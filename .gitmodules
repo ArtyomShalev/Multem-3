@@ -1,0 +1,6 @@
+[submodule "faddeeva_fortran"]
+	path = faddeeva_fortran
+	url = https://github.com/ArtyomShalev/faddeeva_fortran.git
+[submodule "FiNeR"]
+	path = FiNeR
+	url = https://github.com/szaghi/FiNeR.git
