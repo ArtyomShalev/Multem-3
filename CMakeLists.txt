@@ -14,6 +14,8 @@ set(CMAKE_Fortran_FLAGS_DEBUG   "${common} ${warn} -g -fbounds-check -fcheck-arr
 ##set(CMAKE_Fortran_FLAGS_RELEASE "${common} -O3 -march=native -ffast-math -funroll-loops -mtune=native -fopenmp" )
 #set(CMAKE_Fortran_FLAGS_RELEASE "${common} -O3 -march=native -ffast-math -funroll-loops -mtune=native" )
 
-add_subdirectory(FiNeR)
-add_subdirectory(faddeeva_fortran)
-add_subdirectory(lapack_wrapper)
+add_subdirectory(src/lib)
+add_subdirectory(src/third_party/FiNeR)
+add_subdirectory(src/third_party/lapack_wrapper)
+add_subdirectory(src/third_party/amos)
+add_subdirectory(src/third_party/faddeeva_fortran)

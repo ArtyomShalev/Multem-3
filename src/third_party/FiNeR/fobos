@@ -1,0 +1,252 @@
+[modes]
+modes = tests-gnu tests-gnu-debug
+        tests-intel tests-intel-debug
+        finer-static-gnu finer-shared-gnu
+        finer-static-gnu-debug finer-shared-gnu-debug
+        finer-static-intel finer-shared-intel
+        finer-static-intel-debug finer-shared-intel-debug
+
+[common-variables]
+$CSHARED_GNU = -c -fPIC -frealloc-lhs
+$CSHARED_INT = -c -fpic -assume realloc_lhs
+$LSHARED     = -shared
+$CSTATIC_GNU = -c -frealloc-lhs -std=f2008 -fall-intrinsics
+$CSTATIC_INT = -c -assume realloc_lhs -standard-semantics -std08
+$DEBUG_GNU   = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan
+$DEBUG_INT   = -O0 -debug all -warn all -extend-source 132 -traceback
+$OPTIMIZE    = -O2
+$EXDIRS      = BeFoR64/src/tests/ BeFoR64/src/third_party/
+               FACE/src/tests/ FACE/src/third_party/
+               FLAP/src/tests/ FLAP/src/third_party/
+               PENF/src/tests/ PENF/src/third_party/
+               StringiFor/src/tests/ StringiFor/src/third_party/
+
+# main modes
+[tests-gnu]
+template  = template-static-gnu
+build_dir = exe
+
+[tests-gnu-debug]
+template  = template-static-gnu-debug
+build_dir = exe
+
+[tests-intel]
+template  = template-static-intel
+build_dir = exe
+
+[tests-intel-debug]
+template  = template-static-intel-debug
+build_dir = exe
+
+[finer-static-gnu]
+template  = template-static-gnu
+target    = src/lib/finer.f90
+build_dir = ./static/
+output    = libfiner.a
+mklib     = static
+
+[finer-shared-gnu]
+template  = template-shared-gnu
+target    = src/lib/finer.f90
+build_dir = ./shared/
+output    = libfiner.so
+mklib     = shared
+
+[finer-static-gnu-debug]
+template  = template-static-gnu-debug
+target    = src/lib/finer.f90
+build_dir = ./static/
+output    = libfiner.a
+mklib     = static
+
+[finer-shared-gnu-debug]
+template  = template-shared-gnu-debug
+target    = src/lib/finer.f90
+build_dir = ./shared/
+output    = libfiner.so
+mklib     = shared
+
+[finer-static-intel]
+template  = template-static-intel
+target    = src/lib/finer.f90
+build_dir = ./static/
+output    = libfiner.a
+mklib     = static
+
+[finer-shared-intel]
+template  = template-shared-intel
+target    = src/lib/finer.f90
+build_dir = ./shared/
+output    = libfiner.so
+mklib     = shared
+
+[finer-static-intel-debug]
+template  = template-static-intel-debug
+target    = src/lib/finer.f90
+build_dir = ./static/
+output    = libfiner.a
+mklib     = static
+
+[finer-shared-intel-debug]
+template  = template-shared-intel-debug
+target    = src/lib/finer.f90
+build_dir = ./shared/
+output    = libfiner.so
+mklib     = shared
+
+#templates
+[template-static-gnu]
+compiler     = gnu
+cflags       = $CSTATIC_GNU $OPTIMIZE
+lflags       = $OPTIMIZE
+preproc      = -D_R16P
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 10
+
+[template-shared-gnu]
+compiler     = gnu
+cflags       = $CSHARED_GNU $OPTIMIZE
+lflags       = $LSHARED $OPTIMIZE
+preproc      = -D_R16P
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 10
+
+[template-static-gnu-debug]
+compiler     = gnu
+cflags       = $CSTATIC_GNU $DEBUG_GNU
+lflags       = $DEBUG_GNU
+preproc      = -D_R16P
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 10
+
+[template-shared-gnu-debug]
+compiler     = gnu
+cflags       = $CSHARED_GNU $DEBUG_GNU
+lflags       = $LSHARED $DEBUG_GNU
+preproc      = -D_R16P
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 10
+
+[template-static-intel]
+compiler     = intel
+cflags       = $CSTATIC_INT $OPTIMIZE
+lflags       = $OPTIMIZE
+preproc      = -D_R16P
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 10
+
+[template-shared-intel]
+compiler     = intel
+cflags       = $CSHARED_INT $OPTIMIZE
+lflags       = $LSHARED $OPTIMIZE
+preproc      = -D_R16P
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 10
+
+[template-static-intel-debug]
+compiler     = intel
+cflags       = $CSTATIC_INT $DEBUG_INT
+lflags       = $DEBUG_INT
+preproc      = -D_R16P
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 10
+
+[template-shared-intel-debug]
+compiler     = intel
+cflags       = $CSHARED_INT $DEBUG_INT
+lflags       = $LSHARED $DEBUG_INT
+preproc      = -D_R16P
+exclude_dirs = $EXDIRS
+mod_dir      = ./mod/
+obj_dir      = ./obj/
+src          = ./src/
+colors       = True
+quiet        = False
+log          = True
+jobs         = 10
+
+# rules
+[rule-makedoc]
+help   = Build documentation from source files
+rule_1 = rm -rf doc/html/*
+rule_2 = ford doc/main_page.md --debug
+rule_3 = cp -r doc/html/publish/* doc/html/
+rule_4 = rm -rf doc/html/publish
+
+[rule-deldoc]
+help = Delete documentation
+rule = rm -rf doc/html/*
+
+[rule-delexe]
+help = Delete exes
+rule = rm -rf exe/
+
+[rule-clean]
+help = Clean the project tree
+rule_1 = FoBiS.py rule -ex deldoc
+rule_2 = FoBiS.py rule -ex delexe
+rule_3 = rm -f *.gcov
+
+[rule-maketar]
+help = Make tar archive of the project
+rule = tar --xform="s%^%FiNeR/%" -czf FiNeR.tar.gz *
+
+[rule-makecoverage]
+help   = Perform coverage analysis
+rule_1 = FoBiS.py clean -mode tests-gnu
+rule_2 = FoBiS.py build -mode tests-gnu -coverage
+rule_3 = ./scripts/run_tests.sh
+rule_4 = rm -f exe/obj/befor64* exe/obj/face* exe/obj/flap* exe/obj/penf* exe/obj/stringifor*
+rule_5 = gcov -o exe/obj/ src/lib/finer*
+
+[rule-makecoverage-analysis]
+help   = Perform coverage analysis and saving reports in markdown
+rule_1 = FoBiS.py clean -mode tests-gnu
+rule_2 = FoBiS.py build -mode tests-gnu -coverage
+rule_3 = ./exe/autotest
+rule_4 = rm -f exe/obj/befor64* exe/obj/face* exe/obj/flap* exe/obj/penf* exe/obj/stringifor*
+rule_5 = gcov -o exe/obj/ src/lib/finer*
+rule_6 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_7 = rm -f *.gcov

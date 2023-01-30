@@ -1,0 +1,15 @@
+cmake-build-debug/CMakeCache.txt
+CTestTestfile.cmake
+cmake_install.cmake
+cmake-build-debug
+Makefile
+.idea
+Testing
+CMakeFiles
+CMakeCache.txt
+cmake
+*.cbp
+*.a
+example
+modules
+/tests

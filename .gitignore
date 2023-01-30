@@ -35,7 +35,13 @@
 Makefile
 CMakeFiles
 cmake-build-debug
+cmake_install.cmake
+CTestTestfile.cmake
+*.cmake
+CMakeCache.txt
 
 # IDE
 .idea
 
+#binary files
+bin
