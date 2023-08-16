@@ -30,9 +30,9 @@ target_link_libraries(libmultem2b
         amos::amos
         faddeeva_fortran::faddeeva_fortran)
 
-add_executable(multem2 multem_mod.f90)
+add_executable(multem3 multem_mod.f90)
 
-target_link_libraries(multem2
+target_link_libraries(multem3
         libmultem2b)
 #        dense_solve libmultem2b multem_blas
 #        errfun
