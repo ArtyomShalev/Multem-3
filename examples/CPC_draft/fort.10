@@ -1,0 +1,23 @@
+           ********************************************
+           ********INPUT FILE FOR TRANSMISSION*********
+           ********************************************
+   KTYPE = 2   KSCAN = 1   KEMB  = 0    LMAX =13   NCOMP = 2   NUNIT = 1
+ ALPHA =    1.000000  BETA =    1.000000   FAB =   60.000000  RMAX =  8.000000
+  NP = 100  ZINF =  3.730000000000000  ZSUP =  3.740000000000000
+  THETA/AK(1) =  0.001591549430919     FI/AK(2) =  0.000000000000000   POLAR =S     FEIN =   0.00
+
+Give information for the "NCOMP" components 
+
+     IT  = 2
+     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000
+   NPLAN = 1  NLAYER = 1
+       S =   0.47050000     MUSPH =   1.00000000   0.00000000     EPSSPH=    15.000000    0.00000000
+xyzDL 0.0  0.0  0.0
+xyzDR 0.0  0.0  1.0
+     IT  = 2
+     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000
+   NPLAN = 1  NLAYER = 1
+       S =   0.47050000     MUSPH =   1.00000000   0.00000000     EPSSPH=    15.000000    0.00000000
+xyzDL 0.0  0.0  0.0
+xyzDR 0.0  0.0  0.0
+

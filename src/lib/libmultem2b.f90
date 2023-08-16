@@ -1951,6 +1951,7 @@ integer :: s, multipole_type_selector, m_projection_selector, multipole_order_se
             return
         endif
         ig0 = ig0 + 1
+        write (*,*) ig0, igmax
         if(ig0>igmax) stop   'error from reduce:  insufficient nr. of&
                 &reciprocal lattice vectors '
         goto 6
@@ -2120,7 +2121,9 @@ integer :: s, multipole_type_selector, m_projection_selector, multipole_order_se
 !        cerf = exp(-z**2) * (1.0 - erf_pop(-ci * z
 !        write (1,*) z
         cerf = faddeeva_w(z, relerr)
-
+        
+        write(3, 102) z, cerf
+        102 format(5f19.15)
         return
     end function
     !=======================================================================
