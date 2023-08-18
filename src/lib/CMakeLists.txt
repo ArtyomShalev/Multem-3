@@ -48,8 +48,6 @@ target_link_libraries(multem3
 #        ${CMAKE_CURRENT_BINARY_DIR}/../../bin/fort.10)
 #
 
-message(${CMAKE_SOURCE_DIR})
-message(${CMAKE_CURRENT_BINARY_DIR})
 add_custom_command(
        TARGET multem3 POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy
