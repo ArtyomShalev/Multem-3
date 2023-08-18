@@ -47,8 +47,11 @@ target_link_libraries(multem3
 #        ${CMAKE_SOURCE_DIR}/multem2mod/input_inoue.txt
 #        ${CMAKE_CURRENT_BINARY_DIR}/../../bin/fort.10)
 #
-#add_custom_command(
-#        TARGET multem2 POST_BUILD
-#        COMMAND ${CMAKE_COMMAND} -E copy
-#        ${CMAKE_SOURCE_DIR}/multem2mod/multipole_regime_parameters_ref.txt
-#        ${CMAKE_CURRENT_BINARY_DIR}/../../bin/multipole_regime_parameters.ini)
+
+message(${CMAKE_SOURCE_DIR})
+message(${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(
+       TARGET multem3 POST_BUILD
+       COMMAND ${CMAKE_COMMAND} -E copy
+       ${CMAKE_SOURCE_DIR}/bin/multem3
+       ${CMAKE_SOURCE_DIR}/simulation/multem3)

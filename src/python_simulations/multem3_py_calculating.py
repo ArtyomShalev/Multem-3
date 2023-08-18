@@ -10,15 +10,16 @@ import time
 import matplotlib.colors as mcolors
 from matplotlib.colors import hsv_to_rgb
 from colorsys import hls_to_rgb
+# from typing import str
 
 
-def multi_loadtxt(dir, filelist):
+def multi_loadtxt(dir: str, filelist: list):
     output = ()
     for fname in filelist:
         out = np.loadtxt(dir+"/"+fname)
         output += (out,)
+    #TODO what are types for filelist and output
     return output
-
 
 
 def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_ratio, rmax, epssph_re, 
@@ -54,8 +55,6 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                       '     MUEMBL=   1.00000000   0.00000000    EPSEMBL=   1.00000000   0.00000000\n'
                       '     MUEMBR=   1.00000000   0.00000000    EPSEMBR=   1.00000000   0.00000000\n')
 
-
-
     if mode == '2':
         str_fort10 = ('           ********************************************\n'
                       '           ********INPUT FILE FOR TRANSMISSION*********\n'
@@ -82,7 +81,6 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                     'xyzDL 0.0  0.0  0.0\n'
                     'xyzDR 0.0  0.0  0.0\n')
         
-
     if mode == '3':
         str_fort10 = ('           ********************************************\n'
                     '           ********INPUT FILE FOR TRANSMISSION*********\n'
@@ -108,103 +106,21 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                 'xyzDL 0.0  0.0  0.0\n'
                 'xyzDR 0.0  0.0  0.0\n')
 
-
-
-
     with open('fort.10','w') as f:
         print(str_fort10, file=f)
 
     str_ini = ('[selectors]\n'
                'is_multipole_type_selected = '+'%s'%(mts)+'\n'
-                                                                                 'is_multipole_order_selected = '+'%s'%(mos)+'\n'
-                                                                                                                                                     'is_m_projection_selected = '+'%s'%(mps)+'\n'
-                                                                                                                                                                                                                   '\n'
-                                                                                                                                                                                                                   '[regime]\n'
-                                                                                                                                                                                                                   'multipole_type = '+'%s'%(m_type)+'\n'
-                                                                                                                                                                                                                                                     'multipole_order = '+'%s'%(m_order)+'\n'
-                                                                                                                                                                                                                                                                                         'm_projection = '+'%s'%(m)+'\n')
+                'is_multipole_order_selected = '+'%s'%(mos)+'\n'
+                'is_m_projection_selected = '+'%s'%(mps)+'\n'
+                '\n'
+                '[regime]\n'
+                'multipole_type = '+'%s'%(m_type)+'\n'
+                'multipole_order = '+'%s'%(m_order)+'\n'
+                'm_projection = '+'%s'%(m)+'\n')
 
     with open('multipole_regime_parameters.ini','w') as f:
         print(str_ini, file=f)
-
-
-
-
-# def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_ratio, rmax, epssph_re, epssph_im, epsmed_re, m_type, m_order, m,
-#                  mts, mos, mps, mode):
-#     '''
-#     mode:   1 - 2D array of spheres in homogeneous media
-#             2 - interface
-#     '''
-
-#     if mode == '1':
-#         str_fort10 = ('           ********************************************\n'
-#                       '           ********INPUT FILE FOR TRANSMISSION*********\n'
-#                       '           ********************************************\n'
-#                       '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP = 1   NUNIT = 1\n'
-#                                                                                                                   ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
-#                                                                                                                                                                                                                  '  NP ='+'%4i'%(npts)+'  ZINF ='+
-#                       '%19.15f'%(zinf)+'  ZSUP ='+'%19.15f'%(zsup)+'\n'
-#                                                                    '  THETA/AK(1) ='+'%19.15f'%(ak1)+'     FI/AK(2) ='+'%19.15f'%(ak2)+'   POLAR ='+polar+'     FEIN =   0.00\n'
-#                                                                                                                                                           '\n'
-#                                                                                                                                                           'Give information for the "NCOMP" components \n'
-#                                                                                                                                                           '\n'
-#                                                                                                                                                           '     IT  = 2\n'
-#                                                                                                                                                           '     MUMED =   1.00000000   0.00000000     EPSMED=   '+'%11.6f'%(epsmed_re)+'   0.00000000\n'
-#                                                                                                                                                           '   NPLAN = 1  NLAYER = 1\n'
-#                                                                                                                                                           '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-#                                                                                                                                                                                                                                                                                                     'xyzDL 0.0  0.0  0.0\n'
-#                                                                                                                                                                                                                                                                                                     'xyzDR 0.0  0.0  1.8\n'
-#                                                                                                                                                                                                                                                                                                     '     MUEMBL=   1.00000000   0.00000000    EPSEMBL=   1.00000000   0.00000000\n'
-#                                                                                                                                                                                                                                                                                                     '     MUEMBR=   1.00000000   0.00000000    EPSEMBR=   1.00000000   0.00000000\n')
-
-
-
-
-#     if mode == '2':
-#         str_fort10 = ('           ********************************************\n'
-#                       '           ********INPUT FILE FOR TRANSMISSION*********\n'
-#                       '           ********************************************\n'
-#                       '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP = 2   NUNIT = 1\n'
-#                                                                                                                   ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
-#                                                                                                                                                                                                                  '  NP ='+'%4i'%(npts)+'  ZINF ='+
-#                       '%19.15f'%(zinf)+'  ZSUP ='+'%19.15f'%(zsup)+'\n'
-#                                                                    '  THETA/AK(1) ='+'%19.15f'%(ak1)+'     FI/AK(2) ='+'%19.15f'%(ak2)+'   POLAR ='+polar+'     FEIN =   0.00\n'
-#                                                                                                                                                           '\n'
-#                                                                                                                                                           'Give information for the "NCOMP" components \n'
-#                                                                                                                                                           '\n'
-#                                                                                                                                                           '     IT  = 2\n'
-#                                                                                                                                                           '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
-#                                                                                                                                                           '   NPLAN = 1  NLAYER = 1\n'
-#                                                                                                                                                           '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-#                                                                                                                                                                                                                                                                                                     'xyzDL 0.0  0.0  0.0\n'
-#                                                                                                                                                                                                                                                                                                     'xyzDR 0.0  0.0  1.0\n'
-#                                                                                                                                                                                                                                                                                                     '     IT  = 1\n'
-#                                                                                                                                                                                                                                                                                                     '  DSLAB       =  1.000000000000000\n'
-#                                                                                                                                                                                                                                                                                                     '     MU1   =   1.00000000   0.00000000     EPS1  =   1.0000000   0.00000000\n'
-#                                                                                                                                                                                                                                                                                                     '     MU2   =   1.00000000   0.00000000     EPS2  =  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-#                                                                                                                                                                                                                                                                                                                                                                                                            '     MU3   =   1.00000000   0.00000000     EPS3  =   1.00000000   0.00000000\n'
-#                                                                                                                                                                                                                                                                                                                                                                                                            'xyzDL 0.0  0.0  0.0\n'
-#                                                                                                                                                                                                                                                                                                                                                                                                            'xyzDR 0.0  0.0  0.0\n')
-
-
-
-
-#     with open('fort.10','w') as f:
-#         print(str_fort10, file=f)
-
-#     str_ini = ('[selectors]\n'
-#                'is_multipole_type_selected = '+'%s'%(mts)+'\n'
-#                                                                                  'is_multipole_order_selected = '+'%s'%(mos)+'\n'
-#                                                                                                                                                      'is_m_projection_selected = '+'%s'%(mps)+'\n'
-#                                                                                                                                                                                                                    '\n'
-#                                                                                                                                                                                                                    '[regime]\n'
-#                                                                                                                                                                                                                    'multipole_type = '+'%s'%(m_type)+'\n'
-#                                                                                                                                                                                                                                                      'multipole_order = '+'%s'%(m_order)+'\n'
-#                                                                                                                                                                                                                                                                                          'm_projection = '+'%s'%(m)+'\n')
-
-#     with open('multipole_regime_parameters.ini','w') as f:
-#         print(str_ini, file=f)
 
 
 def eval(multem_version='3'):
@@ -262,7 +178,6 @@ def eval(multem_version='3'):
     return F, T, R, A
 
 
-
 # def eval(): #TODO refactor
 #     # create_input(ktype, npts, ap1, ap2, from_y, to_y, polar, lmax, r_ratio, rmax, epssph_re, epssph_im,
 #     #              type, order, is_multipole_type_selected, is_multipole_order_selected, is_m_projection_selected)
@@ -300,6 +215,7 @@ def eval(multem_version='3'):
 #         return T, R, W, THETA
 #     else:
 #         return T, R
+
 
 def calc_kR_map(k, R, ip):
     #calculating kR map like in PHYSICAL REVIEW B 105, 075404 (2022) fig 1c-d
@@ -378,16 +294,20 @@ def calc_ak1_omega_map(ktype, ak1, omega, ip, is_w0_needed):
 
 
 def calc_spectrum_omega(omega, ak1, ak2, ip):
-    # zinf = omega[0]
-    # zsup = omega[-1]
-    # omegalen=len(omega)
-    create_input(ktype=ip['ktype'], kscan=1, npts=ip['npts'], fab=ip['fab'], ak1=ak1, ak2=ak2,
-                 zinf=ip['zinf'], zsup=ip['zsup'],
+    zinf = omega[0]
+    zsup = omega[-1]
+    omegalen=len(omega)
+    if ip['mode'] == '1':
+        dist_btw_spheres_and_interface = 0
+    else:
+        dist_btw_spheres_and_interface = ip['dist_btw_spheres_and_interface']
+    create_input(ktype=ip['ktype'], kscan=1, npts=omegalen, fab=ip['fab'], ak1=ak1, ak2=ak2,
+                 zinf=zinf, zsup=zsup,
                  polar=ip['polar'], lmax=ip['lmax'], r_ratio=ip['r_ratio'],
                  rmax=ip['rmax'], epssph_re=ip['epssph_re'],
                  epssph_im=ip['epssph_im'], epsmed_re=ip['epsmed_re'], epsmed_im=ip['epsmed_im'], 
                  m_type=ip['type'], m_order=ip['order'],
-                 m=ip['m'], mts=ip['mts'], mos=ip['mos'], mps=ip['mps'], mode=ip['mode'], multem_version=ip['multem_version'], dist_btw_spheres_and_interface=ip['dist_btw_spheres_and_interface'])
+                 m=ip['m'], mts=ip['mts'], mos=ip['mos'], mps=ip['mps'], mode=ip['mode'], multem_version=ip['multem_version'], dist_btw_spheres_and_interface=dist_btw_spheres_and_interface)
     F, T, R, A = eval(ip['multem_version'])
     return F, T, R, A
 
