@@ -6,7 +6,7 @@ module libmultem2b
     use multipole_regime_parameters
 
     implicit none
-!    integer, parameter, public :: dp = kind(0.0D0)
+    ! integer, parameter, public :: dp = kind(0.0D0)
     complex(dp), parameter, public :: ci = (0.0_dp, 1.0_dp)
     complex(dp), parameter, public :: czero = (0.0_dp, 0.0_dp)
     complex(dp), parameter, public :: cone = (1.0_dp, 0.0_dp)

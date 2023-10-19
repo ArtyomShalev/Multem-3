@@ -85,12 +85,13 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
         str_fort10 = ('           ********************************************\n'
                     '           ********INPUT FILE FOR TRANSMISSION*********\n'
                     '           ********************************************\n'
-                    '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP = 2   NUNIT = 1\n'
-                                                                                                                ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
+                      '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP =3   NUNIT = 6\n'                    
+                    ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
                                                                                                                                                                                                                 '  NP ='+'%4i'%(npts)+'  ZINF ='+
                     float_format%(zinf)+'  ZSUP ='+float_format%(zsup)+'\n'
-                                                                '  THETA/AK(1) ='+float_format%(ak1)+'     FI/AK(2) ='+float_format%(ak2)+'   POLAR ='+polar+'     FEIN =   0.00\n'
+                                    '  THETA/AK(1) ='+float_format%(ak1)+'     FI/AK(2) ='+float_format%(ak2)+'   POLAR ='+polar+'     FEIN =   0.00\n'
                 '\n'
+
                 'Give information for the "NCOMP" components \n'
                 '\n'
                 '     IT  = 2\n'
@@ -104,7 +105,34 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                 '   NPLAN = 1  NLAYER = 1\n'
                 '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
                 'xyzDL 0.0  0.0  0.0\n'
-                'xyzDR 0.0  0.0  0.0\n')
+                'xyzDR 0.0  0.0  '+'%2.1f'%(dist_btw_spheres_and_interface)+'\n'
+                '     IT  = 2\n'
+                '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
+                '   NPLAN = 1  NLAYER = 1\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.0  0.0  0.0\n'
+                'xyzDR 0.0  0.0  '+'%2.1f'%(dist_btw_spheres_and_interface)+'\n')
+        
+    if mode == '3_old':
+        str_fort10 = ('           ********************************************\n'
+                    '           ********INPUT FILE FOR TRANSMISSION*********\n'
+                    '           ********************************************\n'
+                      '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP =1   NUNIT = 6\n'                    
+                    ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
+                                                                                                                                                                                                                '  NP ='+'%4i'%(npts)+'  ZINF ='+
+                    float_format%(zinf)+'  ZSUP ='+float_format%(zsup)+'\n'
+                                    '  THETA/AK(1) ='+float_format%(ak1)+'     FI/AK(2) ='+float_format%(ak2)+'   POLAR ='+polar+'     FEIN =   0.00\n'
+                '\n'
+
+                'Give information for the "NCOMP" components \n'
+                '\n'
+                '     IT  = 2\n'
+                '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
+                '   NPLAN = 1  NLAYER = 1\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.0  0.0  0.0\n'
+                'xyzDR 0.0  0.0  '+'%2.1f'%(dist_btw_spheres_and_interface)+'\n')
+
 
     with open('fort.10','w') as f:
         print(str_fort10, file=f)
@@ -124,6 +152,8 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
 
 
 def eval(multem_version='3'):
+    if os.path.exists('fort.8'):
+        os.remove('fort.8')
     if multem_version == '3':
         if os.path.isfile('multem3'):
             my_env = os.environ.copy()
@@ -174,7 +204,10 @@ def eval(multem_version='3'):
                            stdout=subprocess.DEVNULL,
                            env=my_env)
     #FREQUENCY   TRANSMITTANCE  Reflectance   Absorbance
-    F, T, R, A = np.loadtxt('fort.8').T
+    try:
+        F, T, R, A = np.loadtxt('fort.8').T
+    except:
+        F, T, R, A = None, None, None, None
     return F, T, R, A
 
 
@@ -328,7 +361,11 @@ def calc_spectrum_ak1(ktype, ak1, wl, ip):
                      m_type=ip['type'], m_order=ip['order'],
                      m=ip['m'], mts=ip['mts'], mos=ip['mos'], mps=ip['mps'], mode='1', multem_version=ip['multem_version'])
         f, t, r, a = eval()
-        R[i] = r[0]
+        try:
+            R[i] = r[0]
+        except:
+            print('smth went wrong')
+            R[i] = R[i-1]
     return R
 
 
@@ -376,6 +413,9 @@ def save_result(path, filename, data):
 
 
 def save_1D_data(x, y, dir, filename, format='%e'):
+    if isinstance(x, type(None)) or isinstance(y, type(None)):
+        print('data is None type. Abort saving...')
+        return
     if not os.path.exists(dir):
         os.makedirs(dir)
     data = np.stack((x, y), axis=-1)

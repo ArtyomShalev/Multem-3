@@ -271,7 +271,7 @@ program multem
             5x, 'of complex refractive index on the'/&
             5x, 'left side of the slab.'/&
             5x, '----------------------------------')
-    228 format(5x, '----------------------------------'/&
+    228 format(5x, '-------------- --------------------'/&
             5x, 'illegal input:semi-infinite medium'/&
             5x, 'of complex refractive index on the'/&
             5x, 'right side of the slab.'/&
