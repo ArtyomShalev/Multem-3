@@ -43,6 +43,13 @@ CMakeCache.txt
 # IDE
 .idea
 .vscode
+.__pycache__
 
 #binary files
 bin
+*.pyc
+
+#figures and data
+*.png
+*.pdf
+*.txt
