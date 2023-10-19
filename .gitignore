@@ -53,3 +53,6 @@ bin
 *.png
 *.pdf
 *.txt
+
+#data folders
+data
