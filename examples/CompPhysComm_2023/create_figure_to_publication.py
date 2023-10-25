@@ -150,8 +150,8 @@ def find_nearest_idx(array, value):
 
 #--------- customizing font --------
 plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
-
-figures_to_plot = ['fig3']
+# fig3
+figures_to_plot = ['fig5']
 
 # ------------- Fig. 3 ---------------------------------------------------------------------------------------------
 if 'fig3' in figures_to_plot:
@@ -476,7 +476,7 @@ import calculating_lib as cl
 
 if 'fig5' in figures_to_plot:
 
-    dir = f'data/fig4/'
+    dir = f'data/fig5/'
     fig = plt.figure(figsize=(20, 20))
     i = 1
     curve_styles = {
@@ -485,10 +485,10 @@ if 'fig5' in figures_to_plot:
         '14': (6, 1, 'black', 1, '-'),
     }
     RMAX = ['12', '14', '7'] 
-    color = {7: 'orange', 8: 'black', 13: 'green'}
-    lw = {7: 6, 8: 6, 13: 18}
-    alpha = {7: 1, 8: 1, 13: 0.4}
-    lines = {'7': None, '8': None, '13': None}
+    # color = {7: 'orange', 8: 'black', 13: 'green'}
+    # lw = {7: 6, 8: 6, 13: 18}
+    # alpha = {7: 1, 8: 1, 13: 0.4}
+    lines = {}
 
     for rmax in RMAX:
         R1, R2, R3, x = multi_loadtxt(dir, (f'650_{rmax}.txt', f'750_{rmax}.txt', f'900_{rmax}.txt', 'sintheta.txt'))
@@ -509,7 +509,7 @@ if 'fig5' in figures_to_plot:
     fig.text(0.5, 0.48, r'$\lambda=750 nm$', ha='center')
     fig.text(0.5, 0.8, r'$\lambda=900 nm$', ha='center')
     
-    plt.savefig('fig4.pdf')
+    plt.savefig('fig5.pdf')
     plt.clf(); plt.close()
 
 

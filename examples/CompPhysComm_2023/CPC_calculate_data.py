@@ -4,8 +4,8 @@ sys.path.insert(0, '../..')
 import src.python_simulations.multem3_py_calculating as calc
 import time 
 
-
-figures_to_calculate = ['fig3a', 'fig3b', 'fig3c']
+'fig3a', 'fig3b', 'fig3c', 'fig5'
+figures_to_calculate = ['fig5']
 
 # ----- calculating data for fig. 3 a) -------------------
 if 'fig3a' in figures_to_calculate:
@@ -253,8 +253,8 @@ if 'fig3' in figures_to_calculate:
             print(f'{input_params["multem_version"]} : {time.time()-time0}s')
  
 
-if 'fig4' in figures_to_calculate:
-    import time
+if 'fig5' in figures_to_calculate:
+    start = time.time()
     input_parameters = {
         'ktype': 1,
         'lmax': 3,
@@ -284,7 +284,7 @@ if 'fig4' in figures_to_calculate:
     theta = np.arcsin(sin_theta)*180/np.pi
 
     for input_parameters['rmax'] in [7, 12, 14]:
-        dir = f'data/fig4/'
+        dir = f'data/fig5/'
         factor = 0
         for wl in [650, 750, 900]:
             if wl == 650:
@@ -297,12 +297,12 @@ if 'fig4' in figures_to_calculate:
                 input_parameters['epssph_re'] = -32.719
                 input_parameters['epssph_im'] = 1.9955
             else:
-                print('epspsh set not correct!')
+                print('epspsh is not set correctly!')
             R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
             calc.save_result(dir, f'{wl}_{input_parameters["rmax"]}', R)
             factor += 1
         calc.save_result(dir, 'sintheta', sin_theta)
-
+        print(f"CPU time {time.time()-start}")
 
 
 if 'fig8' in figures_to_calculate:
