@@ -2,12 +2,14 @@ import numpy as np
 import sys
 sys.path.insert(0, '../..')
 import src.python_simulations.multem3_py_calculating as calc
+import time 
 
 
-figures_to_calculate = ['fig4']
+figures_to_calculate = ['fig3a', 'fig3b', 'fig3c']
 
-# ----- calculating data for fig. 2 a) -------------------
-if 'fig2a' in figures_to_calculate:
+# ----- calculating data for fig. 3 a) -------------------
+if 'fig3a' in figures_to_calculate:
+    start = time.time()
     input_params = {
         'mts': '0', #multipole_type_selected
         'mos': '0', #multipole_order_selected
@@ -40,16 +42,16 @@ if 'fig2a' in figures_to_calculate:
     ak2 = np.array((0, 5e-2, 0, 0))/2/np.pi
     kpts = len(ak1)
     lmax = 4
-    print('calculating data for fig. 2 a)...')
+    print('calculating data for fig. 3 a)...')
     for i in range(kpts):
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1[i], ak2[i], input_params)        
-        calc.save_1D_data(omega, T, dir='data/fig2a', filename=f'akxy={round(ak1[i]*2*np.pi, 4)}_{round(ak2[i]*2*np.pi, 4)}.txt', format='%19.16e')
+        calc.save_1D_data(omega, T, dir='data/fig3a', filename=f'akxy={round(ak1[i]*2*np.pi, 4)}_{round(ak2[i]*2*np.pi, 4)}.txt', format='%19.16e')
     print('done')
     
 
-    # ----- calculating data for fig. 2 b) -------------------
-if 'fig2b' in figures_to_calculate:
-    print('calculating data for fig. 2 b)...')
+    # ----- calculating data for fig. 3 b) -------------------
+if 'fig3b' in figures_to_calculate:
+    print('calculating data for fig. 3 b)...')
     input_params = {
         'mts': '0', #multipole_type_selected
         'mos': '0', #multipole_order_selected
@@ -82,13 +84,13 @@ if 'fig2b' in figures_to_calculate:
     for lmax in LMAX:
         input_params['lmax'] = lmax
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
-        calc.save_1D_data(omega, T, dir='data/fig2b', filename=f'lmax={lmax}.txt', format='%19.16e')       
+        calc.save_1D_data(omega, T, dir='data/fig3b', filename=f'lmax={lmax}.txt', format='%19.16e')       
     print('done')
 
   
-    # ----- calculating data for fig. 2 c) -------------------
-if 'fig2c' in figures_to_calculate:
-    print('calculating data for fig. 2 c)...')
+    # ----- calculating data for fig. 3 c) -------------------
+if 'fig3c' in figures_to_calculate:
+    print('calculating data for fig. 3 c)...')
     input_params = {
         'mts': '0', #multipole_type_selected
         'mos': '0', #multipole_order_selected
@@ -120,22 +122,23 @@ if 'fig2c' in figures_to_calculate:
     input_params['multem_version'] = '3'
     # T_lmax=10
     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
-    calc.save_1D_data(omega, T, dir='data/fig2c', filename='T.txt', format='%19.16e') 
+    calc.save_1D_data(omega, T, dir='data/fig3c', filename='T.txt', format='%19.16e') 
     # with lapack and faddeeva
     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
-    calc.save_1D_data(omega, (T+R-1), dir='data/fig2c', filename='error_with_lapack_and_faddeeva.txt', format='%19.16e') 
+    calc.save_1D_data(omega, (T+R-1), dir='data/fig3c', filename='error_with_lapack_and_faddeeva.txt', format='%19.16e') 
     # wo lapack
     input_params['multem_version'] = 'wo_lapack'
     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
-    calc.save_1D_data(omega, (T+R-1), dir='data/fig2c', filename='error_wo_lapack.txt', format='%19.16e')       
+    calc.save_1D_data(omega, (T+R-1), dir='data/fig3c', filename='error_wo_lapack.txt', format='%19.16e')       
     # with lapack
     input_params['multem_version'] = 'with_lapack'    
     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
-    calc.save_1D_data(omega, (T+R-1), dir='data/fig2c', filename='error_with_lapack.txt', format='%19.16e') 
+    calc.save_1D_data(omega, (T+R-1), dir='data/fig3c', filename='error_with_lapack.txt', format='%19.16e') 
     print('done')
+    print(f'CPU time:{time.time()-start}')
 
 
-if 'fig6' in figures_to_calculate:
+if 'fig7' in figures_to_calculate:
     import time
 
     input_params = {
@@ -163,47 +166,48 @@ if 'fig6' in figures_to_calculate:
     'mode': '1', #multi-layered
     'dist_btw_spheres_and_interface': 0.6
 }
-
-    #fig6 a-d
+    LMAX = [4]
+    RMAX = [12]
+    #fig7 a-d
     omega = np.linspace(3.734, 3.737, input_params['npts'])
     input_params['zinf'] = omega[0]
     input_params['zsup'] = omega[-1]
     ak1 = 0.01/2/np.pi
     ak2 = 0
     for input_params['multem_version'] in ['3_cerf', '3']:
-        for input_params['lmax'] in [4]:
+        for input_params['lmax'] in LMAX:
             time0 = time.time()
-            for input_params['rmax'] in [7]:
-                F, T, R, A = cl.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                cl.save_1D_data(omega, T, dir=f'data/fig4/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+            for input_params['rmax'] in RMAX:
+                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                calc.save_1D_data(omega, T, dir=f'data/fig7/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
             print(f'{input_params["multem_version"]} : {time.time()-time0}s')
 
-    #fig6 b-e
+    #fig7 b-e
     omega = np.linspace(3.73555, 3.73562, input_params['npts'])
     input_params['zinf'] = omega[0]
     input_params['zsup'] = omega[-1]
     ak1 = 8e-5/2/np.pi
     ak2 = 0
     for input_params['multem_version'] in ['3_cerf', '3']:
-        for input_params['lmax'] in [4]:
+        for input_params['lmax'] in LMAX:
             time0 = time.time()
-            for input_params['rmax'] in [7]:
-                F, T, R, A = cl.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                cl.save_1D_data(omega, T, dir=f'data/fig4/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+            for input_params['rmax'] in RMAX:
+                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                calc.save_1D_data(omega, T, dir=f'data/fig7/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
             print(f'{input_params["multem_version"]} : {time.time()-time0}s')
     
-    #fig6 c-f
+    #fig7 c-f
     omega = np.linspace(3.73558, 3.735585, input_params['npts'])
     input_params['zinf'] = omega[0]
     input_params['zsup'] = omega[-1]
     ak1 = 4e-5/2/np.pi
     ak2 = 0
     for input_params['multem_version'] in ['3_cerf', '3']:
-        for input_params['lmax'] in [4]:
+        for input_params['lmax'] in LMAX:
             time0 = time.time()
-            for input_params['rmax'] in [7]:
-                F, T, R, A = cl.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                cl.save_1D_data(omega, T, dir=f'data/fig4/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+            for input_params['rmax'] in RMAX:
+                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                calc.save_1D_data(omega, T, dir=f'data/fig7/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
             print(f'{input_params["multem_version"]} : {time.time()-time0}s')
 
 
@@ -254,7 +258,6 @@ if 'fig4' in figures_to_calculate:
     input_parameters = {
         'ktype': 1,
         'lmax': 3,
-        'rmax': 20,
         'lattice_constant': 475,
         'radius': 100,
         'epssph_re': -20.1480000,
@@ -301,6 +304,150 @@ if 'fig4' in figures_to_calculate:
         calc.save_result(dir, 'sintheta', sin_theta)
 
 
+
+if 'fig8' in figures_to_calculate:
+    input_parameters = {
+        'ktype': 1,
+        'lmax': 3,
+        'rmax': 5,
+        'radius': 100,
+        'epsmed_re': 2.1025,
+        'epsmed_im': 0,
+        'polar': 'S',
+        'fab': 60,
+        'mts': '0',
+        'mos': '0',
+        'mps': '0',
+        'type': '1',
+        'order': '1',
+        'm': '1',
+        'multem_version': '3'
+    }
+    dir = f'data/fig8/'
+    fi = 0
+    from_sin_theta = 0.08
+    to_sin_theta = 0.12
+    n_theta = 300
+    sin_theta = np.linspace(from_sin_theta, to_sin_theta, n_theta)
+    theta = np.arcsin(sin_theta)*180/np.pi
+    input_parameters['lattice_constant'] = 475.0
+    input_parameters['r_ratio'] = input_parameters['radius']/input_parameters['lattice_constant']
+    wl = 650
+    input_parameters['zinf'] = wl/input_parameters['lattice_constant']
+    input_parameters['zsup'] = (wl+0.01)/input_parameters['lattice_constant']
+    input_parameters['epssph_re'] = -12.953
+    input_parameters['epssph_im'] = 1.1209
+# total
+    input_parameters['mts'] = '0'
+    input_parameters['mos'] = '0'
+    input_parameters['mps'] = '0'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_total.txt')
+# q_{sz} multipole
+    input_parameters['mts'] = '1'
+    input_parameters['mos'] = '1'
+    input_parameters['mps'] = '1'
+    input_parameters['type'] = '0 0'
+    input_parameters['order'] = '2 2'
+    input_parameters['m'] = '-1 1'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)  
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_qsz.txt')
+# m{k} + q{sz}
+    input_parameters['type'] =  '0 0 1 1'
+    input_parameters['order'] = '2 2 1 1'
+    input_parameters['m'] =     '-1 1 1 -1'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_qsz_mk.txt')
+
+    wl = 750
+    from_sin_theta = 0.307
+    to_sin_theta = 0.313
+    sin_theta = np.linspace(from_sin_theta, to_sin_theta, n_theta)
+    theta = np.arcsin(sin_theta)*180/np.pi
+    input_parameters['zinf'] = wl/input_parameters['lattice_constant']
+    input_parameters['zsup'] = (wl+0.01)/input_parameters['lattice_constant']
+    input_parameters['epssph_re'] = -20.148
+    input_parameters['epssph_im'] = 1.2470
+    # total
+    input_parameters['mts'] = '0'
+    input_parameters['mos'] = '0'
+    input_parameters['mps'] = '0'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_total.txt')
+# q_{sz} multipole
+    input_parameters['mts'] = '1'
+    input_parameters['mos'] = '1'
+    input_parameters['mps'] = '1'
+    input_parameters['type'] = '0 0'
+    input_parameters['order'] = '2 2'
+    input_parameters['m'] = '-1 1'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)  
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_qsz.txt')
+# m{k} + q{sz}
+    input_parameters['type'] =  '0 0 1 1'
+    input_parameters['order'] = '2 2 1 1'
+    input_parameters['m'] =     '-1 1 1 -1'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_qsz_mk.txt')
+
+    from_sin_theta = 0.0
+    to_sin_theta = 0.4
+    sin_theta = np.linspace(from_sin_theta, to_sin_theta, n_theta)
+    theta = np.arcsin(sin_theta)*180/np.pi
+    # total
+    input_parameters['mts'] = '0'
+    input_parameters['mos'] = '0'
+    input_parameters['mps'] = '0'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_total.txt')
+# p_{s} multipole
+    input_parameters['mts'] = '1'
+    input_parameters['mos'] = '1'
+    input_parameters['mps'] = '1'
+    input_parameters['type'] = '0 0'
+    input_parameters['order'] = '1 1'
+    input_parameters['m'] = '-1 1'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)  
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_ps.txt')
+# p{s} + m{z} + q{ks}
+    input_parameters['type'] =  '0 0 1 0 0'
+    input_parameters['order'] = '1 1 1 2 2'
+    input_parameters['m'] =     '-1 1 0 -2 2'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_qks_mz_ps.txt')
+
+    wl = 900
+    from_sin_theta = 0.4
+    to_sin_theta = 0.8
+    sin_theta = np.linspace(from_sin_theta, to_sin_theta, n_theta)
+    theta = np.arcsin(sin_theta)*180/np.pi
+    input_parameters['zinf'] = wl/input_parameters['lattice_constant']
+    input_parameters['zsup'] = (wl+0.01)/input_parameters['lattice_constant']
+    input_parameters['epssph_re'] = -32.719
+    input_parameters['epssph_im'] = 1.9955
+# total
+    input_parameters['mts'] = '0'
+    input_parameters['mos'] = '0'
+    input_parameters['mps'] = '0'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_total.txt')
+# p_{s} multipole
+    input_parameters['mts'] = '1'
+    input_parameters['mos'] = '1'
+    input_parameters['mps'] = '1'
+    input_parameters['type'] = '0 0'
+    input_parameters['order'] = '1 1'
+    input_parameters['m'] = '-1 1'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)  
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_ps.txt')
+# p{s} + m{z} + q{ks}
+    input_parameters['type'] =  '0 0 1 0 0'
+    input_parameters['order'] = '1 1 1 2 2'
+    input_parameters['m'] =     '-1 1 0 -2 2'
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
+    calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_qks_mz_ps.txt')
+
+
 if 'diff_orders_test' in figures_to_calculate:
     input_parameters = {
         'ktype': 1,
@@ -328,4 +475,7 @@ if 'diff_orders_test' in figures_to_calculate:
     n_theta = 100
     sin_theta = np.linspace(from_sin_theta, to_sin_theta, n_theta)
     theta = np.arcsin(sin_theta)*180/np.pi
-    R = cl.calc_spectrum_ak1(ktype=1, ak1=theta, wl=600, ip=input_parameters)
+    R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=600, ip=input_parameters)
+
+
+

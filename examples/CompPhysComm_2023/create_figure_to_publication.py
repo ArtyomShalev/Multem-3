@@ -69,11 +69,9 @@ def zoom_effect01(ax1, ax2, xmin, xmax, **kwargs):
 
     prop_patches = kwargs.copy()
     prop_patches["ec"] = "none"
-    # prop_patches["fc"] = "green"
     prop_patches["alpha"] = 0.1
     kwargs["alpha"] = 0.3
     kwargs["ls"] = '--'
-
     c1, c2, bbox_patch1, bbox_patch2, p = \
         connect_bbox(mybbox1, mybbox2,
                      loc1a=3, loc2a=2, loc1b=4, loc2b=1,
@@ -88,7 +86,6 @@ def zoom_effect01(ax1, ax2, xmin, xmax, **kwargs):
     return c1, c2, bbox_patch1, bbox_patch2, p
 
 
-
 def prep_xy_data(data):
     x, y = [], []
     for line in data:
@@ -97,11 +94,13 @@ def prep_xy_data(data):
         y.append(yi)
     return x, y
 
+
 def load_errors(filename, err_lim):
     #filnames - list of str txt files names
     content = np.loadtxt(filename)
     content[content<err_lim] = err_lim
     return content
+
 
 def convert_to_square_2d(arr):
     square_shape = int(np.sqrt(len(arr))), int(np.sqrt(len(arr)))
@@ -109,32 +108,13 @@ def convert_to_square_2d(arr):
     return arr
 
 
-
-
-
-# fig.3 insertion (now it differs from MB)-----
-# plt.figure(figsize=(12, 7))
-# # teal dashed
-# data = np.loadtxt('lmax4_all/akxy=0.001_0.0.txt')
-# x, y = prep_xy_data(data)
-# plt.plot(x, y, color='cyan', linestyle='--')
-# # black solid
-# data = np.loadtxt('lmax4_all/akxy=8e-05_0.0.txt')
-# x, y = prep_xy_data(data)
-# plt.plot(x, y, color='black')
-#
-# plt.show()
-
-
 def plot_error(ax, x,y,z, title='', vextr=None, n_orders_div=1):
-    # fig, ax = plt.subplots(figsize=(8,6))
     if vextr is not None:
         z = np.clip(a=z, a_min=vextr[0], a_max=vextr[1])
         n_orders = int(np.ceil(np.abs(np.log10(vextr[0]) -
                                       np.log10(vextr[1])))) // n_orders_div #// 2 + 1
         cmap_idv = matplotlib.colors.ListedColormap(sns.color_palette("RdBu_r", n_orders))
         im  = ax.imshow(
-            # np.vectorize(mpmath.log10)(z).astype(np.float64),
             z.astype(np.float64),
             origin="lower",extent=[exp_min,exp_max,exp_min,exp_max],aspect='auto',
             norm=LogNorm(vmin=vextr[0], vmax=vextr[1]),
@@ -145,43 +125,10 @@ def plot_error(ax, x,y,z, title='', vextr=None, n_orders_div=1):
                        cmap=cmap_std)
 
     ax.set_title(title)
-    # ax.set_xlabel('real')
-    # ax.set_ylabel('imaginary')
-    # ax.set_yticklabels([3.731, 3.732, 0, 3.734, 3.735])
-
-    # ax.grid(True, c='black', ls='--')
-
     return im
 
 
 def create_arc_and_arrow(ax, x1, y1, len_x, len_y, fc, alpha):
-    # # Configure arc
-    # # center_x = 2            # x coordinate
-    # # center_y = 3.8          # y coordinate
-    # radius_1 = 0.0001        # radius 1
-    # radius_2 = 500*radius_1           # radius 2 >> for cicle: radius_2 = 2 x radius_1
-    # angle = 180             # orientation
-    # theta_1 = 0          # arc starts at this angle
-    # theta_2 = 300         # arc finishes at this angle
-    # arc = Arc([center_x, center_y],
-    #           radius_1,
-    #           radius_2,
-    #           angle = angle,
-    #           theta1 = theta_1,
-    #           theta2=theta_2,
-    #           capstyle = 'round',
-    #           linestyle='-',
-    #           lw=2,
-    #           color = 'black')
-
-    # Add arc
-    # ax.add_patch(arc)
-
-    # Add arrow
-    # x1 = 3.733335          # x coordinate
-    # y1 = 1.0            # y coordinate
-    # len_x = 0.00005     # length on the x axis (negative so the arrow points to the left)
-    # len_y = 0        # length on the y axis
     ax.arrow(x1,
              y1,
              len_x,
@@ -193,34 +140,26 @@ def create_arc_and_arrow(ax, x1, y1, len_x, len_y, fc, alpha):
              linewidth=2,
              ec=fc,
              fc=fc)
-    # ax.annotate(xy=(x1, y1), dxdy=(len_x, len_y),
-    #             arrowprops={'arrowstyle': '->', 'lw': 2, 'color': fc},
-    #             va='center')
+ 
 
 def find_nearest_idx(array, value):
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     return idx
 
-#--------- customizing font --------
-# plt.rcParams['text.usetex'] = True
-# print(plt.style.available)
-# print(plt.rcParams.keys())
-plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
-# rc('font',**{'family':'serif','serif':['Times']})
-# rc('text', usetex=True)
 
+#--------- customizing font --------
+plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 figures_to_plot = ['fig3']
 
-
-# ------------- Fig. 2 ---------------------------------------------------------------------------------------------
-if 'fig2' in figures_to_plot:
+# ------------- Fig. 3 ---------------------------------------------------------------------------------------------
+if 'fig3' in figures_to_plot:
     fig = plt.figure(figsize=(20, 7*3))
     gs = GridSpec(3, 2, figure=fig)
-    # # fig 2 a
+    # # fig 3 a
     ax1 = fig.add_subplot(gs[0, :])
-    core_dir = 'data/fig2a'
+    core_dir = 'data/fig3a'
     # red
     data = np.loadtxt(core_dir+'/akxy=0.01_0.0.txt')
     x, y = prep_xy_data(data)
@@ -241,13 +180,11 @@ if 'fig2' in figures_to_plot:
     ax1.set_yticks([0.0, 1.0], minor=False)
     ax1.set_xlabel(r'$ak_0$')
     ax1.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
-    # ax1.set_xlim(3.7295, 3.74)
     ax1.set_xlim(3.7285, 3.74)
     ax1.set_ylim(-0.1, 1.1)
     ax1.legend(frameon=False, loc=2, bbox_to_anchor=(0.0,0.86) ,title='\t'+r'$ak_x$'+'\t'+r'$ak_y$')
-    
     # fig.3 b
-    core_dir = 'data/fig2b'
+    core_dir = 'data/fig3b'
     ax2 = fig.add_subplot(gs[1, 0])
     ax3 = fig.add_subplot(gs[1, 1], sharey=ax2)  
     for lmax in [4, 7, 10, 13]:
@@ -283,7 +220,7 @@ if 'fig2' in figures_to_plot:
     ax3.set_xticks([3.735, 3.7353, 3.7356], minor=False)
     # fig.3 c
     ax4 = fig.add_subplot(gs[2, :])
-    data_dir = 'data/fig2c/'
+    data_dir = 'data/fig3c/'
     data = np.loadtxt(data_dir+'T.txt')
     x, T = prep_xy_data(data)
     x, T = x, T
@@ -305,7 +242,6 @@ if 'fig2' in figures_to_plot:
                 )
     # customizing
     ax4.set_yticks([0.0, 1.0], minor=False)
-    # ax4.tick_params(axis='y', colors='red')
     ax4.set_ylim([-0.25, 1.1])
     ax4.set_xlim([3.731, 3.735])
     ax4.set_xlabel(r'$ak_0$')
@@ -322,9 +258,9 @@ if 'fig2' in figures_to_plot:
     fig.text(0.49, 0.34, r'$ak_0$', ha='center')
     fig.text(0.17, 0.28, r'$l_{max}=10$', ha='center')
     fig.text(0.17, 0.93, r'$l_{max}=4$', ha='center')
-    fig.text(0.02, 0.97, 'a)', ha='center')
-    fig.text(0.02, 0.65, 'b)', ha='center')
-    fig.text(0.02, 0.33, 'c)', ha='center')
+    fig.text(0.02, 0.97, 'a', ha='center')
+    fig.text(0.02, 0.65, 'b', ha='center')
+    fig.text(0.02, 0.33, 'c', ha='center')
     fig.text(0.8, 0.14, r'$x10^4$', ha='center', color='C2', fontsize=26)
     # ---------- zooming
     zoom_effect01(ax1, ax3, 3.7349, 3.7355)
@@ -341,11 +277,11 @@ if 'fig2' in figures_to_plot:
     for ax in [ax1, ax2, ax3, ax4, ax44]:
         ax.tick_params('both', length=10, width=2, which='major')
     
-    plt.savefig('fig2.pdf')
+    plt.savefig('fig3.pdf')
     plt.clf(); plt.close()
 
 
-if 'fig5' in figures_to_plot:
+if 'fig6' in figures_to_plot:
     plt.rcParams.update({'font.size': 50, 'font.serif':"Times New Roman"})
 
     fig = plt.figure(figsize=(40, 20))
@@ -538,13 +474,13 @@ if 'fig5' in figures_to_plot:
 
 import calculating_lib as cl
 
-if 'fig4' in figures_to_plot:
+if 'fig5' in figures_to_plot:
 
     dir = f'data/fig4/'
     fig = plt.figure(figsize=(20, 20))
     i = 1
     curve_styles = {
-        '7': (6, 1, 'orange', 1, 'dotted'),
+        '7': (8, 1, 'red', 1, 'dotted'),
         '12': (18, 0.4, 'green', 1, '-'),
         '14': (6, 1, 'black', 1, '-'),
     }
@@ -579,17 +515,15 @@ if 'fig4' in figures_to_plot:
 
 
 
-if 'fig6' in figures_to_plot:
-    # ---- ERROR BTW RMAX 7 AND RMAX 29 --------
-    # --- JUST SPECTRA -----
+if 'fig7' in figures_to_plot:
     LMAX = [4]
-    RMAX = [7]
+    RMAX = [12]
     AK1 = [0.01, 8e-5, 4e-5]
     X = {}; Y = {}
     step = 1
     #reading data to plot
     for version in ['3_cerf', '3']:
-        main_dir = dir=f'data/fig6/{version}/'
+        main_dir = dir=f'data/fig7/{version}/'
         for lmax in LMAX:
             for rmax in RMAX:
                 for ak1 in AK1:
@@ -599,12 +533,11 @@ if 'fig6' in figures_to_plot:
                     X[f'{version}_{rmax}_{ak1}'] = x; Y[f'{version}_{rmax}_{ak1}'] = y
     
     fig = plt.figure(figsize=(20, 20))
-    # plt.rcParams.update({'font.size': 45, 'font.serif':"Times New Roman"})
-    error_step = 5
+    error_step = 15
     axs = []
     for i, ak1 in enumerate(AK1):
         ak1 = round(ak1/2/np.pi, 8) 
-        ax = fig.add_subplot(3, 2, i+1)
+        ax = fig.add_subplot(3, 2, 2*(i+1)-1)
         axs.append(ax)
         key = f'{RMAX[0]}_{ak1}'
         plt.gca().plot(X['3_'+key], Y['3_'+key], 'black', lw=6, label='SciPy')
@@ -614,61 +547,55 @@ if 'fig6' in figures_to_plot:
         plt.gca().set_xlabel(r'$ak_0$')
         plt.gca().set_yscale('log')
         plt.gca().legend(frameon=False)
-        plt.gca().tick_params('both', length=15, width=4, which='both')
+        plt.gca().tick_params('both', length=15, width=4, which='major')
+        plt.gca().minorticks_off()
         plt.gca().set_ylabel(r'$\mathbf{T}$', rotation=0)
-        ax = fig.add_subplot(2, 3, i+4)
+        plt.gca().yaxis.set_label_coords(-0.25, 0.5)
+        ax = fig.add_subplot(3, 2, 2*(i+1))
         axs.append(ax)
         error = np.abs(Y['3_'+key]-Y['3_cerf_'+key])
-        plt.gca().scatter(X['3_'+key][::error_step], error[::error_step], color='black', s=30)
-        # plt.gca().set_ylabel('abs(T_Faddeeva - T_cerf)')
+        plt.gca().scatter(X['3_'+key][::error_step], error[::error_step], color='black', s=20)
         plt.gca().set_ylabel('error')
         plt.gca().set_xlabel(r'$ak_0$')
         plt.gca().set_yscale('log')
-        plt.gca().tick_params('both', length=15, width=4, which='both')
-    print(len(axs))
-    print(axs[4])
-    print(len(axs))
-
-    fig.text(0.08, 0.97, r'a)', ha='center', fontsize=50)
-    fig.text(0.4, 0.97, r'b)', ha='center', fontsize=50)
-    fig.text(0.71, 0.97, r'c)', ha='center', fontsize=50)
-    fig.text(0.08, 0.48, r'd)', ha='center', fontsize=50)
-    fig.text(0.4, 0.48, r'e)', ha='center', fontsize=50)
-    fig.text(0.71, 0.48, r'f)', ha='center', fontsize=50)
+        plt.gca().tick_params('both', length=15, width=4, which='major')
+        plt.gca().minorticks_off()
 
 
+    # fig.text(0.08, 0.97, r'a)', ha='center', fontsize=50)
+    # fig.text(0.4, 0.97, r'b)', ha='center', fontsize=50)
+    # fig.text(0.71, 0.97, r'c)', ha='center', fontsize=50)
+    # fig.text(0.08, 0.48, r'd)', ha='center', fontsize=50)
+    # fig.text(0.4, 0.48, r'e)', ha='center', fontsize=50)
+    # fig.text(0.71, 0.48, r'f)', ha='center', fontsize=50)
 
-    print(axs[5])
+
+
     #setting ticks and labels
-    # axs[2].set_xticks([3.73556, 3.73558, 3.73560, 3.73562])
-    # axs[2].set_xticklabels([3.73556, 3.73558, 3.73560, 3.73562])
+    axs[4].set_yticks([1, 1e-2, 1e-4, 1e-6])
+    # axs[2].set_yticklabels([3.73556, 3.73560])
     axs[2].set_xticks([3.73556, 3.73560])
     axs[2].set_xticklabels([3.73556, 3.73560])
-
-
     axs[4].set_xticks([3.73558, 3.7355825, 3.735585])
     axs[4].set_xticklabels([3.73558, 3.7355825, 3.735585])
-    axs[4].set_ylim([1e-5, 2])
-
-    # axs[3].set_xticks([3.73556, 3.73558, 3.73560, 3.73562])
-    # axs[3].set_xticklabels([3.73556, 3.73558, 3.73560, 3.73562])
+    # axs[4].set_ylim([1e-7, 2])
     axs[3].set_xticks([3.73556, 3.73560])
     axs[3].set_xticklabels([3.73556, 3.73560])
-
     axs[5].set_xticks([3.73558, 3.7355825, 3.735585])
     axs[5].set_xticklabels([3.73558, 3.7355825, 3.735585])
-    plt.subplots_adjust(left=0.08,
+  
+    plt.subplots_adjust(left=0.12,
                         bottom=0.099,
                         right=0.95,
                         top=0.95,
                         wspace=0.25,
                         hspace=0.35)
-    plt.savefig(f'fig6.pdf')
+    plt.savefig(f'fig7.pdf')
     plt.clf(); plt.close()
 
 
 
-if 'fig3' in figures_to_plot:
+if 'fig4' in figures_to_plot:
     import os
     from matplotlib.offsetbox import OffsetImage, AnnotationBbox
     lmax = 7
@@ -679,7 +606,7 @@ if 'fig3' in figures_to_plot:
     # #key:version_rmax
     # #value: (lw, alpha, color, zorder, styles)
     curve_styles = {
-        '2_35': (6, 1, 'orange', 1, 'dotted'),
+        '2_35': (9, 1, 'red', 1, 'dotted'),
         '2_60': (18, 0.4, 'green', 1, '-'),
         '2_50': (6, 1, 'black', 1, '-'),
     }
@@ -781,7 +708,7 @@ if 'fig3' in figures_to_plot:
     # }
 
     curve_styles = {
-        '3_35': (6, 1, 'orange', 1, 'dotted'),
+        '3_35': (9, 1, 'red', 1, 'dotted'),
         '3_47': (18, 0.4, 'green', 1, '-'),
         '3_45': (6, 1, 'black', 1, '-'),
     }
@@ -930,6 +857,137 @@ if 'fig3' in figures_to_plot:
     # plt.gca().plot(X['3'], np.abs(Y['with_lapack']-Y['3_wo_faddeeva'])*factor, label=f'v={version}_d={d}')
     # plt.gca().set_yscale('log')
 
+
+curve_styles = {
+        '650_m_qsz': (6, 1, 'green', 1, 'dashed'),
+        '650_m_qsz_mk': (6, 1, 'green', 1, 'solid'),
+        '650_m_total': (20, 0.2, 'green', 1, 'solid'),
+        '750_m_qsz': (6, 1, 'green', 1, 'dashed'),
+        '750_m_qsz_mk': (6, 1, 'green', 1, 'solid'),
+        '750_m_total': (20, 0.2, 'green', 1, 'solid'),
+        '750_p_ps': (6, 1, 'red', 1, 'dashed'),
+        '750_p_qks_mz_ps': (6, 1, 'red', 1, 'solid'),
+        '750_p_total': (20, 0.2, 'red', 1, 'solid'),
+        '900_p_ps': (6, 1, 'red', 1, 'dashed'),
+        '900_p_qks_mz_ps': (6, 1, 'red', 1, 'solid'),
+        '900_p_total': (20, 0.2, 'red', 1, 'solid')
+    }
+
+if 'fig8' in figures_to_plot:
+    import os
+    fig = plt.figure(figsize=(20, 20))
+    main_dir = f'data/fig8/'
+    fig.add_subplot(2, 2, 1)
+    for dataset in ['650_m_qsz', '650_m_qsz_mk', '650_m_total']:
+        path = main_dir+f'{dataset}.txt'
+        if os.path.exists(path): 
+            x, y = cl.read_1D_data_real(path)
+        else:
+            print('File not Found')
+            continue
+        plt.gca().plot(x, y, 
+                    lw=curve_styles[dataset][0], 
+                    alpha=curve_styles[dataset][1],
+                    color=curve_styles[dataset][2],
+                    zorder=curve_styles[dataset][3],
+                    ls=curve_styles[dataset][4])
+    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
+    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
+    plt.gca().set_xlabel(r'sin$\theta$')
+    plt.gca().tick_params('both', length=15, width=4, which='major')
+    plt.gca().set_yticks([0.0, 0.1, 0.3, 0.5, 0.7])
+    fig.text(0.32, 0.96, '650 nm', color='black', ha='center', fontsize=30)
+    fig.text(0.08, 0.96, 'a', color='black', ha='center', fontsize=30)
+    fig.text(0.28, 0.83, r'$q_{sz}$', color='green', ha='center', fontsize=30)
+    fig.text(0.33, 0.9, r'$m_{k}+q_{sz}$', color='green', ha='center', fontsize=30)
+
+
+    fig.add_subplot(2, 2, 2)
+    for dataset in ['750_m_qsz', '750_m_qsz_mk', '750_m_total']:
+        path = main_dir+f'{dataset}.txt'
+        if os.path.exists(path): 
+            x, y = cl.read_1D_data_real(path)
+        else:
+            print('File not Found')
+            continue
+        plt.gca().plot(x, y, 
+                    lw=curve_styles[dataset][0], 
+                    alpha=curve_styles[dataset][1],
+                    color=curve_styles[dataset][2],
+                    zorder=curve_styles[dataset][3],
+                    ls=curve_styles[dataset][4])
+    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
+    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
+    plt.gca().set_xlabel(r'sin$\theta$')
+    plt.gca().tick_params('both', length=15, width=4, which='major')
+    plt.gca().set_yticks([0.0, 0.1, 0.3, 0.5, 0.7])
+    fig.text(0.77, 0.96, '750 nm', color='black', ha='center', fontsize=30)
+    fig.text(0.55, 0.96, 'b', color='black', ha='center', fontsize=30)
+    fig.text(0.73, 0.86, r'$q_{sz}$', color='green', ha='center', fontsize=30)
+    fig.text(0.78, 0.93, r'$m_{k}+q_{sz}$', color='green', ha='center', fontsize=30)
+
+
+    fig.add_subplot(2, 2, 3)
+    for dataset in ['750_p_ps', '750_p_qks_mz_ps', '750_p_total']:
+        path = main_dir+f'{dataset}.txt'
+        if os.path.exists(path): 
+            x, y = cl.read_1D_data_real(path)
+        else:
+            print('File not Found')
+            continue
+        plt.gca().plot(x, y, 
+                    lw=curve_styles[dataset][0], 
+                    alpha=curve_styles[dataset][1],
+                    color=curve_styles[dataset][2],
+                    zorder=curve_styles[dataset][3],
+                    ls=curve_styles[dataset][4])
+    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
+    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
+    plt.gca().set_xlabel(r'sin$\theta$')
+    plt.gca().tick_params('both', length=15, width=4, which='major')
+    fig.text(0.32, 0.48, '750 nm', color='black', ha='center', fontsize=30)
+    fig.text(0.08, 0.48, 'c', color='black', ha='center', fontsize=30)
+    fig.text(0.33, 0.3, r'$p_{s}$', color='red', ha='center', fontsize=30)
+    fig.text(0.42, 0.42, r'$p_{s}+m_{z}+q_{ks}$', color='red', ha='center', fontsize=30)
+
+    
+    fig.add_subplot(2, 2, 4)
+    for dataset in ['900_p_ps', '900_p_qks_mz_ps', '900_p_total']:
+        path = main_dir+f'{dataset}.txt'
+        if os.path.exists(path): 
+            x, y = cl.read_1D_data_real(path)
+        else:
+            print('File not Found')
+            continue
+        plt.gca().plot(x, y, 
+                    lw=curve_styles[dataset][0], 
+                    alpha=curve_styles[dataset][1],
+                    color=curve_styles[dataset][2],
+                    zorder=curve_styles[dataset][3],
+                    ls=curve_styles[dataset][4])
+    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
+    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
+    plt.gca().set_xlabel(r'sin$\theta$')
+    plt.gca().tick_params('both', length=15, width=4, which='major')
+    fig.text(0.77, 0.48, '900 nm', color='black', ha='center', fontsize=30)
+    fig.text(0.55, 0.48, 'd', color='black', ha='center', fontsize=30)
+    fig.text(0.72, 0.41, r'$p_{s}$', color='red', ha='center', fontsize=30)
+    fig.text(0.7, 0.2, r'$p_{s}+m_{z}+q_{ks}$', color='red', ha='center', fontsize=30)
+
+    plt.subplots_adjust(left=0.15,
+                        bottom=0.1,
+                        right=0.95,
+                        top=0.95,
+                        wspace=0.3,
+                        hspace=0.3)
+
+
+
+    plt.savefig(f'fig8.pdf')
+    plt.clf(); plt.close()
+
+
+
 if 'extra_data' in figures_to_plot:
     import collections
     fad_x_re, fad_x_im, fad_y_re, fad_y_im = cl.read_1D_data_complex('fort.3')
@@ -971,7 +1029,9 @@ if 'extra_data' in figures_to_plot:
     # plt.subplots_adjust(left=0.063,
     #                     bottom=0.094,
     #                     right=0.97,
-    #                     top=0.93,
+    #                     top=0.93,  plt.subplots_adjust(left=0.1,
+                   
+
     #                     wspace=0.2,
     #                     hspace=0.4)
     
@@ -998,7 +1058,8 @@ if 'extra_data' in figures_to_plot:
 
 #     # --- reading args for Faddeeva func from MB Dirac cone
 #     with open('fort.1') as f:
-#         lines = f.readlines()
+#         lines = f.readlines()  plt.subplots_adjust(left=0.1,
+        
 #     args_re, args_im = [], []
 #     # ---- postprocess - deleting brackets and left only unique positive values
 #     for line in lines:
@@ -1086,7 +1147,9 @@ if 'extra_data' in figures_to_plot:
 #     fig.text(left_x_pos, 0.25, 'Multem 3', ha='center', rotation=90)
 #     fig.text(left_x_pos, 0.7, 'Multem 2', ha='center', rotation=90)
 #     fig.text(0.28, 0.97, r'$\Re(w(z))$', ha='center')
-#     fig.text(0.73, 0.97, r'$\Im(w(z))$', ha='center')
+#     fig.text(0.73, 0.97, r'$\Im(w(z))$', ha='center')  plt.subplots_adjust(left=0.1,
+                        
+
 
 #     delta_x_pos = 0.04
 #     fig.text(left_x_pos + delta_x_pos, 0.93, r'$10^{8}$', ha='center')
