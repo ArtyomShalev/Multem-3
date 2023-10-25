@@ -150,7 +150,8 @@ def find_nearest_idx(array, value):
 
 #--------- customizing font --------
 plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
-# fig3
+
+
 figures_to_plot = ['fig5']
 
 # ------------- Fig. 3 ---------------------------------------------------------------------------------------------
@@ -463,11 +464,6 @@ if 'fig6' in figures_to_plot:
     for ax in [ax1, ax2, ax3, ax4, ax5]:
         ax.tick_params('both', length=15, width=4, which='major')
 
-    # plt.subplot_tool()
-    #
-
-
-    # plt.show()
     plt.savefig('fig5.pdf')
     plt.clf(); plt.close()
 
@@ -600,7 +596,6 @@ if 'fig4' in figures_to_plot:
     from matplotlib.offsetbox import OffsetImage, AnnotationBbox
     lmax = 7
     fig = plt.figure(figsize=(20, 20))
-    #fig 3b -- multem2 multem3 coincidence
     ax1 = fig.add_subplot(3, 1, 2)
     X = {}; Y = {}
     # #key:version_rmax
@@ -611,7 +606,7 @@ if 'fig4' in figures_to_plot:
         '2_50': (6, 1, 'black', 1, '-'),
     }
     for version in ['2']:
-        main_dir = f'data/fig5/mode=3/version={version}/d=0.85/'
+        main_dir = f'data/fig4/mode=3/version={version}/d=0.85/'
         for rmax in ['60', '50', '35']:
             path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
             if os.path.exists(path): 
@@ -667,7 +662,7 @@ if 'fig4' in figures_to_plot:
         '3_30': (18, 0.4, 'blue', 1),
     }
     for version in ['2', '3']:
-        main_dir = f'data/fig5/mode=3/version={version}/d=0.85/'
+        main_dir = f'data/fig4/mode=3/version={version}/d=0.85/'
         for rmax in ['20', '30']:
             path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
             if os.path.exists(path): 
@@ -713,7 +708,7 @@ if 'fig4' in figures_to_plot:
         '3_45': (6, 1, 'black', 1, '-'),
     }
     for version in ['3']:
-        main_dir = f'data/fig5/mode=3/version={version}/d=0.85/'
+        main_dir = f'data/fig4/mode=3/version={version}/d=0.85/'
         for rmax in ['47', '45', '35']:
             path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
             if os.path.exists(path): 
@@ -754,59 +749,6 @@ if 'fig4' in figures_to_plot:
     fig.text(0.03, 0.33, 'c', color='black', ha='center', fontsize=30)
     fig.text(0.7, 0.33, 'd', color='black', ha='center', fontsize=30)
 
-
-
-
-    # plt.show()
-    #        
-    #   if rmax == '20' or rmax == '22':
-    #             ax2.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'RMAX={rmax}', 
-    #                      lw=curve_styles[f'{version}_{rmax}'][0], 
-    #                      alpha=curve_styles[f'{version}_{rmax}'][1],
-    #                      color=curve_styles[f'{version}_{rmax}'][2],
-    #                      zorder=curve_styles[f'{version}_{rmax}'][3])
-    #         else:
-    #             ax1.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], 
-    #                      lw=curve_styles[f'{version}_{rmax}'][0], 
-    #                      alpha=curve_styles[f'{version}_{rmax}'][1],
-    #                      color=curve_styles[f'{version}_{rmax}'][2],
-    #                      zorder=curve_styles[f'{version}_{rmax}'][3])
-    # ax2.plot(X['3_16'], Y['3_16'], label='RMAX=16', 
-    #                      lw=3, 
-    #                      alpha=1,
-    #                      color='blue')
-
-    # from matplotlib.legend_handler import HandlerBase
-    # class AnyObjectHandler(HandlerBase):
-    #     def create_artists(self, legend, orig_handle,
-    #                     x0, y0, width, height, fontsize, trans):
-    #         l1 = plt.Line2D([x0,y0+width], [0.9*height,0.9*height],
-    #                         color=orig_handle[0], lw=orig_handle[1], alpha=orig_handle[2])
-    #         l2 = plt.Line2D([x0,y0+width], [0.1*height,0.1*height], 
-    #                         color=orig_handle[3], lw=orig_handle[4], alpha=orig_handle[5])
-    #         return [l1, l2]
-
-    # leg1 = ax1.legend([("green", 15, 0.5, "red", 15, 0.5),("black", 3, 1, "blue", 3, 1)], ['multem2', "multem3"], 
-    #            handler_map={tuple: AnyObjectHandler()}, loc='lower center', frameon=False)
-    # handles, labels = ax2.get_legend_handles_labels()
-    # order = [2,0,1]
-    # leg2 = ax2.legend([handles[idx] for idx in order],[labels[idx] for idx in order], loc="upper right", 
-    #                   fontsize="22", frameon=False)
-    # leg2.set_title("multem3")
-    # ax1.legend()
-    # ax1.set_ylabel('T')
-    # ax1.set_xlabel(r'$ak_0$')
-    # ax1.set_xlim([4, 6])
-    # ax1.set_ylim([0, 1])
-
-    # ax2.set_ylabel('T')
-    # ax2.set_xlabel(r'$ak_0$')
-
-    # fig.text(0.8, 0.7, 'multem2 crashes', ha='center', color='red', fontsize=24)
-    # fig.text(0.8, 0.65, 'when RMAX=20', ha='center', color='red',  fontsize=24)
-    # fig.text(0.4, 0.3, 'RMAX=8', ha='center')
-    # fig.text(0.2, 0.8, 'RMAX=16', ha='center')
-
     plt.subplots_adjust(left=0.1,
                         bottom=0.05,
                         right=0.95,
@@ -818,47 +760,13 @@ if 'fig4' in figures_to_plot:
     for ax in [ax1, ax2, ax3]:
         ax.tick_params('both', length=10, width=2, which='major')
 
-    plt.savefig(f'fig3.pdf')
+    plt.savefig(f'fig4.pdf')
     plt.clf(); plt.close()
 
-    # error = np.abs(Y[f'3_{rmax}']-Y[f'3_cerf_{rmax}'])
-    # plt.gca().scatter(X[f'3_{rmax}'][::step], y[::step], label=f'max_error {np.max(y)}', s=10)
+   
 
-                    # if version == '3_cerf':
-                    #     plt.gca().plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'{version}', lw=5, alpha=0.7)
-                    # else:
-                    #     plt.gca().plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'{version}')
-                        
-    # plt.gca().set_title(f'LMAX={LMAX[0]} RMAX={RMAX}')
-    # plt.gca().set_ylabel('abs(T_Faddeeva - T_cerf)')
-    # plt.gca().set_xlabel(r'$ak_0$')
-    # for rmax in RMAX:
-        # plt.gca().plot(X[f'3_{rmax}']*2*np.pi, np.abs(Y[f'3_{rmax}']-Y[f'3_cerf_{rmax}'])*factor, label=f'{rmax}')
-        # plt.gca().plot(X[f'3_{rmax}'], Y[f'3_{rmax}']*factor, label=f'{rmax}')
-    # plt.gca().set_yscale('log')
-    # plt.gca().legend()
-    # fig.text(0.25, 0.75, 'RMAX', ha='center')
-
-
-    # fig.add_subplot(3, 1, 2)
-    # plt.gca().plot(X['3_1.0']*2*np.pi, np.abs(Y['3_1.0']-Y['3_wo_faddeeva_1.0'])*factor, label=f'd=1.0')
-    # plt.gca().set_yscale('log')
-    # plt.gca().legend()
-
-    # fig.add_subplot(3, 1, 3)
-    # plt.gca().plot(X['3_1.8']*2*np.pi, np.abs(Y['3_1.8']-Y['3_wo_faddeeva_1.8'])*factor, label=f'd=1.8')
-    # plt.gca().set_yscale('log')
-
-    # plt.gca().plot(X['3'], np.abs(Y['3']-Y['3_wo_faddeeva'])*factor, label=f'v={version}_d={d}')
-    # plt.gca().set_yscale('log')
-    # fig.add_subplot(3, 1, 2)
-    
-    # fig.add_subplot(3, 1, 3)
-    # plt.gca().plot(X['3'], np.abs(Y['with_lapack']-Y['3_wo_faddeeva'])*factor, label=f'v={version}_d={d}')
-    # plt.gca().set_yscale('log')
-
-
-curve_styles = {
+if 'fig8' in figures_to_plot:
+    curve_styles = {
         '650_m_qsz': (6, 1, 'green', 1, 'dashed'),
         '650_m_qsz_mk': (6, 1, 'green', 1, 'solid'),
         '650_m_total': (20, 0.2, 'green', 1, 'solid'),
@@ -872,8 +780,6 @@ curve_styles = {
         '900_p_qks_mz_ps': (6, 1, 'red', 1, 'solid'),
         '900_p_total': (20, 0.2, 'red', 1, 'solid')
     }
-
-if 'fig8' in figures_to_plot:
     import os
     fig = plt.figure(figsize=(20, 20))
     main_dir = f'data/fig8/'

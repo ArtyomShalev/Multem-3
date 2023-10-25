@@ -4,8 +4,8 @@ sys.path.insert(0, '../..')
 import src.python_simulations.multem3_py_calculating as calc
 import time 
 
-'fig3a', 'fig3b', 'fig3c', 'fig5'
-figures_to_calculate = ['fig5']
+# 'fig3a', 'fig3b', 'fig3c', 'fig5'
+figures_to_calculate = ['fig8']
 
 # ----- calculating data for fig. 3 a) -------------------
 if 'fig3a' in figures_to_calculate:
@@ -211,9 +211,8 @@ if 'fig7' in figures_to_calculate:
             print(f'{input_params["multem_version"]} : {time.time()-time0}s')
 
 
-if 'fig3' in figures_to_calculate:
-    import time
-
+if 'fig4' in figures_to_calculate:
+    start = time.time()
     input_params = {
     'mts': '0', #multipole_type_selected
     'mos': '0', #multipole_order_selected
@@ -247,11 +246,28 @@ if 'fig3' in figures_to_calculate:
     for input_params['multem_version'] in ['3']:
         for input_params['lmax'] in [7]:
             time0 = time.time()
-            for input_params['rmax'] in [35]:
+            for input_params['rmax'] in [35, 45, 47]:
                 F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                calc.save_1D_data(omega, T, dir=f'data/fig5/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
+                calc.save_1D_data(omega, T, dir=f'data/fig4/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
             print(f'{input_params["multem_version"]} : {time.time()-time0}s')
- 
+
+    for input_params['multem_version'] in ['2']:
+        for input_params['lmax'] in [7]:
+            time0 = time.time()
+            for input_params['rmax'] in [35, 50, 60]:
+                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                calc.save_1D_data(omega, T, dir=f'data/fig4/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
+            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+
+    for input_params['multem_version'] in ['2', '3']:
+        for input_params['lmax'] in [7]:
+            time0 = time.time()
+            for input_params['rmax'] in [20, 30]:
+                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                calc.save_1D_data(omega, T, dir=f'data/fig4/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
+            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+    print(f'CPU time:{time.time()-start}')
+
 
 if 'fig5' in figures_to_calculate:
     start = time.time()
@@ -306,6 +322,7 @@ if 'fig5' in figures_to_calculate:
 
 
 if 'fig8' in figures_to_calculate:
+    start = time.time()
     input_parameters = {
         'ktype': 1,
         'lmax': 3,
@@ -446,7 +463,7 @@ if 'fig8' in figures_to_calculate:
     input_parameters['m'] =     '-1 1 0 -2 2'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_qks_mz_ps.txt')
-
+    print(f'CPU time: {time.time()-start}')
 
 if 'diff_orders_test' in figures_to_calculate:
     input_parameters = {
