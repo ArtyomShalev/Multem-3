@@ -5,7 +5,7 @@ import src.python_simulations.multem3_py_calculating as calc
 import time 
 
 # 'fig3a', 'fig3b', 'fig3c', 'fig5'
-figures_to_calculate = ['fig8']
+figures_to_calculate = ['fig4']
 
 # ----- calculating data for fig. 3 a) -------------------
 if 'fig3a' in figures_to_calculate:
@@ -138,79 +138,6 @@ if 'fig3c' in figures_to_calculate:
     print(f'CPU time:{time.time()-start}')
 
 
-if 'fig7' in figures_to_calculate:
-    import time
-
-    input_params = {
-    'mts': '0', #multipole_type_selected
-    'mos': '0', #multipole_order_selected
-    'mps': '0', #m_projection_selected
-    'type': '1',
-    'order': '1',
-    'm': '1',
-    'rmax': 2,
-    'lmax': 4,
-    'lattice_constant': 300,
-    'fab': 60,
-    'polar': 'S',
-    'epssph_re': 15,
-    'epssph_im': 0,
-    'epsmed_re': 1,
-    'epsmed_im': 0,
-    'ktype': 2,
-    'kscan': 1,
-    'zinf': 0.5,
-    'zsup': 1.0,
-    'npts': 1000,
-    'r_ratio': 0.4705,
-    'mode': '1', #multi-layered
-    'dist_btw_spheres_and_interface': 0.6
-}
-    LMAX = [4]
-    RMAX = [12]
-    #fig7 a-d
-    omega = np.linspace(3.734, 3.737, input_params['npts'])
-    input_params['zinf'] = omega[0]
-    input_params['zsup'] = omega[-1]
-    ak1 = 0.01/2/np.pi
-    ak2 = 0
-    for input_params['multem_version'] in ['3_cerf', '3']:
-        for input_params['lmax'] in LMAX:
-            time0 = time.time()
-            for input_params['rmax'] in RMAX:
-                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                calc.save_1D_data(omega, T, dir=f'data/fig7/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
-            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-
-    #fig7 b-e
-    omega = np.linspace(3.73555, 3.73562, input_params['npts'])
-    input_params['zinf'] = omega[0]
-    input_params['zsup'] = omega[-1]
-    ak1 = 8e-5/2/np.pi
-    ak2 = 0
-    for input_params['multem_version'] in ['3_cerf', '3']:
-        for input_params['lmax'] in LMAX:
-            time0 = time.time()
-            for input_params['rmax'] in RMAX:
-                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                calc.save_1D_data(omega, T, dir=f'data/fig7/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
-            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-    
-    #fig7 c-f
-    omega = np.linspace(3.73558, 3.735585, input_params['npts'])
-    input_params['zinf'] = omega[0]
-    input_params['zsup'] = omega[-1]
-    ak1 = 4e-5/2/np.pi
-    ak2 = 0
-    for input_params['multem_version'] in ['3_cerf', '3']:
-        for input_params['lmax'] in LMAX:
-            time0 = time.time()
-            for input_params['rmax'] in RMAX:
-                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                calc.save_1D_data(omega, T, dir=f'data/fig7/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
-            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-
-
 if 'fig4' in figures_to_calculate:
     start = time.time()
     input_params = {
@@ -319,6 +246,83 @@ if 'fig5' in figures_to_calculate:
             factor += 1
         calc.save_result(dir, 'sintheta', sin_theta)
         print(f"CPU time {time.time()-start}")
+
+#========================================================================
+#fig 6 
+#========================================================================
+
+if 'fig7' in figures_to_calculate:
+    import time
+
+    input_params = {
+    'mts': '0', #multipole_type_selected
+    'mos': '0', #multipole_order_selected
+    'mps': '0', #m_projection_selected
+    'type': '1',
+    'order': '1',
+    'm': '1',
+    'rmax': 2,
+    'lmax': 4,
+    'lattice_constant': 300,
+    'fab': 60,
+    'polar': 'S',
+    'epssph_re': 15,
+    'epssph_im': 0,
+    'epsmed_re': 1,
+    'epsmed_im': 0,
+    'ktype': 2,
+    'kscan': 1,
+    'zinf': 0.5,
+    'zsup': 1.0,
+    'npts': 1000,
+    'r_ratio': 0.4705,
+    'mode': '1', #multi-layered
+    'dist_btw_spheres_and_interface': 0.6
+}
+    LMAX = [4]
+    RMAX = [12]
+    #fig7 a-d
+    omega = np.linspace(3.734, 3.737, input_params['npts'])
+    input_params['zinf'] = omega[0]
+    input_params['zsup'] = omega[-1]
+    ak1 = 0.01/2/np.pi
+    ak2 = 0
+    for input_params['multem_version'] in ['3_cerf', '3']:
+        for input_params['lmax'] in LMAX:
+            time0 = time.time()
+            for input_params['rmax'] in RMAX:
+                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                calc.save_1D_data(omega, T, dir=f'data/fig7/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+
+    #fig7 b-e
+    omega = np.linspace(3.73555, 3.73562, input_params['npts'])
+    input_params['zinf'] = omega[0]
+    input_params['zsup'] = omega[-1]
+    ak1 = 8e-5/2/np.pi
+    ak2 = 0
+    for input_params['multem_version'] in ['3_cerf', '3']:
+        for input_params['lmax'] in LMAX:
+            time0 = time.time()
+            for input_params['rmax'] in RMAX:
+                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                calc.save_1D_data(omega, T, dir=f'data/fig7/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+    
+    #fig7 c-f
+    omega = np.linspace(3.73558, 3.735585, input_params['npts'])
+    input_params['zinf'] = omega[0]
+    input_params['zsup'] = omega[-1]
+    ak1 = 4e-5/2/np.pi
+    ak2 = 0
+    for input_params['multem_version'] in ['3_cerf', '3']:
+        for input_params['lmax'] in LMAX:
+            time0 = time.time()
+            for input_params['rmax'] in RMAX:
+                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                calc.save_1D_data(omega, T, dir=f'data/fig7/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+
 
 
 if 'fig8' in figures_to_calculate:

@@ -284,7 +284,6 @@ if 'fig3' in figures_to_plot:
 
 if 'fig6' in figures_to_plot:
     plt.rcParams.update({'font.size': 50, 'font.serif':"Times New Roman"})
-
     fig = plt.figure(figsize=(40, 20))
     # --- reading data ------
     data_dir = 'data/fig3/'
@@ -481,9 +480,6 @@ if 'fig5' in figures_to_plot:
         '14': (6, 1, 'black', 1, '-'),
     }
     RMAX = ['12', '14', '7'] 
-    # color = {7: 'orange', 8: 'black', 13: 'green'}
-    # lw = {7: 6, 8: 6, 13: 18}
-    # alpha = {7: 1, 8: 1, 13: 0.4}
     lines = {}
 
     for rmax in RMAX:
@@ -494,7 +490,7 @@ if 'fig5' in figures_to_plot:
         plt.plot([0.726, 0.726], [1.04, 1.19], 'red', lw=5)
         lines[rmax], = plt.plot(x, R3+2, color=curve_styles[rmax][2], lw=curve_styles[rmax][0], alpha=curve_styles[rmax][1], ls=curve_styles[rmax][4])
         plt.plot([0.872, 0.872], [2.1, 2.25], 'red', lw=5)
-        plt.xlabel(r'$sin\theta$')
+        plt.xlabel(r'sin$\theta$')
         plt.ylabel(r'$\mathbf{R_{spec}}$', rotation=0)
         plt.gca().yaxis.set_label_coords(-0.1, 0.5)
     plt.legend(handles=[lines['7'], lines['12'], lines['14']], labels=['RMAX=7', 'RMAX=12', 'RMAX=14'], frameon=False)
@@ -1094,261 +1090,6 @@ if 'extra_data' in figures_to_plot:
 # plt.savefig('/home/ashalev/Projects/amos-try/multem2mod/multem3article/figures/ready_to_publish/fig1_new.pdf')
 # plt.clf(); plt.close()
 # ----------------------------------------------------------------------------------------------------------
-
-# ------------- Fig. 2 errors lapack ---------------------------------------------------------------------------------------------
-# fig = plt.figure(figsize=(16, 9))
-# data_dir = 'figures/Maksimov_Bulgakov/data/lapack/'
-# data = np.loadtxt(data_dir+'T.txt')
-# x, T = prep_xy_data(data)
-# x, T = x[:400], T[:400]
-# error_wo_lapack = prep_xy_data(np.loadtxt(data_dir+'error_wo_lapack.txt'))[1][:400]
-# error_with_lapack = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1][:400]
-# ax1 = plt.subplot()
-# l2, = ax1.plot(x, error_wo_lapack, lw=3)
-# l1, = ax1.plot(x, np.array(error_with_lapack)*1e4)
-# ax1.set_ylabel('error')
-# ax2 = ax1.twinx()
-# l3, = ax2.plot(x, T, 'r', lw=4, alpha=0.3, zorder=10)
-# create_arc_and_arrow(ax2, 3.733282, 1.002)
-# ax2.set_ylabel('T')
-# plt.legend([l1, l2], ['LAPACK', 'W/O LAPACK'], frameon=False)
-# plt.annotate(r"x$10^4$",
-#             xy=(3.731546, 0.6), xycoords='data',    # 0.6 1 option; 0.34 2 option
-#             xytext=(-19, 30), textcoords='offset points',
-#             arrowprops=dict(arrowstyle="->", color='black')
-#             )
-# ax1.set_xlabel(r'$ak_0$')
-# ax1.set_xticks([3.731, 3.732, 3.733, 3.734, 3.735], minor=False)
-# ax1.set_yticks([-0.0235, 0.0235], minor=False)  # -0.0235 1 option; -0.005 2 option
-# ax2.set_yticks([0, 1.], minor=False)
-#
-# plt.subplots_adjust(left=0.11,
-#                     bottom=0.09,
-#                     right=0.95,
-#                     top=0.95,
-#                     wspace=0.06,
-#                     hspace=0.07)
-#
-# plt.subplot_tool()
-
-# plt.show()
-
-# plt.savefig('/home/ashalev/Projects/amos-try/multem2mod/multem3article/figures/ready_to_publish/fig2-1option.pdf')
-# plt.clf(); plt.close()
-
-# ----------------------------------------------------------------------------------------------------------
-
-
-
-# ------------- Fig. 2 ---------------------------------------------------------------------------------------------
-# fig = plt.figure(figsize=(10, 10))
-# fig = plt.figure(figsize=(20, 7*3))
-# gs = GridSpec(3, 2, figure=fig)
-#
-# # fig 3 a
-# ax1 = fig.add_subplot(gs[0, :])
-# core_dir = 'figures/Maksimov_Bulgakov/data/lmax4_all'
-# #red
-# data = np.loadtxt(core_dir+'/akxy=0.01_0.0.txt')
-# x, y = prep_xy_data(data)
-# ax1.plot(x, y, color='red', label=r'$0.01$'+'\t'+ r'$0$')
-# #silver
-# data = np.loadtxt(core_dir+'/akxy=0.0_0.049999999999999996.txt')
-# x, y = prep_xy_data(data)
-# ax1.plot(x, y, color='silver', lw=2, label=r'$0$'+'\t'+ '  0.05')
-# #blue dashed
-# data = np.loadtxt(core_dir+'/akxy=0.049999999999999996_0.0.txt')
-# x, y = prep_xy_data(data)
-# ax1.plot(x, y, 'b--', dashes=(15, 15), label=r'$0.05$'+'\t'+ r'$0$')
-# #magenta dot-dashed
-# data = np.loadtxt(core_dir+'/akxy=0.09999999999999999_0.0.txt')
-# x, y = prep_xy_data(data)
-# ax1.plot(x, y, color='magenta', linestyle= (0, (3, 5, 1, 5)), label=r'$0.1$'+'\t'+' 0')
-# #------- customizing
-# ax1.set_yticks([0.0, 1.0], minor=False)
-# ax1.set_xlabel(r'$ak_0$')
-# ax1.set_ylabel('$T$')
-# ax1.set_xlim(3.7295, 3.74)
-# ax1.set_ylim(-0.1, 1.1)
-# ax1.legend(frameon=False, loc=2, bbox_to_anchor=(0.0,0.86) ,title='\t'+r'$ak_x$'+'\t'+r'$ak_y$')
-#
-# # fig.3 b
-# core_dir = 'figures/Maksimov_Bulgakov/data/akx0.01'
-# ax2 = fig.add_subplot(gs[1, 0])
-# ax3 = fig.add_subplot(gs[1, 1], sharey=ax2)
-# # --- red spectrum ----
-# lmax = 4
-# data = np.loadtxt(core_dir+f'/lmax={lmax}.txt')
-# x, y = prep_xy_data(data)
-# ax2.plot(x, y, color='red', label=str(lmax))
-# ax3.plot(x, y, color='red', label=str(lmax))
-# for lmax in [7, 10, 13]:
-#     data = np.loadtxt(core_dir+f'/lmax={lmax}.txt')
-#     x, y = prep_xy_data(data)
-#     ax2.plot(x, y, label=str(lmax))
-#     ax3.plot(x, y, label=str(lmax))
-# ax2.set_ylim(-0.1, 1.1)
-# ax2.set_xlim(3.7317, 3.7325)
-# ax3.set_xlim(3.7348, 3.7356)
-# ax2.legend(frameon=False, loc=2, title='\t'+r'$l_{max}$')
-# # hiding the spines between ax2 and ax3
-# ax2.spines['right'].set_visible(False)
-# ax3.spines['left'].set_visible(False)
-# ax3.yaxis.tick_right()
-# ax3.tick_params(labelright=False)  # don't put tick labels at the top
-# # drawing diagonal lines
-# d = .015  # how big to make the diagonal lines in axes coordinates
-# kwargs = dict(transform=ax2.transAxes, color='k', clip_on=False)
-# ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)
-# ax2.plot((1 - d, 1 + d), (-d, +d), **kwargs)
-# kwargs.update(transform=ax3.transAxes)
-# ax3.plot((-d, +d), (1 - d, 1 + d), **kwargs)
-# ax3.plot((-d, +d), (-d, +d), **kwargs)
-#
-# #------- customizing
-# ax2.set_ylabel('$T$')
-# ax2.set_yticks([0.0, 1.0], minor=False)
-# ax2.set_xticks([3.7318, 3.7321, 3.7324], minor=False)
-# ax3.set_xticks([3.735, 3.7353, 3.7356], minor=False)
-#
-#
-#
-#
-#
-# # fig.3 c
-# ax4 = fig.add_subplot(gs[2, :])
-# data_dir = 'figures/Maksimov_Bulgakov/data/lapack/'
-# data = np.loadtxt(data_dir+'T.txt')
-# x, T = prep_xy_data(data)
-# x, T = x[:400], T[:400]
-# error_wo_lapack = prep_xy_data(np.loadtxt(data_dir+'error_wo_lapack.txt'))[1][:400]
-# error_with_lapack = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1][:400]
-# ax44 = ax4.twinx()
-# # l1, = ax44.plot(x, np.array(error_with_lapack)*1e4, color='C5')
-# l1, = ax44.plot(x, np.array(error_with_lapack)*1e4, color='C2')
-#
-# l2, = ax44.plot(x, error_wo_lapack, color='C0', lw=2)
-# ax4.set_ylabel('error')
-# l3, = ax4.plot(x, T, 'red', lw=4, alpha=0.3)
-# # create_arc_and_arrow(ax11, 3.733282, 1.002)
-# ax4.set_ylabel('T')
-# plt.legend([l1, l2], ['LAPACK', 'W/O LAPACK'], frameon=False)
-# plt.annotate(r"x$10^4$",
-#             xy=(3.731546, 0.6), xycoords='data',    # 0.6 1 option; 0.34 2 option
-#             xytext=(-19, 30), textcoords='offset points',
-#             arrowprops=dict(arrowstyle="->", color='black')
-#             )
-#
-#
-#
-#
-# # customizing
-# ax4.set_yticks([0.0, 1.0], minor=False)
-# #ax4.tick_params(axis='y', colors='red')
-# ax4.set_ylim([-0.25, 1.1])
-# ax4.set_xlim([3.731, 3.735])
-# ax4.set_xlabel(r'$ak_0$')
-# ax4.set_xticks([3.731, 3.732, 3.733, 3.734, 3.735], minor=False)
-# ax44.set_ylim([-0.009, 0.042])
-# ax44.set_yticks([0, 0.04], minor=False)  # -0.0235 1 option; -0.005 2 option
-# ax44.set_yticklabels(['0', '0.04'])
-# ax44.set_ylabel('error', labelpad=-30)
-#
-#
-# arrow_len = 0.00012
-# create_arc_and_arrow(ax4, 3.7321, 0.9, -arrow_len, 0.0, 'pink', 1.0)
-# create_arc_and_arrow(ax4, 3.7346, 0.2, arrow_len, 0.0, 'C2', 1.0)
-# create_arc_and_arrow(ax4, 3.7333, 0.24, arrow_len, 0.0, 'C0', 1.0)
-#
-#
-#
-# # annotations on the whole figure
-# fig.text(0.49, 0.34, r'$ak_0$', ha='center')
-# fig.text(0.17, 0.28, r'$l_{max}=10$', ha='center')
-# fig.text(0.17, 0.93, r'$l_{max}=4$', ha='center')
-# fig.text(0.02, 0.97, 'a)', ha='center')
-# fig.text(0.02, 0.65, 'b)', ha='center')
-# fig.text(0.02, 0.33, 'c)', ha='center')
-# fig.text(0.8, 0.14, r'$x10^4$', ha='center', color='C2', fontsize=26)
-#
-#
-# # ---------- zooming
-# zoom_effect01(ax1, ax3, 3.7349, 3.7355)
-# zoom_effect01(ax2, ax4, 3.7321, 3.7322)
-#
-# # plt.subplot_tool()
-# plt.subplots_adjust(left=0.07,
-#                     bottom=0.07,
-#                     right=0.915,
-#                     top=0.963,
-#                     wspace=0.033,
-#                     hspace=0.297)
-#
-#
-# plt.show()
-
-# plt.savefig('/home/ashalev/Projects/amos-try/multem2mod/multem3article/figures/ready_to_publish/fig2.pdf')
-# plt.clf(); plt.close()
-
-# ----------------------------------------------------------------------------------------------------------
-# ------ rmax issues
-# import matplotlib.cm as cm
-
-# def show_2D_map(x, y, z, zmin, zmax, logscale=False):
-#     if logscale:
-#         im = plt.imshow(z.T, extent = (np.min(x), np.max(x), np.min(y), np.max(y)), cmap=cm.hot, norm=LogNorm(vmin=zmin, vmax=1), aspect='auto', interpolation = 'none', origin='lower')
-#     else:
-#         im = plt.imshow(z.T, extent = (np.min(x), np.max(x), np.min(y), np.max(y)), cmap=cm.hot, vmin=zmin, vmax=zmax, aspect='auto', interpolation = 'none', origin='lower')
-
-#     cb = plt.colorbar(im)
-#     # plt.show()
-
-
-# def multi_loadtxt(dir, filelist):
-#     output = ()
-#     for fname in filelist:
-#         out = np.loadtxt(dir+"/"+fname)
-#         output += (out,)
-#     return output
-# # r = f(kx) maps with several diffraction orders
-# plt.rcParams.update({'font.size': 20, 'font.serif':"Times New Roman"})
-
-
-# LMAX = [13]
-# RMAX = [7, 29]
-# main_dir = 'rmax_issue/'
-# R = {}
-# for lmax in LMAX:
-#     fig = plt.figure(figsize=(30, 10))
-#     i = 1
-#     for rmax in RMAX:
-#         fig.add_subplot(1, 3, i)
-#         i += 1
-#         dir = main_dir+f'lmax={lmax}_rmax={rmax}'
-#         kx, omega, R[f'{rmax}'], T = multi_loadtxt(dir, ('kx.txt', 'omega.txt', 'R.txt', 'T.txt'))
-#         show_2D_map(kx, omega, R[f'{rmax}'], 1e-5, 1, logscale=True)
-#         plt.gca().set_title(f'lmax={lmax}_rmax={rmax}')
-#         plt.gca().set_ylabel(r'$\omega a/{2\pi c}$')
-#         plt.gca().set_xlabel(r'${k_x d/\pi}$')
-#     fig.add_subplot(2, 3, i)
-#     i += 1
-#     show_2D_map(kx, omega, np.abs(R['30']-R['16']), 0, 1, logscale=False)
-#     plt.gca().set_title('np.abs(R_rmax30 - R_rmax16)')
-#     plt.gca().set_ylabel(r'$\omega a/{2\pi c}$')
-#     plt.gca().set_xlabel(r'${k_x d/\pi}$')
-#
-#     fig.add_subplot(2, 3, i)
-#     i += 1
-#     show_2D_map(kx, omega, np.abs(R['30']-R['7']), 0, 1, logscale=False)
-#     plt.gca().set_title('np.abs(R_rmax30 - R_rmax7)')
-#     plt.gca().set_ylabel(r'$\omega a/{2\pi c}$')
-#     plt.gca().set_xlabel(r'${k_x d/\pi}$')
-
-    # plt.savefig(f'lmax={lmax}.pdf')
-    # plt.clf(); plt.close()
-
-
-
 
 
 
