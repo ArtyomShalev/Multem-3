@@ -138,6 +138,7 @@ if 'fig3c' in figures_to_calculate:
     print(f'CPU time:{time.time()-start}')
 
 
+#takes approx 43000 seconds to calculate these data
 if 'fig4' in figures_to_calculate:
     start = time.time()
     input_params = {
@@ -177,7 +178,7 @@ if 'fig4' in figures_to_calculate:
                 F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
                 calc.save_1D_data(omega, T, dir=f'data/fig4/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
             print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-
+    #10738.055797576904s
     for input_params['multem_version'] in ['2']:
         for input_params['lmax'] in [7]:
             time0 = time.time()
@@ -185,7 +186,6 @@ if 'fig4' in figures_to_calculate:
                 F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
                 calc.save_1D_data(omega, T, dir=f'data/fig4/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
             print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-
     for input_params['multem_version'] in ['2', '3']:
         for input_params['lmax'] in [7]:
             time0 = time.time()
@@ -194,7 +194,7 @@ if 'fig4' in figures_to_calculate:
                 calc.save_1D_data(omega, T, dir=f'data/fig4/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
             print(f'{input_params["multem_version"]} : {time.time()-time0}s')
     print(f'CPU time:{time.time()-start}')
-
+   
 
 if 'fig5' in figures_to_calculate:
     start = time.time()

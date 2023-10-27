@@ -152,7 +152,7 @@ def find_nearest_idx(array, value):
 plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 
-figures_to_plot = ['fig5']
+figures_to_plot = ['fig7']
 
 # ------------- Fig. 3 ---------------------------------------------------------------------------------------------
 if 'fig3' in figures_to_plot:
@@ -554,12 +554,12 @@ if 'fig7' in figures_to_plot:
         plt.gca().minorticks_off()
 
 
-    # fig.text(0.08, 0.97, r'a)', ha='center', fontsize=50)
-    # fig.text(0.4, 0.97, r'b)', ha='center', fontsize=50)
-    # fig.text(0.71, 0.97, r'c)', ha='center', fontsize=50)
-    # fig.text(0.08, 0.48, r'd)', ha='center', fontsize=50)
-    # fig.text(0.4, 0.48, r'e)', ha='center', fontsize=50)
-    # fig.text(0.71, 0.48, r'f)', ha='center', fontsize=50)
+    fig.text(0.04, 0.96, r'a', ha='center', fontsize=30)
+    fig.text(0.54, 0.96, r'b', ha='center', fontsize=30)
+    fig.text(0.04, 0.64, r'c', ha='center', fontsize=30)
+    fig.text(0.54, 0.64, r'd', ha='center', fontsize=30)
+    fig.text(0.04, 0.33, r'e', ha='center', fontsize=30)
+    fig.text(0.54, 0.33, r'f', ha='center', fontsize=30)
 
 
 
