@@ -152,7 +152,7 @@ def find_nearest_idx(array, value):
 plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 
-figures_to_plot = ['fig7']
+figures_to_plot = ['fig6']
 
 # ------------- Fig. 3 ---------------------------------------------------------------------------------------------
 if 'fig3' in figures_to_plot:
@@ -286,7 +286,7 @@ if 'fig6' in figures_to_plot:
     plt.rcParams.update({'font.size': 50, 'font.serif':"Times New Roman"})
     fig = plt.figure(figsize=(40, 20))
     # --- reading data ------
-    data_dir = 'data/fig3/'
+    data_dir = 'data/fig6/'
     x, y = np.loadtxt(data_dir+'x.txt'), np.loadtxt(data_dir+'y.txt')
     x2d = convert_to_square_2d(x)
     y2d = convert_to_square_2d(y)
@@ -330,7 +330,6 @@ if 'fig6' in figures_to_plot:
     ax1.set_yticks([-8, 0, 8])
     ax1.set_yticklabels([])
     # plotting argument regions
-    data_dir = 'data/fig3/'
     regimes = np.loadtxt(data_dir+'multem2_regimes.txt')
     regimes2d = convert_to_square_2d(regimes)
     ax1.contour(regimes2d, levels=2, linewidths=7, colors='yellow', linestyles='dashed', extent=[exp_min,exp_max,exp_min,exp_max])
@@ -343,7 +342,6 @@ if 'fig6' in figures_to_plot:
     # plotting argument regions
     ax2.contour(regimes2d, levels=2, linewidths=7, colors='yellow', linestyles='dashed', extent=[exp_min,exp_max,exp_min,exp_max])
 
-    # ax2.scatter(np.log10(pos_args.real)[::30], np.log10(pos_args.imag)[::30], color='black', s=1)
 
     # ax3
     ax3 = fig.add_subplot(2,2,3)
@@ -352,7 +350,6 @@ if 'fig6' in figures_to_plot:
     ax3.set_yticklabels([])
     ax3.set_xticks([-8, 0, 8])
     ax3.set_xticklabels([])
-    # ax3.scatter(np.log10(pos_args.real)[::30], np.log10(pos_args.imag)[::30], color='black', s=1)
 
     # ax4
     ax4 = fig.add_subplot(2,2,4, sharey=ax3)
@@ -360,7 +357,6 @@ if 'fig6' in figures_to_plot:
     ax4.get_yaxis().set_visible(False)
     ax4.set_xticks([-8, 0, 8])
     ax4.set_xticklabels([])
-    # ax4.scatter(np.log10(pos_args.real)[::30], np.log10(pos_args.imag)[::30], color='black', s=1)
 
 
     # ax5 (arg values from MB Dirac cone)
@@ -463,7 +459,7 @@ if 'fig6' in figures_to_plot:
     for ax in [ax1, ax2, ax3, ax4, ax5]:
         ax.tick_params('both', length=15, width=4, which='major')
 
-    plt.savefig('fig5.pdf')
+    plt.savefig('fig6.pdf')
     plt.clf(); plt.close()
 
 

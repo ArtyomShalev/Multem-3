@@ -248,7 +248,8 @@ if 'fig5' in figures_to_calculate:
         print(f"CPU time {time.time()-start}")
 
 #========================================================================
-#fig 6 
+#fig 6
+#calculation is implemented in dir Zaghoul_MIT_faddeeva_comparison
 #========================================================================
 
 if 'fig7' in figures_to_calculate:
