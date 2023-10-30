@@ -5,7 +5,7 @@ import src.python_simulations.multem3_py_calculating as calc
 import time 
 
 # 'fig3a', 'fig3b', 'fig3c', 'fig5'
-figures_to_calculate = ['fig4']
+figures_to_calculate = ['fig3a']
 
 # ----- calculating data for fig. 3 a) -------------------
 if 'fig3a' in figures_to_calculate:
@@ -250,6 +250,9 @@ if 'fig5' in figures_to_calculate:
 #========================================================================
 #fig 6
 #calculation is implemented in dir Zaghoul_MIT_faddeeva_comparison
+# fig 6 contains data calculated in fig3a, so one needs to calculate data for fig 3a first
+# then 
+# run bash script cerf_faddeeva_comparison/run_CompPhysComm_data_prep.sh
 #========================================================================
 
 if 'fig7' in figures_to_calculate:

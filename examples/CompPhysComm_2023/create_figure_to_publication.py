@@ -307,9 +307,9 @@ if 'fig6' in figures_to_plot:
     args_re, args_im = [], []
     # ---- postprocess - deleting brackets and left only unique positive values
     for line in lines:
-        line = line.replace("(","")
-        line = line.replace(")","")
-        re, im = line.split(",")
+        # line = line.replace("(","")
+        # line = line.replace(")","")
+        re, im = line.split()
         args_re.append(re)
         args_im.append(im)
     args_re = np.array(args_re, dtype=np.float64)
@@ -326,7 +326,7 @@ if 'fig6' in figures_to_plot:
     ax1 = fig.add_subplot(2,2,1)
     im = plot_error(ax1, x2d, y2d, multem2_re_err, vextr=[err_lim, 1e-6])
     ax1.get_xaxis().set_visible(False)
-    ax1.scatter(np.log10(pos_args.real)[::30], np.log10(pos_args.imag)[::30], color='black', s=15)
+    ax1.scatter(np.log10(pos_args.real)[::60], np.log10(pos_args.imag)[::60], color='black', s=15)
     ax1.set_yticks([-8, 0, 8])
     ax1.set_yticklabels([])
     # plotting argument regions
@@ -364,7 +364,7 @@ if 'fig6' in figures_to_plot:
     # plotting argument regions
     ax5.contour(regimes2d, zorder=1, levels=2, linewidths=7, colors='yellow', linestyles='dashed', extent=[exp_min,exp_max,exp_min,exp_max])
     im = plot_error(ax5, x2d, y2d, multem2_re_err, vextr=[err_lim, 1e-6])
-    ax5.scatter(np.log10(pos_args.real)[::5], np.log10(pos_args.imag)[::5], color='black', s=30)
+    ax5.scatter(np.log10(pos_args.real)[::50], np.log10(pos_args.imag)[::50], color='black', s=30)
     ax5.set_xticks([-0.0092, -0.0074])
     ax5.set_xticklabels([round(np.min(pos_args.real),3), round(np.max(pos_args.real),3)])
     ax5.set_yticks([np.min(np.log10(pos_args.imag)), np.max(np.log10(pos_args.imag))])
