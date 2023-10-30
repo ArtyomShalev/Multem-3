@@ -4,3 +4,6 @@
 [submodule "FiNeR"]
 	path = FiNeR
 	url = https://github.com/szaghi/FiNeR.git
+[submodule "examples/CompPhysComm_2023/examples/CompPhysComm_2023/cerf_faddeeva_comparison"]
+	path = examples/CompPhysComm_2023/examples/CompPhysComm_2023/cerf_faddeeva_comparison
+	url = https://github.com/ArtyomShalev/faddeeva_fortran.git
