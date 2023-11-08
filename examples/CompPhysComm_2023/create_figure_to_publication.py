@@ -152,15 +152,15 @@ def find_nearest_idx(array, value):
 plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 
-figures_to_plot = ['fig6']
+figures_to_plot = ['fig7']
 
 # ------------- Fig. 3 ---------------------------------------------------------------------------------------------
 if 'fig3' in figures_to_plot:
-    fig = plt.figure(figsize=(20, 7*3))
-    gs = GridSpec(3, 2, figure=fig)
+    fig = plt.figure(figsize=(20, 20))
+    gs = GridSpec(2, 2, figure=fig)
     # # fig 3 a
     ax1 = fig.add_subplot(gs[0, :])
-    core_dir = 'data/fig3a'
+    core_dir = 'data/fig3'
     # red
     data = np.loadtxt(core_dir+'/akxy=0.01_0.0.txt')
     x, y = prep_xy_data(data)
@@ -185,7 +185,6 @@ if 'fig3' in figures_to_plot:
     ax1.set_ylim(-0.1, 1.1)
     ax1.legend(frameon=False, loc=2, bbox_to_anchor=(0.0,0.86) ,title='\t'+r'$ak_x$'+'\t'+r'$ak_y$')
     # fig.3 b
-    core_dir = 'data/fig3b'
     ax2 = fig.add_subplot(gs[1, 0])
     ax3 = fig.add_subplot(gs[1, 1], sharey=ax2)  
     for lmax in [4, 7, 10, 13]:
@@ -219,70 +218,79 @@ if 'fig3' in figures_to_plot:
     ax2.set_yticks([0.0, 1.0], minor=False)
     ax2.set_xticks([3.7318, 3.7321, 3.7324], minor=False)
     ax3.set_xticks([3.735, 3.7353, 3.7356], minor=False)
-    # fig.3 c
-    ax4 = fig.add_subplot(gs[2, :])
-    data_dir = 'data/fig3c/'
-    data = np.loadtxt(data_dir+'T.txt')
-    x, T = prep_xy_data(data)
-    x, T = x, T
-    error_wo_lapack = prep_xy_data(np.loadtxt(data_dir+'error_wo_lapack.txt'))[1]
-    error_with_lapack = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1]
-    error_with_lapack_and_fad = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1]
-    ax44 = ax4.twinx()
-    l1, = ax44.plot(x[::2], np.array(error_with_lapack[::2])*1e4, color='C2', lw=3)
-    l2, = ax44.plot(x, error_wo_lapack, color='C0', lw=6)
-    ax4.set_ylabel('error')
-    l3, = ax4.plot(x, T, 'red', lw=18, alpha=0.3)
-    # create_arc_and_arrow(ax11, 3.733282, 1.002)
-    ax4.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
-    plt.legend([l1, l2], ['LAPACK', 'W/O LAPACK'], frameon=False)
-    plt.annotate(r"x$10^4$",
-                xy=(3.731546, 0.6), xycoords='data',    # 0.6 1 option; 0.34 2 option
-                xytext=(-19, 30), textcoords='offset points',
-                arrowprops=dict(arrowstyle="->", color='black')
-                )
-    # customizing
-    ax4.set_yticks([0.0, 1.0], minor=False)
-    ax4.set_ylim([-0.25, 1.1])
-    ax4.set_xlim([3.731, 3.735])
-    ax4.set_xlabel(r'$ak_0$')
-    ax4.set_xticks([3.731, 3.732, 3.733, 3.734, 3.735], minor=False)
-    ax44.set_ylim([-0.009, 0.042])
-    ax44.set_yticks([0, 0.04], minor=False)  # -0.0235 1 option; -0.005 2 option
-    ax44.set_yticklabels(['0', '0.04'])
-    ax44.set_ylabel('error', labelpad=-30)
-    arrow_len = 0.00012
-    create_arc_and_arrow(ax4, 3.7321, 0.9, -arrow_len, 0.0, 'pink', 1.0)
-    create_arc_and_arrow(ax4, 3.7346, 0.2, arrow_len, 0.0, 'C2', 1.0)
-    create_arc_and_arrow(ax4, 3.7333, 0.24, arrow_len, 0.0, 'C0', 1.0)
-    # annotations on the whole figure
-    fig.text(0.49, 0.34, r'$ak_0$', ha='center')
-    fig.text(0.17, 0.28, r'$l_{max}=10$', ha='center')
-    fig.text(0.17, 0.93, r'$l_{max}=4$', ha='center')
-    fig.text(0.02, 0.97, 'a', ha='center')
-    fig.text(0.02, 0.65, 'b', ha='center')
-    fig.text(0.02, 0.33, 'c', ha='center')
-    fig.text(0.8, 0.14, r'$x10^4$', ha='center', color='C2', fontsize=26)
-    # ---------- zooming
     zoom_effect01(ax1, ax3, 3.7349, 3.7355)
-    zoom_effect01(ax2, ax4, 3.7321, 3.7322)
-    # plt.subplot_tool()
-    plt.subplots_adjust(left=0.07,
-                        bottom=0.07,
-                        right=0.915,
-                        top=0.963,
-                        wspace=0.033,
-                        hspace=0.297)
     
     # customizing ticks 
-    for ax in [ax1, ax2, ax3, ax4, ax44]:
+    for ax in [ax1, ax2, ax3]:
         ax.tick_params('both', length=10, width=2, which='major')
     
     plt.savefig('fig3.pdf')
     plt.clf(); plt.close()
 
 
-if 'fig6' in figures_to_plot:
+if 'fig4' in figures_to_plot:
+    fig = plt.figure(figsize=(16*1.25, 9*1.25))
+    ax1 = fig.add_subplot(1, 1, 1)
+    data_dir = 'data/fig4/'
+    data = np.loadtxt(data_dir+'T.txt')
+    x, T = prep_xy_data(data)
+    x, T = x, T
+    error_wo_lapack = prep_xy_data(np.loadtxt(data_dir+'error_wo_lapack.txt'))[1]
+    error_with_lapack = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1]
+    error_with_lapack_and_fad = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1]
+    ax11 = ax1.twinx()
+    l1, = ax11.plot(x[::2], np.array(error_with_lapack[::2])*1e4, color='C2', lw=3)
+    l2, = ax11.plot(x, error_wo_lapack, color='C0', lw=6)
+    ax1.set_ylabel('error')
+    l3, = ax1.plot(x, T, 'red', lw=18, alpha=0.3)
+    # create_arc_and_arrow(ax11, 3.733282, 1.002)
+    ax1.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
+    plt.legend([l1, l2], ['LAPACK', 'W/O LAPACK'], frameon=False)
+    # plt.annotate(r"x$10^4$",
+    #             xy=(3.731546, 0.6), xycoords='data',    # 0.6 1 option; 0.34 2 option
+    #             xytext=(-19, 30), textcoords='offset points',
+    #             arrowprops=dict(arrowstyle="->", color='black')
+                # )
+    # customizing
+    ax1.set_yticks([0.0, 1.0], minor=False)
+    ax1.set_ylim([-0.25, 1.1])
+    ax1.set_xlim([3.731, 3.735])
+    ax1.set_xlabel(r'$ak_0$')
+    ax1.set_xticks([3.731, 3.732, 3.733, 3.734, 3.735], minor=False)
+    ax11.set_ylim([-0.009, 0.042])
+    ax11.set_yticks([0, 0.04], minor=False)  # -0.0235 1 option; -0.005 2 option
+    ax11.set_yticklabels(['0', '0.04'])
+    ax11.set_ylabel('error', labelpad=-30)
+    arrow_len = 0.00012
+    create_arc_and_arrow(ax1, 3.7321, 0.9, -arrow_len, 0.0, 'pink', 1.0)
+    create_arc_and_arrow(ax1, 3.7346, 0.2, arrow_len, 0.0, 'C2', 1.0)
+    create_arc_and_arrow(ax1, 3.7333, 0.24, arrow_len, 0.0, 'C0', 1.0)
+    # annotations on the whole figure
+    # fig.text(0.49, 0.02, r'$ak_0$', ha='center')
+    # fig.text(0.17, 0.28, r'$l_{max}=10$', ha='center')
+    # fig.text(0.17, 0.93, r'$l_{max}=4$', ha='center')
+    # fig.text(0.02, 0.97, 'a', ha='center')
+    # fig.text(0.02, 0.48, 'b', ha='center')
+    fig.text(0.8, 0.34, r'$x10^4$', ha='center', color='C2', fontsize=30)
+    # ---------- zooming
+    # zoom_effect01(ax2, ax4, 3.7321, 3.7322)
+    # plt.subplot_tool()
+    plt.subplots_adjust(left=0.07,
+                        bottom=0.1,
+                        right=0.915,
+                        top=0.963,
+                        wspace=0.033,
+                        hspace=0.297)
+
+      # customizing ticks 
+    for ax in [ax1, ax11]:
+        ax.tick_params('both', length=10, width=2, which='major')
+    
+    plt.savefig('fig4.pdf')
+    plt.clf(); plt.close()
+
+
+if 'fig6_7' in figures_to_plot:
     plt.rcParams.update({'font.size': 50, 'font.serif':"Times New Roman"})
     fig = plt.figure(figsize=(40, 20))
     # --- reading data ------
@@ -492,7 +500,6 @@ if 'fig5' in figures_to_plot:
     plt.legend(handles=[lines['7'], lines['12'], lines['14']], labels=['RMAX=7', 'RMAX=12', 'RMAX=14'], frameon=False)
     plt.tick_params('both', length=10, width=2, which='major')
 
-
     fig.text(0.5, 0.23, r'$\lambda=650 nm$', ha='center')
     fig.text(0.5, 0.48, r'$\lambda=750 nm$', ha='center')
     fig.text(0.5, 0.8, r'$\lambda=900 nm$', ha='center')
@@ -504,14 +511,16 @@ if 'fig5' in figures_to_plot:
 
 
 if 'fig7' in figures_to_plot:
+    from decimal import Decimal
     LMAX = [4]
-    RMAX = [12]
-    AK1 = [0.01, 8e-5, 4e-5]
+    RMAX = [16]
+    # AK1 = [0.01, 8e-5, 4e-5]
+    AK1 = [2e-3, 1e-4, 5e-5]
     X = {}; Y = {}
     step = 1
     #reading data to plot
     for version in ['3_cerf', '3']:
-        main_dir = dir=f'data/fig7/{version}/'
+        main_dir = dir=f'data/fig8/{version}/'
         for lmax in LMAX:
             for rmax in RMAX:
                 for ak1 in AK1:
@@ -520,8 +529,8 @@ if 'fig7' in figures_to_plot:
                     x, y = cl.read_1D_data_real(path)
                     X[f'{version}_{rmax}_{ak1}'] = x; Y[f'{version}_{rmax}_{ak1}'] = y
     
-    fig = plt.figure(figsize=(20, 20))
-    error_step = 15
+    fig = plt.figure(figsize=(22, 22))
+    error_step = 3
     axs = []
     for i, ak1 in enumerate(AK1):
         ak1 = round(ak1/2/np.pi, 8) 
@@ -530,15 +539,15 @@ if 'fig7' in figures_to_plot:
         key = f'{RMAX[0]}_{ak1}'
         plt.gca().plot(X['3_'+key], Y['3_'+key], 'black', lw=6, label='SciPy')
         plt.gca().plot(X['3_cerf_'+key], Y['3_cerf_'+key], 'green', lw=18, alpha=0.4, label='CERF') 
-        plt.gca().set_title(r'$ak_x$='+f'{AK1[i]}')
+        plt.gca().set_title(r'$ak_x$='+f'{Decimal(AK1[i]):.0e}')
         plt.gca().set_ylabel('T')
         plt.gca().set_xlabel(r'$ak_0$')
-        plt.gca().set_yscale('log')
+        # plt.gca().set_yscale('log')
         plt.gca().legend(frameon=False)
         plt.gca().tick_params('both', length=15, width=4, which='major')
         plt.gca().minorticks_off()
         plt.gca().set_ylabel(r'$\mathbf{T}$', rotation=0)
-        plt.gca().yaxis.set_label_coords(-0.25, 0.5)
+        plt.gca().yaxis.set_label_coords(-0.18, 0.5)
         ax = fig.add_subplot(3, 2, 2*(i+1))
         axs.append(ax)
         error = np.abs(Y['3_'+key]-Y['3_cerf_'+key])
@@ -548,6 +557,8 @@ if 'fig7' in figures_to_plot:
         plt.gca().set_yscale('log')
         plt.gca().tick_params('both', length=15, width=4, which='major')
         plt.gca().minorticks_off()
+        plt.gca().yaxis.set_label_coords(-0.18, 0.5)
+
 
 
     fig.text(0.04, 0.96, r'a', ha='center', fontsize=30)
@@ -559,102 +570,56 @@ if 'fig7' in figures_to_plot:
 
 
 
-    #setting ticks and labels
-    axs[4].set_yticks([1, 1e-2, 1e-4, 1e-6])
-    # axs[2].set_yticklabels([3.73556, 3.73560])
-    axs[2].set_xticks([3.73556, 3.73560])
-    axs[2].set_xticklabels([3.73556, 3.73560])
-    axs[4].set_xticks([3.73558, 3.7355825, 3.735585])
-    axs[4].set_xticklabels([3.73558, 3.7355825, 3.735585])
-    # axs[4].set_ylim([1e-7, 2])
-    axs[3].set_xticks([3.73556, 3.73560])
-    axs[3].set_xticklabels([3.73556, 3.73560])
-    axs[5].set_xticks([3.73558, 3.7355825, 3.735585])
-    axs[5].set_xticklabels([3.73558, 3.7355825, 3.735585])
+    # #setting ticks and labels
+    axs[0].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[0].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[0].set_xticks([3.734, 3.735, 3.736, 3.737])
+    axs[0].set_xticklabels([3.734, 3.735, 3.736, 3.737])
+    axs[1].set_xticks([3.734, 3.735, 3.736, 3.737])
+    axs[1].set_xticklabels([3.734, 3.735, 3.736, 3.737])
+    axs[2].set_xticks([3.7354, 3.7356, 3.7358])
+    axs[2].set_xticklabels([3.7354, 3.7356, 3.7358])
+    axs[2].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[2].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[3].set_xticks([3.7354, 3.7356, 3.7358])
+    axs[3].set_xticklabels([3.7354, 3.7356, 3.7358])
+    axs[4].set_xticks([3.73558, 3.735583, 3.735586])
+    axs[4].set_xticklabels([3.73558, 3.735583, 3.735586])
+    axs[4].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[4].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[5].set_xticks([3.73558, 3.735583, 3.735586])
+    axs[5].set_xticklabels([3.73558, 3.735583, 3.735586])
+    
   
     plt.subplots_adjust(left=0.12,
                         bottom=0.099,
-                        right=0.95,
+                        right=0.98,
                         top=0.95,
-                        wspace=0.25,
-                        hspace=0.35)
-    plt.savefig(f'fig7.pdf')
+                        wspace=0.3,
+                        hspace=0.4)
+    plt.savefig(f'fig8.pdf')
     plt.clf(); plt.close()
 
 
 
-if 'fig4' in figures_to_plot:
+if 'fig6' in figures_to_plot:
     import os
     from matplotlib.offsetbox import OffsetImage, AnnotationBbox
     lmax = 7
     fig = plt.figure(figsize=(20, 20))
-    ax1 = fig.add_subplot(3, 1, 2)
     X = {}; Y = {}
-    # #key:version_rmax
-    # #value: (lw, alpha, color, zorder, styles)
-    curve_styles = {
-        '2_35': (9, 1, 'red', 1, 'dotted'),
-        '2_60': (18, 0.4, 'green', 1, '-'),
-        '2_50': (6, 1, 'black', 1, '-'),
-    }
-    for version in ['2']:
-        main_dir = f'data/fig4/mode=3/version={version}/d=0.85/'
-        for rmax in ['60', '50', '35']:
-            path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
-            if os.path.exists(path): 
-                x, y = cl.read_1D_data_real(path)
-            else:
-                print('File not Found')
-                continue
-            X[f'{version}_{rmax}'] = x; Y[f'{version}_{rmax}'] = y
-            ax1.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'RMAX={rmax}',
-                      lw=curve_styles[f'{version}_{rmax}'][0], 
-                    alpha=curve_styles[f'{version}_{rmax}'][1],
-                    color=curve_styles[f'{version}_{rmax}'][2],
-                    zorder=curve_styles[f'{version}_{rmax}'][3],
-                    ls=curve_styles[f'{version}_{rmax}'][4])
-
-    ax1.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
-    ax1.set_xticks([6.29, 6.291, 6.292])
-    ax1.set_xticklabels([])
-    ax1.set_yticks([0.0, 0.5, 1, 1.5])
-    ax1.set_yticklabels([0.0, 0.5, 1.0, 1.5])
-     # customizing ticks 
-    
-    
-    ax1.legend(frameon=False, loc=(0.04,0.6))
-    ax1.set_ylim([-0.1, 1.9])
-    fig.text(0.22, 0.64, r'MULTEM2', color='black', ha='center', fontsize=30)
-    ax1.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
-    ax1.yaxis.set_label_coords(-0.08, 0.5)
-
-  
-    
-
-
-
-
-
-    # RMAX = ['40']
-    # i = 0
-    # T = {}
-    # ax1 = fig.add_subplot(1, 1, 1)
-    # # ax2 = fig.add_axes([0.55, 0.48, 0.35, 0.4])
-    # #key:version_rmax
-    # #value: (lw, alpha, color, zorder)
-    #fig 3b -- multem2 multem3 coincidence
-    ax2 = fig.add_subplot(3, 1, 1)
-    # X = {}; Y = {}
+    d = '0.5'
+    ax1 = fig.add_subplot(3, 1, 1)
     # #key:version_rmax
     # #value: (lw, alpha, color, zorder)
     curve_styles = {
-        '2_20': (6, 1, 'red', 2),
-        '2_30': (6, 1, 'blue', 2),
-        '3_20': (18, 0.4, 'red', 1),
-        '3_30': (18, 0.4, 'blue', 1),
+        '2_20': (6, 1, 'red', 2, 'dotted'),
+        '2_30': (6, 1, 'red', 2, 'dotted'),
+        '3_20': (18, 0.4, 'red', 1, 'solid'),
+        '3_30': (18, 0.4, 'red', 1, 'solid'),
     }
     for version in ['2', '3']:
-        main_dir = f'data/fig4/mode=3/version={version}/d=0.85/'
+        main_dir = f'data/fig6/mode=3/version={version}/d={d}/'
         for rmax in ['20', '30']:
             path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
             if os.path.exists(path): 
@@ -665,43 +630,81 @@ if 'fig4' in figures_to_plot:
                 continue
             if rmax == '30':
                 y += 1
-            ax2.plot(x, y, label=f'RMAX={rmax}_VERSION={version}',
+            ax1.plot(x, y, label=f'RMAX={rmax}_VERSION={version}',
                     lw=curve_styles[f'{version}_{rmax}'][0], 
                     alpha=curve_styles[f'{version}_{rmax}'][1],
                     color=curve_styles[f'{version}_{rmax}'][2],
-                    zorder=curve_styles[f'{version}_{rmax}'][3])
-    # ax2.legend()
-    ax2.set_xticks([6.29, 6.291, 6.292])
-    ax2.set_xticklabels([])
-    ax2.tick_params('both', length=7, width=2, which='both')
-    fig.text(0.22, 0.76, r'RMAX=20', color='red', ha='center', fontsize=30)
-    fig.text(0.22, 0.84, r'RMAX=30', color='blue', ha='center', fontsize=30)
-    ax2.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
-    ax2.yaxis.set_label_coords(-0.08, 0.5)
+                    zorder=curve_styles[f'{version}_{rmax}'][3],
+                    ls=curve_styles[f'{version}_{rmax}'][4])
+    ax1.tick_params('both', length=7, width=2, which='both')
+    fig.text(0.21, 0.72, r'RMAX=20', color='black', ha='center', fontsize=30)
+    fig.text(0.21, 0.92, r'RMAX=30', color='black', ha='center', fontsize=30)
+    ax1.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
+    ax1.yaxis.set_label_coords(-0.08, 0.5)
+    ax1.set_xticks([6.29, 6.291, 6.291])
+    ax1.set_xticklabels([])
+    ax1.set_ylim([-0.1, 2.7])
+    # ax1.legend(handles=[lines['2'], lines['3']], labels=['MULTEM2', 'MULTEM3', 'RMAX=14'], color='black', frameon=False)
+    
+    from matplotlib.lines import Line2D
+    custom_lines = [Line2D([0], [0], color='red', lw=18, alpha=0.4, ls='solid'),
+            Line2D([0], [0], color='red', lw=6, alpha=1, ls='dotted')]
+
+    ax1.legend(custom_lines, ['MULTEM2', 'MULTEM3'], frameon=False)
+
+    ax2 = fig.add_subplot(3, 1, 2)
+   # #key:version_rmax
+    # #value: (lw, alpha, color, zorder, styles)
+    curve_styles = {
+        '2_20': (9, 1, 'red', 1, 'dotted'),
+        '2_25': (18, 0.4, 'green', 1, '-'),
+        # '2_50': (6, 1, 'black', 1, '-'),
+        # '2_47': (18, 0.4, 'green', 1, '-'),
+        # '2_45': (6, 1, 'black', 1, '-'),
+    }
+    for version in ['2']:
+        main_dir = f'data/fig6/mode=orig_multem/version={version}/d={d}/'
+        for rmax in ['20', '25']:
+            path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
+            if os.path.exists(path): 
+                x, y = cl.read_1D_data_real(path)
+            else:
+                print('File not Found')
+                continue
+            X[f'{version}_{rmax}'] = x; Y[f'{version}_{rmax}'] = y
+            ax2.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'RMAX={rmax}',
+                      lw=curve_styles[f'{version}_{rmax}'][0], 
+                    alpha=curve_styles[f'{version}_{rmax}'][1],
+                    color=curve_styles[f'{version}_{rmax}'][2],
+                    zorder=curve_styles[f'{version}_{rmax}'][3],
+                    ls=curve_styles[f'{version}_{rmax}'][4])
+
+    ax2.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
+
+    # ax2.set_xticks([6.29, 6.291, 6.291])
+    # ax2.set_xticklabels([])
+    # ax2.set_yticks([0.0, 0.5, 1, 1.5])
+    # ax2.set_yticklabels([0.0, 0.5, 1.0, 1.5]) 
+    # ax2.legend(frameon=False, loc=(0.04,0.6))
+    # ax2.set_ylim([-0.1, 1.9])
+    # fig.text(0.22, 0.64, r'MULTEM2', color='black', ha='center', fontsize=30)
+    # ax2.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
+    # ax2.yaxis.set_label_coords(-0.08, 0.5)        
 
 
-           
-           
     ax3 = fig.add_subplot(3, 1, 3)
-
     X = {}; Y = {}
     # #key:version_rmax
     # #value: (lw, alpha, color, zorder)
-    # curve_styles = {
-    #     # '3_35': (3, 1, 'black', 2, (0, (3, 5, 1, 5))),
-    #     '3_35': (2, 1, 'black', 2, '-'),
-    #     '3_45': (7, 1, 'b', 1, '-'),
-    #     '3_47': (7, 1, 'silver', 1, '--')
-    # }
-
     curve_styles = {
-        '3_35': (9, 1, 'red', 1, 'dotted'),
-        '3_47': (18, 0.4, 'green', 1, '-'),
-        '3_45': (6, 1, 'black', 1, '-'),
+        '3_20': (9, 1, 'red', 1, 'dotted'),
+        '3_25': (18, 0.4, 'green', 1, '-'),
+        '3_30': (18, 1, 'black', 1, '-'),
     }
     for version in ['3']:
-        main_dir = f'data/fig4/mode=3/version={version}/d=0.85/'
-        for rmax in ['47', '45', '35']:
+        main_dir = f'data/fig6/mode=orig_multem/version={version}/d={d}/'
+        for rmax in ['20', '25']:
+        # for rmax in ['47', '45']:
             path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
             if os.path.exists(path): 
                 x, y = cl.read_1D_data_real(path)
@@ -716,24 +719,23 @@ if 'fig4' in figures_to_plot:
                     zorder=curve_styles[f'{version}_{rmax}'][3],
                     ls=curve_styles[f'{version}_{rmax}'][4])
 
-    ax3.set_xticks([6.29, 6.291, 6.292])
-    ax3.set_xticklabels([6.29, 6.291, 6.292])
-    ax3.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
+    # ax3.set_xticks([6.29, 6.291, 6.291])
+    # ax3.set_xticklabels([6.29, 6.291, 6.291])
+    ax3.plot((x[0], x[-1]),(1.0, 1.0), '-', color='red', lw=3)
     
-    ax3.set_yticks([0.0, 0.5, 1.0, 1.5])
-    ax3.set_yticklabels([0.0, 0.5, 1.0, 1.5])
-    ax3.tick_params('both', length=7, width=2, which='both')
-    # ax3.legend()
-    ax3.legend(frameon=False, loc=(0.04,0.6))
-    fig.text(0.22, 0.325, r'MULTEM3', color='black', ha='center', fontsize=30)
-    ax3.set_ylim([-0.1, 2.3])
-    ax3.set_xlabel(r'$ak_0$')
-    ax3.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
-    ax3.yaxis.set_label_coords(-0.08, 0.5)
-    arr_img = plt.imread("unit_slice.png")
-    im = OffsetImage(arr_img, zoom=0.55)
-    ab = AnnotationBbox(im, (0.86, 0.74), xycoords='axes fraction', frameon=False)
-    ax3.add_artist(ab)
+    # ax3.set_yticks([0.0, 0.5, 1.0, 1.5])
+    # ax3.set_yticklabels([0.0, 0.5, 1.0, 1.5])
+    # ax3.tick_params('both', length=7, width=2, which='both')
+    # ax3.legend(frameon=False, loc=(0.04,0.6))
+    # fig.text(0.22, 0.325, r'MULTEM3', color='black', ha='center', fontsize=30)
+    # ax3.set_ylim([-0.1, 2.3])
+    # ax3.set_xlabel(r'$ak_0$')
+    # ax3.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
+    # ax3.yaxis.set_label_coords(-0.08, 0.5)
+    # arr_img = plt.imread("unit_slice.png")
+    # im = OffsetImage(arr_img, zoom=0.55)
+    # ab = AnnotationBbox(im, (0.86, 0.74), xycoords='axes fraction', frameon=False)
+    # ax3.add_artist(ab)
 
 
     fig.text(0.03, 0.96, 'a', color='black', ha='center', fontsize=30)
@@ -752,12 +754,12 @@ if 'fig4' in figures_to_plot:
     for ax in [ax1, ax2, ax3]:
         ax.tick_params('both', length=10, width=2, which='major')
 
-    plt.savefig(f'fig4.pdf')
+    plt.savefig(f'fig6.pdf')
     plt.clf(); plt.close()
 
    
 
-if 'fig8' in figures_to_plot:
+if 'fig9' in figures_to_plot:
     curve_styles = {
         '650_m_qsz': (6, 1, 'green', 1, 'dashed'),
         '650_m_qsz_mk': (6, 1, 'green', 1, 'solid'),
@@ -774,7 +776,7 @@ if 'fig8' in figures_to_plot:
     }
     import os
     fig = plt.figure(figsize=(20, 20))
-    main_dir = f'data/fig8/'
+    main_dir = f'data/fig9/'
     fig.add_subplot(2, 2, 1)
     for dataset in ['650_m_qsz', '650_m_qsz_mk', '650_m_total']:
         path = main_dir+f'{dataset}.txt'
@@ -881,7 +883,7 @@ if 'fig8' in figures_to_plot:
 
 
 
-    plt.savefig(f'fig8.pdf')
+    plt.savefig(f'fig9.pdf')
     plt.clf(); plt.close()
 
 

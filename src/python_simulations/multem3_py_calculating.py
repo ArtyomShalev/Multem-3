@@ -51,7 +51,7 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                       '   NPLAN = 1  NLAYER = 1\n'
                       '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.6f'%(epssph_im)+'\n'
                       'xyzDL 0.0  0.0  0.0\n'
-                      'xyzDR 0.0  0.0  1.8\n'
+                      'xyzDR 0.0  0.0  1.0\n'
                       '     MUEMBL=   1.00000000   0.00000000    EPSEMBL=   1.00000000   0.00000000\n'
                       '     MUEMBR=   1.00000000   0.00000000    EPSEMBR=   1.00000000   0.00000000\n')
 
@@ -85,7 +85,7 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
         str_fort10 = ('           ********************************************\n'
                     '           ********INPUT FILE FOR TRANSMISSION*********\n'
                     '           ********************************************\n'
-                      '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP =3   NUNIT = 6\n'                    
+                      '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP =1   NUNIT = 6\n'                    
                     ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
                                                                                                                                                                                                                 '  NP ='+'%4i'%(npts)+'  ZINF ='+
                     float_format%(zinf)+'  ZSUP ='+float_format%(zsup)+'\n'
@@ -96,22 +96,16 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                 '\n'
                 '     IT  = 2\n'
                 '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
-                '   NPLAN = 1  NLAYER = 1\n'
+                '   NPLAN = 3  NLAYER = 1\n'
                 '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-                'xyzDL 0.0  0.0  0.0\n'
-                'xyzDR 0.0  0.0  '+'%2.1f'%(dist_btw_spheres_and_interface)+'\n'
-                '     IT  = 2\n'
-                '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
-                '   NPLAN = 1  NLAYER = 1\n'
+                'xyzDL 0.0  0.0  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
+                'xyzDR 0.25  0.25  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
                 '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-                'xyzDL 0.0  0.0  0.0\n'
-                'xyzDR 0.0  0.0  '+'%2.1f'%(dist_btw_spheres_and_interface)+'\n'
-                '     IT  = 2\n'
-                '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
-                '   NPLAN = 1  NLAYER = 1\n'
+                'xyzDL 0.25  0.25  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
+                'xyzDR 0.25  0.25  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
                 '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-                'xyzDL 0.0  0.0  0.0\n'
-                'xyzDR 0.0  0.0  '+'%2.1f'%(dist_btw_spheres_and_interface)+'\n')
+                'xyzDL 0.25  0.25  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
+                'xyzDR 0.0  0.0  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n')
         
     if mode == '3_old':
         str_fort10 = ('           ********************************************\n'
@@ -132,6 +126,51 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                 '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
                 'xyzDL 0.0  0.0  0.0\n'
                 'xyzDR 0.0  0.0  '+'%2.1f'%(dist_btw_spheres_and_interface)+'\n')
+        
+    if mode == 'orig_multem':
+        str_fort10 = ('           ********************************************\n'
+                '           ********INPUT FILE FOR TRANSMISSION*********\n'
+                '           ********************************************\n'
+                '   KTYPE = 2   KSCAN = 1   KEMB  = 0    LMAX = 4   NCOMP = 4   NUNIT = 6\n'                    
+                ' ALPHA =    1.000000  BETA =    1.000000   FAB = 90.000000  RMAX ='+'%11.6f'%(rmax)+'\n'
+                '  NP ='+'%4i'%(npts)+'  ZINF ='+float_format%(zinf)+'  ZSUP ='+float_format%(zsup)+'\n'
+                '  THETA/AK(1) ='+float_format%(ak1)+'     FI/AK(2) ='+float_format%(ak2)+'   POLAR =S     FEIN =   0.00\n'
+                '\n'
+
+                'Give information for the "NCOMP" components \n'
+                '\n'
+                '     IT  = 2\n'
+                '     MUMED =   1.00000000   0.00000000     EPSMED=   2.00000000   0.00000000\n'
+                '   NPLAN = 2  NLAYER = 1\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.0  0.0  0.4\n'
+                'xyzDR 0.25 0.25 0.3\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.25 0.25 0.3\n'
+                'xyzDR 0.25 0.25 0.4\n'
+                '     IT  = 1\n'
+                ' DSLAB       =    0.000000\n'
+                '     MU1   =   1.00000000   0.00000000     EPS1  =   2.00000000   0.00000000\n'
+                '     MU2   =   1.00000000   0.00000000     EPS1  =   1.10000000   0.00000000\n'
+                '     MU3   =   1.00000000   0.00000000     EPS1  =   7.00000000   0.00000000\n'
+                'xyzDL 0.0  0.0  0.0\n'
+                'xyzDR 0.0  0.0  0.0\n'
+                '     IT  = 2\n'
+                '     MUMED =   1.00000000   0.00000000     EPSMED=   7.00000000   0.00000000\n'
+                '   NPLAN = 1  NLAYER = 1\n'
+                '       S =   0.25000000     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.25 0.25 0.3\n'
+                'xyzDR 0.0  0.0  0.3\n'
+                '     IT  = 1\n'
+                ' DSLAB       =    1.000000\n'
+                '     MU1   =   1.00000000   0.00000000     EPS1  =   7.00000000   0.00000000\n'
+                '     MU2   =   1.00000000   0.00000000     EPS1  =   9.10000000   0.00000000\n'
+                '     MU3   =   1.00000000   0.00000000     EPS1  =   2.00000000   0.00000000\n'
+                'xyzDL 0.0  0.0  0.0\n'
+                'xyzDR 0.0  0.0  0.0\n'
+                '     MUEMBL=   1.00000000   0.00000000    EPSEMBL=   1.00000000   0.00000000\n'
+                '     MUEMBR=   1.00000000   0.00000000    EPSEMBR=   1.00000000   0.00000000\n')
+            
 
 
     with open('fort.10','w') as f:
@@ -365,7 +404,7 @@ def calc_spectrum_ak1(ktype, ak1, wl, ip):
             R[i] = r[0]
         except:
             print('smth went wrong')
-            R[i] = R[i-1]
+            R[i] = np.NAN
     return R
 
 
