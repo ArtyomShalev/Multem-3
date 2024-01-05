@@ -3,9 +3,24 @@ import sys
 sys.path.insert(0, '../..')
 import src.python_simulations.multem3_py_calculating as calc
 import time 
+import matplotlib.pyplot as plt
+
+
+def get_half_width_half_maxima_and_x0(x, y):
+        #TODO corner cases
+        idx = [np.argmax(y), np.argmin(y)]
+        ymax = y[idx[0]]
+        ymin = y[idx[1]]
+        amp = ymax - ymin
+        idx_hwhm = np.abs(y - 0.5*amp).argmin()
+        x0 = x[idx[0]]
+        hwhm = np.abs(x0 - x[idx_hwhm])
+
+        return hwhm, x0
+        
 
 # 'fig3a', 'fig3b', 'fig3c', 'fig5'
-figures_to_calculate = ['fig8']
+figures_to_calculate = ['fig6']
 
 # ----- calculating data for fig. 3 a) -------------------
 if 'fig3' in figures_to_calculate:
@@ -31,7 +46,7 @@ if 'fig3' in figures_to_calculate:
         'zinf': 3.73,
         'zsup': 3.74,
         'npts': 1000,
-        'r_ratio': 0.4705,
+        'r_ratio': 0.470512,
         'mode': '1', # 2D array of spheres
         'multem_version': '3'
     }
@@ -147,53 +162,86 @@ if 'fig6' in figures_to_calculate:
     'm': '1',
     'rmax': 2,
     'lmax': 4,
-    'lattice_constant': 300,
-    'fab': 90,
+    'lattice_constant': 500,
+    'fab': 60,
     'polar': 'S',
-    'epssph_re': 5,
-    'epssph_im': 0,
-    'epsmed_re': 1,
-    'epsmed_im': 0,
+    # 'epssph_re': 2.2231,
+    # 'epssph_re': 6,
+    'epssph_re': 25,
+    'epssph_im': 0.00,
+    'epsmed_re': 0.00,
+    'epsmed_im': 0.00,
     'ktype': 2,
     'kscan': 1,
     'zinf': 0.5,
     'zsup': 1.0,
-    'npts': 70,
-    'r_ratio': 0.35,
-    'mode': 'orig_multem', #multi-layered
-    'dist_btw_spheres_and_interface': 0.5
+    'npts': 300,
+    'r_ratio': 0.48,
+    # 'r_ratio': 0.5,
+    # 'r_ratio': 0.48683,
+    'mode': '3_ref', #multi-layered
+    'dist_btw_spheres_and_interface': 0.41
 }
-    omega = np.linspace(1, 2, input_params['npts'])
-    input_params['zinf'] = omega[0]
-    input_params['zsup'] = omega[-1]
-    ak1 = 0
-    ak2 = 0
-    # for input_params['multem_version'] in ['3']:
+    # omega = np.linspace(6.2, 6.292, input_params['npts'])
+    # omega = np.linspace(6.1, 6.2, input_params['npts'])
+    # omega = np.linspace(1, 2.5, input_params['npts'])
+    # omega = np.linspace(2.5, 3.5, input_params['npts'])
+
+    # omega = np.linspace(0.8, 1.2, input_params['npts'])
+    omega = np.linspace(0.2, 1.8, input_params['npts'])
+    # omega = np.linspace(0.01, 10, input_params['npts'])
+    
+
+    #just to check
+    # dl = [0.22, 0.0, input_params['dist_btw_spheres_and_interface']]
+    # dr = [0.22, 0.0, input_params['dist_btw_spheres_and_interface']]
+
+    # print(f'vector length:', np.sum(np.power(dl + dr, 2)))
+
+    # dl = [0.33, 0.33, input_params['dist_btw_spheres_and_interface']]
+    # dr = [0.33, 0.33, input_params['dist_btw_spheres_and_interface']]
+
+    # print(f'vector length:', np.sum(p.power(dl + dr, 2)))
+
+    # print(f'minimal vector length:', input_params['r_ratio'])
+    # NLAYERS = ['3', '4', '5', '6', '7', '8', '9']
+    # NLAYERS = ['7', '8', '9']
+    NLAYERS = ['3', '4', '6']
+
+    for nlayer in NLAYERS:
+        nunit = f'_1unit_{nlayer}'
+        input_params['nlayer'] = nlayer
+        input_params['zinf'] = omega[0]
+        input_params['zsup'] = omega[-1]
+        ak1 = 0
+        ak2 = 0
+        for input_params['multem_version'] in ['3']:
+            for input_params['lmax'] in [7]:
+                time0 = time.time()
+                for input_params['rmax'] in [32]:
+                    F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                    calc.save_1D_data(omega, R, dir=f'data/fig6_new{nunit}/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
+                print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+        #10738.055797576904s
+        for input_params['multem_version'] in ['2']:
+            for input_params['lmax'] in [7]:
+                time0 = time.time()
+                # for input_params['rmax'] in [35, 50]:
+                for input_params['rmax'] in [32]:
+                    F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+                    calc.save_1D_data(omega, R, dir=f'data/fig6_new{nunit}/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
+                print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+    # for input_params['multem_version'] in ['2', '3']:
     #     for input_params['lmax'] in [7]:
     #         time0 = time.time()
-    #         for input_params['rmax'] in [20, 25, 30]:
+    #         for input_params['rmax'] in [20, 30]:
     #             F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
     #             calc.save_1D_data(omega, T, dir=f'data/fig6/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
     #         print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-    #10738.055797576904s
-    for input_params['multem_version'] in ['2']:
-        for input_params['lmax'] in [7]:
-            time0 = time.time()
-            for input_params['rmax'] in [20, 25, 30]:
-                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                calc.save_1D_data(omega, T, dir=f'data/fig6/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
-            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-    for input_params['multem_version'] in ['2', '3']:
-        for input_params['lmax'] in [7]:
-            time0 = time.time()
-            for input_params['rmax'] in [20, 30]:
-                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                calc.save_1D_data(omega, T, dir=f'data/fig6/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
-            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
     print(f'CPU time:{time.time()-start}')
    
-
-if 'fig6_5' in figures_to_calculate:
+# 0.470512
+if 'fig5' in figures_to_calculate:
     start = time.time()
     input_parameters = {
         'ktype': 1,
@@ -224,7 +272,7 @@ if 'fig6_5' in figures_to_calculate:
     theta = np.arcsin(sin_theta)*180/np.pi
 
     for input_parameters['rmax'] in [7, 12, 14]:
-        dir = f'data/fig6/'
+        dir = f'data/fig5/'
         factor = 0
         for wl in [650, 750, 900]:
             if wl == 650:
@@ -252,70 +300,6 @@ if 'fig6_5' in figures_to_calculate:
 #========================================================================
 
 if 'fig8' in figures_to_calculate:
-    import matplotlib.pyplot as plt
-
-    def get_half_width_half_maxima_and_x0(x, y):
-        #TODO corner cases
-        idx = [np.argmax(y), np.argmin(y)]
-        ymax = y[idx[0]]
-        ymin = y[idx[1]]
-        amp = ymax - ymin
-        idx_hwhm = np.abs(y - 0.5*amp).argmin()
-        x0 = x[idx[0]]
-        hwhm = np.abs(x0 - x[idx_hwhm])
-
-        return hwhm, x0
-        
-    def q_factor_estimate(hwhm, x0, q_factor_limit):
-            is_enough_spectra = 0
-            q = x0/(2*hwhm)
-            if (q >= q_factor_limit):
-                is_enough_spectra = 1
-
-
-    def show_spectrum(figsize, x, y, sign):
-        plt.figure(figsize=figsize)
-        plt.plot(x, y, 'r', lw=0.5)
-        plt.scatter(x, y)
-        plt.title(sign)
-        # plt.scatter([3.7355827121317358], [1])
-        # 3.7355827103690302
-        # 6.121325668573263e-11
-        # plt.scatter([3.7355827103690302], [1])
-
-        #only for example
-        # plt.xlabel(r'${\omega d / 2\pi c }$')
-        plt.ylabel('T')
-        plt.show()
-
-    def find_spectrum(ak1, x, th):
-        ip = input_params
-        from_x = x[0]
-        to_x = x[-1]
-        while True:
-            F , T, R, A = calc.calc_spectrum_omega(x, ak1, ak2, input_params)
-            y = T
-            x = np.linspace(from_x, to_x, input_params['npts'])
-            x_range = to_x - from_x
-            show_spectrum((10,10), x, y, 'spectrum')
-            hwhm, x0 = get_half_width_half_maxima_and_x0(x, y)
-            hwhm_factor = 2
-            from_x = x0 - hwhm_factor*hwhm
-            to_x = x0 + hwhm_factor*hwhm
-            if (hwhm/x_range*100 >= th): break
-        F, T, R, A = calc.calc_spectrum_omega(x, ak1, ak2, input_params)   
-        y = T
-        x = np.linspace(from_x, to_x, input_params['npts'])
-        hwhm, x0 = get_half_width_half_maxima_and_x0(x, y)
-        is_enough_spectra = q_factor_estimate(hwhm, x0, 1e11)
-        # show_spectrum((10,10), x, y, k_value)
-        Q = x0/hwhm
-
-        return x, y, is_enough_spectra, Q
-
-
-    import time
-
     input_params = {
     'mts': '0', #multipole_type_selected
     'mos': '0', #multipole_order_selected
@@ -337,60 +321,125 @@ if 'fig8' in figures_to_calculate:
     'zinf': 0.5,
     'zsup': 1.0,
     'npts': 1000,
-    'r_ratio': 0.4705,
+    'r_ratio': 0.470512,
     'mode': '1', #multi-layered
     'dist_btw_spheres_and_interface': 0.6
 }
     start = time.time()
-    LMAX = [4]
-    RMAX = [16]
-    input_params['multem_version'] = '3'
     #fig8 b-e ?
-    omega = np.linspace(3.734, 3.737, input_params['npts'])
+    # omega = np.linspace(3.7314, 3.732, input_params['npts'])
+    omega = np.linspace(3.7354, 3.7357, input_params['npts']) #Lmax 4 0.4705
     input_params['zinf'] = omega[0]
     input_params['zsup'] = omega[-1]
-    ak1 = 2e-3/2/np.pi
+    ak1 = 1e-3/2/np.pi
     ak2 = 0
     for input_params['multem_version'] in ['3_cerf', '3']:
-        for input_params['lmax'] in LMAX:
-            time0 = time.time()
-            for input_params['rmax'] in RMAX:
-                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                calc.save_1D_data(omega, T, dir=f'data/fig8/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
-            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+        time0 = time.time()
+        F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+        calc.save_1D_data(omega, R, dir=f'data/fig8/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+        print(f'{input_params["multem_version"]} : {time.time()-time0}s')
 
-
-    omega = np.linspace(3.7354, 3.7358, input_params['npts'])
+    omega = np.linspace(3.7354, 3.7357, input_params['npts']) #Lmax 4 0.4705
     input_params['zinf'] = omega[0]
     input_params['zsup'] = omega[-1]
-    ak1 = 1e-4/2/np.pi
+    ak1 = 8e-5/2/np.pi
     ak2 = 0
     for input_params['multem_version'] in ['3_cerf', '3']:
-        for input_params['lmax'] in LMAX:
-            time0 = time.time()
-            for input_params['rmax'] in RMAX:
-                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                calc.save_1D_data(omega, T, dir=f'data/fig8/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
-            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-
-
-    omega = np.linspace(3.73558, 3.735586, input_params['npts'])
+        time0 = time.time()
+        F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+        calc.save_1D_data(omega, R, dir=f'data/fig8/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+        print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+    
+    omega = np.linspace(3.73553338, 3.735533395, input_params['npts']) #lmax4
+    # omega = np.linspace(3.73163055, 3.731630575, input_params['npts']) #lmax4
     input_params['zinf'] = omega[0]
     input_params['zsup'] = omega[-1]
-    ak1 = 5e-5/2/np.pi
+    ak1 = 8e-6/2/np.pi
     ak2 = 0
     for input_params['multem_version'] in ['3_cerf', '3']:
-        for input_params['lmax'] in LMAX:
-            time0 = time.time()
-            for input_params['rmax'] in RMAX:
-                F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                calc.save_1D_data(omega, T, dir=f'data/fig8/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
-            print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+        time0 = time.time()
+        F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+        calc.save_1D_data(omega, R, dir=f'data/fig8/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+        print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+        hwhm, x0 = get_half_width_half_maxima_and_x0(omega, R)
+        print(f'fwhm={hwhm*2}, x0={x0}')
+        plt.plot(omega, R)
+        plt.scatter(x0, 1)
+        plt.show()
     print(f'CPU time: {time.time()-start}')
 
 
-
 if 'fig9' in figures_to_calculate:
+    input_params = {
+    'mts': '0', #multipole_type_selected
+    'mos': '0', #multipole_order_selected
+    'mps': '0', #m_projection_selected
+    'type': '1',
+    'order': '1',
+    'm': '1',
+    'rmax': 16,
+    'lmax': 10,
+    'lattice_constant': 300,
+    'fab': 60,
+    'polar': 'S',
+    'epssph_re': 15,
+    'epssph_im': 0,
+    'epsmed_re': 1,
+    'epsmed_im': 0,
+    'ktype': 2,
+    'kscan': 1,
+    'zinf': 0.5,
+    'zsup': 1.0,
+    'npts': 1000,
+    # 'r_ratio': 0.470512,
+    'r_ratio': 0.470665,
+    'mode': '1', #multi-layered
+    'dist_btw_spheres_and_interface': 0.6
+}
+    start = time.time()
+    omega = np.linspace(3.7314, 3.732, input_params['npts'])
+    input_params['zinf'] = omega[0]
+    input_params['zsup'] = omega[-1]
+    ak1 = 1e-3/2/np.pi
+    ak2 = 0
+    for input_params['multem_version'] in ['3_cerf', '3']:
+        time0 = time.time()
+        F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+        calc.save_1D_data(omega, R, dir=f'data/fig9/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+        print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+
+
+    omega = np.linspace(3.7316, 3.7317, input_params['npts'])
+    input_params['zinf'] = omega[0]
+    input_params['zsup'] = omega[-1]
+    ak1 = 8e-5/2/np.pi
+    ak2 = 0
+    for input_params['multem_version'] in ['3_cerf', '3']:
+        time0 = time.time()
+        F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+        calc.save_1D_data(omega, R, dir=f'data/fig9/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+        print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+
+    omega = np.linspace(3.73163055, 3.731630575, input_params['npts'])
+    input_params['zinf'] = omega[0]
+    input_params['zsup'] = omega[-1]
+    ak1 = 8e-6/2/np.pi
+    ak2 = 0
+    for input_params['multem_version'] in ['3_cerf', '3']:
+        time0 = time.time()
+        F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
+        calc.save_1D_data(omega, R, dir=f'data/fig9/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+        print(f'{input_params["multem_version"]} : {time.time()-time0}s')
+        hwhm, x0 = get_half_width_half_maxima_and_x0(omega, R)
+        print(f'fwhm={hwhm*2}, x0={x0}')
+        #--------- BIC spectral position check -------------
+        plt.plot(omega, R)
+        plt.scatter(x0, 1)
+        plt.show()
+    print(f'CPU time: {time.time()-start}')
+
+
+if 'fig10' in figures_to_calculate:
     start = time.time()
     input_parameters = {
         'ktype': 1,

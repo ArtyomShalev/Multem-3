@@ -152,7 +152,7 @@ def find_nearest_idx(array, value):
 plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 
-figures_to_plot = ['fig7']
+figures_to_plot = ['fig6']
 
 # ------------- Fig. 3 ---------------------------------------------------------------------------------------------
 if 'fig3' in figures_to_plot:
@@ -224,6 +224,12 @@ if 'fig3' in figures_to_plot:
     for ax in [ax1, ax2, ax3]:
         ax.tick_params('both', length=10, width=2, which='major')
     
+    fig.text(0.05, 0.9, 'a', ha='center')
+    fig.text(0.05, 0.47, 'b', ha='center')
+    fig.text(0.51, 0.06, r'$ak_0$', ha='center')
+
+
+
     plt.savefig('fig3.pdf')
     plt.clf(); plt.close()
 
@@ -376,7 +382,9 @@ if 'fig6_7' in figures_to_plot:
     ax5.set_xticks([-0.0092, -0.0074])
     ax5.set_xticklabels([round(np.min(pos_args.real),3), round(np.max(pos_args.real),3)])
     ax5.set_yticks([np.min(np.log10(pos_args.imag)), np.max(np.log10(pos_args.imag))])
-    ax5.set_yticks([np.log10(2), np.log10(16)])
+    ax5.set_yticks([np.log10(2), np.log10(16)])    
+   
+
     ax5.set_yticklabels([2, 16])
     ax5.set_xlim([np.min(np.log10(pos_args.real)) - (np.max(np.log10(pos_args.real)) - np.min(np.log10(pos_args.real)))/2, np.max(np.log10(pos_args.real)) + (np.max(np.log10(pos_args.real)) - np.min(np.log10(pos_args.real)))/2])
     ax5.set_ylim([np.min(np.log10(pos_args.imag)) - (np.max(np.log10(pos_args.imag)) - np.min(np.log10(pos_args.imag)))/2, np.max(np.log10(pos_args.imag)) + (np.max(np.log10(pos_args.imag)) - np.min(np.log10(pos_args.imag)))/2])
@@ -457,7 +465,7 @@ if 'fig6_7' in figures_to_plot:
         ax.add_artist(at)
     plt.subplots_adjust(left=0.08,
                         bottom=0.099,
-                        right=0.91,
+                        right=0.91,    
                         top=0.96,
                         wspace=0.01,
                         hspace=0.02)
@@ -475,7 +483,7 @@ import calculating_lib as cl
 
 if 'fig5' in figures_to_plot:
 
-    dir = f'data/fig5/'
+    dir = f'data/fig5'
     fig = plt.figure(figsize=(20, 20))
     i = 1
     curve_styles = {
@@ -494,15 +502,15 @@ if 'fig5' in figures_to_plot:
         plt.plot([0.726, 0.726], [1.04, 1.19], 'red', lw=5)
         lines[rmax], = plt.plot(x, R3+2, color=curve_styles[rmax][2], lw=curve_styles[rmax][0], alpha=curve_styles[rmax][1], ls=curve_styles[rmax][4])
         plt.plot([0.872, 0.872], [2.1, 2.25], 'red', lw=5)
-        plt.xlabel(r'sin$\theta$')
+        plt.xlabel(r'sin $\theta$')
         plt.ylabel(r'$\mathbf{R_{spec}}$', rotation=0)
         plt.gca().yaxis.set_label_coords(-0.1, 0.5)
     plt.legend(handles=[lines['7'], lines['12'], lines['14']], labels=['RMAX=7', 'RMAX=12', 'RMAX=14'], frameon=False)
     plt.tick_params('both', length=10, width=2, which='major')
 
-    fig.text(0.5, 0.23, r'$\lambda=650 nm$', ha='center')
-    fig.text(0.5, 0.48, r'$\lambda=750 nm$', ha='center')
-    fig.text(0.5, 0.8, r'$\lambda=900 nm$', ha='center')
+    fig.text(0.5, 0.23, r'$\lambda=650$ nm', ha='center')
+    fig.text(0.5, 0.48, r'$\lambda=750$ nm', ha='center')
+    fig.text(0.5, 0.8, r'$\lambda=900$ nm', ha='center')
     
     plt.savefig('fig5.pdf')
     plt.clf(); plt.close()
@@ -510,17 +518,16 @@ if 'fig5' in figures_to_plot:
 
 
 
-if 'fig7' in figures_to_plot:
+if 'fig9' in figures_to_plot:
     from decimal import Decimal
-    LMAX = [4]
+    LMAX = [10]
     RMAX = [16]
-    # AK1 = [0.01, 8e-5, 4e-5]
-    AK1 = [2e-3, 1e-4, 5e-5]
+    AK1 = [1e-3, 8e-5, 8e-6]
     X = {}; Y = {}
     step = 1
     #reading data to plot
     for version in ['3_cerf', '3']:
-        main_dir = dir=f'data/fig8/{version}/'
+        main_dir = dir=f'data/fig9/{version}/'
         for lmax in LMAX:
             for rmax in RMAX:
                 for ak1 in AK1:
@@ -530,23 +537,21 @@ if 'fig7' in figures_to_plot:
                     X[f'{version}_{rmax}_{ak1}'] = x; Y[f'{version}_{rmax}_{ak1}'] = y
     
     fig = plt.figure(figsize=(22, 22))
-    error_step = 3
+    error_step = 5
     axs = []
     for i, ak1 in enumerate(AK1):
         ak1 = round(ak1/2/np.pi, 8) 
         ax = fig.add_subplot(3, 2, 2*(i+1)-1)
         axs.append(ax)
         key = f'{RMAX[0]}_{ak1}'
-        plt.gca().plot(X['3_'+key], Y['3_'+key], 'black', lw=6, label='SciPy')
         plt.gca().plot(X['3_cerf_'+key], Y['3_cerf_'+key], 'green', lw=18, alpha=0.4, label='CERF') 
-        plt.gca().set_title(r'$ak_x$='+f'{Decimal(AK1[i]):.0e}')
-        plt.gca().set_ylabel('T')
+        plt.gca().plot(X['3_'+key], Y['3_'+key], 'black', lw=6, label='SciPy')
+        plt.gca().set_title(r'$k_x$='+f'{Decimal(AK1[i]):.0e}')
         plt.gca().set_xlabel(r'$ak_0$')
-        # plt.gca().set_yscale('log')
         plt.gca().legend(frameon=False)
         plt.gca().tick_params('both', length=15, width=4, which='major')
         plt.gca().minorticks_off()
-        plt.gca().set_ylabel(r'$\mathbf{T}$', rotation=0)
+        plt.gca().set_ylabel(r'$\mathbf{R}$', rotation=0)
         plt.gca().yaxis.set_label_coords(-0.18, 0.5)
         ax = fig.add_subplot(3, 2, 2*(i+1))
         axs.append(ax)
@@ -573,22 +578,137 @@ if 'fig7' in figures_to_plot:
     # #setting ticks and labels
     axs[0].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
     axs[0].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
-    axs[0].set_xticks([3.734, 3.735, 3.736, 3.737])
-    axs[0].set_xticklabels([3.734, 3.735, 3.736, 3.737])
-    axs[1].set_xticks([3.734, 3.735, 3.736, 3.737])
-    axs[1].set_xticklabels([3.734, 3.735, 3.736, 3.737])
-    axs[2].set_xticks([3.7354, 3.7356, 3.7358])
-    axs[2].set_xticklabels([3.7354, 3.7356, 3.7358])
+    axs[0].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
+    axs[0].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
+    axs[1].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
+    axs[1].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
+    axs[2].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
+    axs[2].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
+    axs[3].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
+    axs[3].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
+    axs[4].set_xticks([3.73163055, 3.731630575])
+    axs[4].set_xticklabels([3.73163055, 3.731630575])
+    axs[5].set_xticks([3.73163055, 3.731630575])
+    axs[5].set_xticklabels([3.73163055, 3.731630575])
+
+
+    # axs[2].set_xticks([3.7354, 3.7356, 3.7358])
+    # axs[2].set_xticklabels([3.7354, 3.7356, 3.7358])
+    # axs[2].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    # axs[2].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
+    # axs[3].set_xticks([3.7354, 3.7356, 3.7358])
+    # axs[3].set_xticklabels([3.7354, 3.7356, 3.7358])
+    # axs[4].set_xticks([3.73558, 3.735583, 3.735586])
+    # axs[4].set_xticklabels([3.73558, 3.735583, 3.735586])
+    # axs[4].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    # axs[4].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
+    # axs[5].set_xticks([3.73558, 3.735583, 3.735586])
+    # axs[5].set_xticklabels([3.73558, 3.735583, 3.735586])
+    
+  
+    plt.subplots_adjust(left=0.12,
+                        bottom=0.099,
+                        right=0.98,
+                        top=0.95,
+                        wspace=0.3,
+                        hspace=0.4)
+    plt.savefig(f'fig9.pdf')
+    plt.clf(); plt.close()
+
+
+if 'fig8' in figures_to_plot:
+    from decimal import Decimal
+    LMAX = [4]
+    RMAX = [16]
+    AK1 = [1e-3, 8e-5, 8e-6]
+    X = {}; Y = {}
+    step = 1
+    #reading data to plot
+    for version in ['3_cerf', '3']:
+        main_dir = dir=f'data/fig8/{version}/'
+        for lmax in LMAX:
+            for rmax in RMAX:
+                for ak1 in AK1:
+                    ak1 = round(ak1/2/np.pi, 8)
+                    path = main_dir+f'lmax={lmax}_rmax={rmax}_ak1={ak1}.txt'
+                    x, y = cl.read_1D_data_real(path)
+                    X[f'{version}_{rmax}_{ak1}'] = x; Y[f'{version}_{rmax}_{ak1}'] = y
+    
+    fig = plt.figure(figsize=(22, 22))
+    error_step = 5
+    axs = []
+    for i, ak1 in enumerate(AK1):
+        ak1 = round(ak1/2/np.pi, 8) 
+        ax = fig.add_subplot(3, 2, 2*(i+1)-1)
+        axs.append(ax)
+        key = f'{RMAX[0]}_{ak1}'
+        plt.gca().plot(X['3_cerf_'+key], Y['3_cerf_'+key], 'green', lw=18, alpha=0.4, label='CERF') 
+        plt.gca().plot(X['3_'+key], Y['3_'+key], 'black', lw=6, label='SciPy')
+        plt.gca().set_title(r'$k_x$='+f'{Decimal(AK1[i]):.0e}')
+        plt.gca().set_xlabel(r'$ak_0$')
+        plt.gca().legend(frameon=False)
+        plt.gca().tick_params('both', length=15, width=4, which='major')
+        plt.gca().minorticks_off()
+        plt.gca().set_ylabel(r'$\mathbf{R}$', rotation=0)
+        plt.gca().yaxis.set_label_coords(-0.18, 0.5)
+        ax = fig.add_subplot(3, 2, 2*(i+1))
+        axs.append(ax)
+        error = np.abs(Y['3_'+key]-Y['3_cerf_'+key])
+        plt.gca().scatter(X['3_'+key][::error_step], error[::error_step], color='black', s=20)
+        plt.gca().set_ylabel('error')
+        plt.gca().set_xlabel(r'$ak_0$')
+        plt.gca().set_yscale('log')
+        plt.gca().tick_params('both', length=15, width=4, which='major')
+        plt.gca().minorticks_off()
+        plt.gca().yaxis.set_label_coords(-0.18, 0.5)
+
+
+
+    fig.text(0.04, 0.96, r'a', ha='center', fontsize=30)
+    fig.text(0.54, 0.96, r'b', ha='center', fontsize=30)
+    fig.text(0.04, 0.64, r'c', ha='center', fontsize=30)
+    fig.text(0.54, 0.64, r'd', ha='center', fontsize=30)
+    fig.text(0.04, 0.33, r'e', ha='center', fontsize=30)
+    fig.text(0.54, 0.33, r'f', ha='center', fontsize=30)
+
+
+
+    # #setting ticks and labels
+    # axs[0].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    # axs[0].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
+    # axs[0].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
+    # axs[0].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
+    # axs[1].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
+    # axs[1].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
+    # axs[2].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
+    # axs[2].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
+    # axs[3].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
+    # axs[3].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
+    # axs[4].set_xticks([3.73163055, 3.731630575])
+    # axs[4].set_xticklabels([3.73163055, 3.731630575])
+    # axs[5].set_xticks([3.73163055, 3.731630575])
+    # axs[5].set_xticklabels([3.73163055, 3.731630575])
+
+
+    axs[0].set_xticks([3.7354, 3.7355, 3.7356, 3.7357])
+    axs[0].set_xticklabels([3.7354, 3.7355, 3.7356, 3.7357])
+    axs[0].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[0].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[1].set_xticks([3.7354, 3.7355, 3.7356, 3.7357])
+    axs[1].set_xticklabels([3.7354, 3.7355, 3.7356, 3.7357])
+    axs[2].set_xticks([3.7354, 3.7355, 3.7356, 3.7357])
+    axs[2].set_xticklabels([3.7354, 3.7355, 3.7356, 3.7357])
     axs[2].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
     axs[2].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
-    axs[3].set_xticks([3.7354, 3.7356, 3.7358])
-    axs[3].set_xticklabels([3.7354, 3.7356, 3.7358])
-    axs[4].set_xticks([3.73558, 3.735583, 3.735586])
-    axs[4].set_xticklabels([3.73558, 3.735583, 3.735586])
+    axs[3].set_xticks([3.7354, 3.7355, 3.7356, 3.7357])
+    axs[3].set_xticklabels([3.7354, 3.7355, 3.7356, 3.7357])
+    axs[4].set_xticks([3.73553338, 3.735533395])
+    axs[4].set_xticklabels([3.73553338, 3.735533395])
     axs[4].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
     axs[4].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
-    axs[5].set_xticks([3.73558, 3.735583, 3.735586])
-    axs[5].set_xticklabels([3.73558, 3.735583, 3.735586])
+    axs[5].set_xticks([3.73553338, 3.735533395])
+    axs[5].set_xticklabels([3.73553338, 3.735533395])
+
     
   
     plt.subplots_adjust(left=0.12,
@@ -602,69 +722,32 @@ if 'fig7' in figures_to_plot:
 
 
 
-if 'fig6' in figures_to_plot:
+if 'fig6_old' in figures_to_plot:
     import os
     from matplotlib.offsetbox import OffsetImage, AnnotationBbox
     lmax = 7
     fig = plt.figure(figsize=(20, 20))
     X = {}; Y = {}
-    d = '0.5'
-    ax1 = fig.add_subplot(3, 1, 1)
-    # #key:version_rmax
-    # #value: (lw, alpha, color, zorder)
-    curve_styles = {
-        '2_20': (6, 1, 'red', 2, 'dotted'),
-        '2_30': (6, 1, 'red', 2, 'dotted'),
-        '3_20': (18, 0.4, 'red', 1, 'solid'),
-        '3_30': (18, 0.4, 'red', 1, 'solid'),
-    }
-    for version in ['2', '3']:
-        main_dir = f'data/fig6/mode=3/version={version}/d={d}/'
-        for rmax in ['20', '30']:
-            path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
-            if os.path.exists(path): 
-                x, y = cl.read_1D_data_real(path)
-                print(x.shape)
-            else:
-                print('File not Found')
-                continue
-            if rmax == '30':
-                y += 1
-            ax1.plot(x, y, label=f'RMAX={rmax}_VERSION={version}',
-                    lw=curve_styles[f'{version}_{rmax}'][0], 
-                    alpha=curve_styles[f'{version}_{rmax}'][1],
-                    color=curve_styles[f'{version}_{rmax}'][2],
-                    zorder=curve_styles[f'{version}_{rmax}'][3],
-                    ls=curve_styles[f'{version}_{rmax}'][4])
-    ax1.tick_params('both', length=7, width=2, which='both')
-    fig.text(0.21, 0.72, r'RMAX=20', color='black', ha='center', fontsize=30)
-    fig.text(0.21, 0.92, r'RMAX=30', color='black', ha='center', fontsize=30)
-    ax1.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
-    ax1.yaxis.set_label_coords(-0.08, 0.5)
-    ax1.set_xticks([6.29, 6.291, 6.291])
-    ax1.set_xticklabels([])
-    ax1.set_ylim([-0.1, 2.7])
-    # ax1.legend(handles=[lines['2'], lines['3']], labels=['MULTEM2', 'MULTEM3', 'RMAX=14'], color='black', frameon=False)
-    
+    d = '0.41'
+    nunit = '_1unit_6'
     from matplotlib.lines import Line2D
     custom_lines = [Line2D([0], [0], color='red', lw=18, alpha=0.4, ls='solid'),
             Line2D([0], [0], color='red', lw=6, alpha=1, ls='dotted')]
 
-    ax1.legend(custom_lines, ['MULTEM2', 'MULTEM3'], frameon=False)
 
-    ax2 = fig.add_subplot(3, 1, 2)
+    ax1 = fig.add_subplot(2, 1, 1)
    # #key:version_rmax
     # #value: (lw, alpha, color, zorder, styles)
     curve_styles = {
         '2_20': (9, 1, 'red', 1, 'dotted'),
-        '2_25': (18, 0.4, 'green', 1, '-'),
-        # '2_50': (6, 1, 'black', 1, '-'),
-        # '2_47': (18, 0.4, 'green', 1, '-'),
+        '2_30': (9, 1, 'black', 1, 'dashed'),
+        '2_26': (18, 0.7, 'green', 1, 'solid'),
+        '2_40': (6, 1, 'blue', 1, 'dotted'),
         # '2_45': (6, 1, 'black', 1, '-'),
     }
     for version in ['2']:
-        main_dir = f'data/fig6/mode=orig_multem/version={version}/d={d}/'
-        for rmax in ['20', '25']:
+        main_dir = f'data/fig6_new{nunit}/mode=3_old/version={version}/d={d}/'
+        for rmax in ['20']:
             path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
             if os.path.exists(path): 
                 x, y = cl.read_1D_data_real(path)
@@ -672,38 +755,36 @@ if 'fig6' in figures_to_plot:
                 print('File not Found')
                 continue
             X[f'{version}_{rmax}'] = x; Y[f'{version}_{rmax}'] = y
-            ax2.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'RMAX={rmax}',
-                      lw=curve_styles[f'{version}_{rmax}'][0], 
+            ax1.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'RMAX={rmax}',
+                    lw=curve_styles[f'{version}_{rmax}'][0], 
                     alpha=curve_styles[f'{version}_{rmax}'][1],
                     color=curve_styles[f'{version}_{rmax}'][2],
                     zorder=curve_styles[f'{version}_{rmax}'][3],
                     ls=curve_styles[f'{version}_{rmax}'][4])
 
-    ax2.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
-
-    # ax2.set_xticks([6.29, 6.291, 6.291])
-    # ax2.set_xticklabels([])
-    # ax2.set_yticks([0.0, 0.5, 1, 1.5])
-    # ax2.set_yticklabels([0.0, 0.5, 1.0, 1.5]) 
-    # ax2.legend(frameon=False, loc=(0.04,0.6))
-    # ax2.set_ylim([-0.1, 1.9])
-    # fig.text(0.22, 0.64, r'MULTEM2', color='black', ha='center', fontsize=30)
-    # ax2.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
+    ax1.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
+    ax1.legend(frameon=False)
+    # ax1.set_ylim([-0.05, 0.5])
+    fig.text(0.5, 0.6, r'MULTEM2', color='black', ha='center', fontsize=30)
+    ax1.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
     # ax2.yaxis.set_label_coords(-0.08, 0.5)        
 
 
-    ax3 = fig.add_subplot(3, 1, 3)
-    X = {}; Y = {}
+    ax2 = fig.add_subplot(2, 1, 2)
+    # X = {}; Y = {}
     # #key:version_rmax
     # #value: (lw, alpha, color, zorder)
     curve_styles = {
         '3_20': (9, 1, 'red', 1, 'dotted'),
-        '3_25': (18, 0.4, 'green', 1, '-'),
-        '3_30': (18, 1, 'black', 1, '-'),
+        '3_30': (18, 0.7, 'green', 1, 'solid'),
+        # '3_26': (9, 0.7, 'green', 1, 'dashed'),
+        '3_40': (6, 1, 'red', 1, 'dotted'),
+        '3_22': (18, 0.4, 'green', 1, '-'),
+        # '2_45': (6, 1, 'black', 1, '-'),
     }
     for version in ['3']:
-        main_dir = f'data/fig6/mode=orig_multem/version={version}/d={d}/'
-        for rmax in ['20', '25']:
+        main_dir = f'data/fig6_new{nunit}/mode=3_old/version={version}/d={d}/'
+        for rmax in ['20', '30', '40']:
         # for rmax in ['47', '45']:
             path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
             if os.path.exists(path): 
@@ -712,25 +793,46 @@ if 'fig6' in figures_to_plot:
                 print('File not Found')
                 continue
             X[f'{version}_{rmax}'] = x; Y[f'{version}_{rmax}'] = y
-            ax3.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'RMAX={rmax}',
+            ax2.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'RMAX={rmax}',
                     lw=curve_styles[f'{version}_{rmax}'][0], 
                     alpha=curve_styles[f'{version}_{rmax}'][1],
                     color=curve_styles[f'{version}_{rmax}'][2],
                     zorder=curve_styles[f'{version}_{rmax}'][3],
                     ls=curve_styles[f'{version}_{rmax}'][4])
 
+
+    # ax3 = fig.add_subplot(2, 1, 2)
+    # error_step = 1
+    # error = np.abs(Y['3_20']-Y['2_20'])
+    # ax3.scatter(X['3_20'][::error_step], error[::error_step], color='black', s=20)
+    # print(Y[f'2_50']-Y[f'3_50'])
+    # print(Y[f'2_20']-Y[f'2_30'])
+    # print(Y[f'2_16']-Y[f'3_16'])
+
+    # print(Y[f'2_16']-Y[f'2_35'])
+
+    print('----------------------')
+    # print(np.max(Y[f'2_16']))
+    # print(np.max(Y[f'2_35']))
+    # print(np.max(Y[f'2_50']))
+    # print(np.max(Y[f'3_16']))
+    # print(np.max(Y[f'3_35']))
+
+
+
     # ax3.set_xticks([6.29, 6.291, 6.291])
     # ax3.set_xticklabels([6.29, 6.291, 6.291])
-    ax3.plot((x[0], x[-1]),(1.0, 1.0), '-', color='red', lw=3)
+    ax2.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
     
     # ax3.set_yticks([0.0, 0.5, 1.0, 1.5])
     # ax3.set_yticklabels([0.0, 0.5, 1.0, 1.5])
-    # ax3.tick_params('both', length=7, width=2, which='both')
-    # ax3.legend(frameon=False, loc=(0.04,0.6))
-    # fig.text(0.22, 0.325, r'MULTEM3', color='black', ha='center', fontsize=30)
-    # ax3.set_ylim([-0.1, 2.3])
-    # ax3.set_xlabel(r'$ak_0$')
-    # ax3.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
+    # ax2.tick_params('both', length=7, width=2, which='both')
+    # ax2.legend(frameon=False)
+    fig.text(0.5, 0.1, r'MULTEM3', color='black', ha='center', fontsize=30)
+
+    # ax2.set_ylim([-0.1, 0.8])
+    ax2.set_xlabel(r'$ak_0$')
+    ax2.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
     # ax3.yaxis.set_label_coords(-0.08, 0.5)
     # arr_img = plt.imread("unit_slice.png")
     # im = OffsetImage(arr_img, zoom=0.55)
@@ -738,28 +840,413 @@ if 'fig6' in figures_to_plot:
     # ax3.add_artist(ab)
 
 
-    fig.text(0.03, 0.96, 'a', color='black', ha='center', fontsize=30)
-    fig.text(0.03, 0.65, 'b', color='black', ha='center', fontsize=30)
-    fig.text(0.03, 0.33, 'c', color='black', ha='center', fontsize=30)
-    fig.text(0.7, 0.33, 'd', color='black', ha='center', fontsize=30)
+    # fig.text(0.03, 0.96, 'a', color='black', ha='center', fontsize=30)
+    # fig.text(0.03, 0.65, 'b', color='black', ha='center', fontsize=30)
+    # fig.text(0.03, 0.33, 'c', color='black', ha='center', fontsize=30)
+    # fig.text(0.7, 0.33, 'd', color='black', ha='center', fontsize=30)
 
     plt.subplots_adjust(left=0.1,
                         bottom=0.05,
                         right=0.95,
                         top=0.98,
                         wspace=0.01,
-                        hspace=0.05)
+                        hspace=0.1)
+
+
+    # for ax in [ax1, ax2, ax3]:
+    #     ax.tick_params('both', length=10, width=2, which='major')
+
+    plt.savefig(f'fig6.pdf')
+    plt.clf(); plt.close()
+
+
+if 'fig6_test' in figures_to_plot:
+    import os
+    from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+    lmax = 7
+    fig = plt.figure(figsize=(20, 20))
+    X = {}; Y = {}
+    d = '0.41'
+    # nunit = '_1unit_9nlayer_2nplan'
+    from matplotlib.lines import Line2D
+    custom_lines = [Line2D([0], [0], color='red', lw=18, alpha=0.4, ls='solid'),
+            Line2D([0], [0], color='red', lw=6, alpha=1, ls='dotted')]
+
+    # nunit = '_1unit_6'
+    ax1 = fig.add_subplot(3, 1, 1)
+   # #key:version_rmax
+    # #value: (lw, alpha, color, zorder, styles)
+    curve_styles = {
+        '2_32_5': (3, 1, 'green', 1, 'solid'),
+        '2_16_6': (9, 1, 'red', 1, 'dashed'),
+        '2_30_3': (3, 1, 'black', 1, 'solid'),
+        '2_30_9': (6, 1, 'blue', 1, 'dotted'),
+        # '2_45': (6, 1, 'black', 1, '-'),
+    }
+    NLAYERS = ['6']
+    for version in ['2']:
+        for nlayer in NLAYERS:
+                nunit = f'_1unit_{nlayer}'
+                for rmax in ['16']:
+                    main_dir = f'data/fig6_new{nunit}/mode=3_ref/version={version}/d={d}/'
+                    path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
+                    if os.path.exists(path): 
+                        x, y = cl.read_1D_data_real(path)
+                    else:
+                        print('File not Found')
+                        continue
+                    X[f'{version}_{rmax}_{nlayer}'] = x; Y[f'{version}_{rmax}_{nlayer}'] = y
+                    ax1.plot(X[f'{version}_{rmax}_{nlayer}'], Y[f'{version}_{rmax}_{nlayer}'], label=f'nlayer={nlayer}',
+                            lw=curve_styles[f'{version}_{rmax}_{nlayer}'][0], 
+                            alpha=curve_styles[f'{version}_{rmax}_{nlayer}'][1],
+                            color=curve_styles[f'{version}_{rmax}_{nlayer}'][2],
+                            zorder=curve_styles[f'{version}_{rmax}_{nlayer}'][3],
+                            ls=curve_styles[f'{version}_{rmax}_{nlayer}'][4])
+
+    ax1.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
+    ax1.legend(frameon=False)
+    ax1.set_ylim([-0.05, 1.5])
+    fig.text(0.5, 0.85, r'MULTEM2', color='black', ha='center', fontsize=30)
+    ax1.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
+    # ax2.yaxis.set_label_coords(-0.08, 0.5)        
+
+
+    ax2 = fig.add_subplot(3, 1, 2)
+    # X = {}; Y = {}
+    # #key:version_rmax
+    # #value: (lw, alpha, color, zorder)
+    curve_styles = {
+        '3_32_5': (3, 1, 'green', 1, 'solid'),
+        '3_30_6': (9, 1, 'red', 1, 'dashed'),
+        '3_30_3': (3, 1, 'black', 1, 'solid'),
+        '3_30_9': (6, 1, 'blue', 1, 'dotted'),
+        # '2_45': (6, 1, 'black', 1, '-'),
+    }
+    for version in ['3']:
+        for nlayer in NLAYERS:
+            nunit = f'_1unit_{nlayer}'
+            for rmax in ['30']:
+            # for rmax in ['47', '45']:
+                main_dir = f'data/fig6_new{nunit}/mode=3_ref/version={version}/d={d}/'
+                path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
+                if os.path.exists(path): 
+                    x, y = cl.read_1D_data_real(path)
+                else:
+                    print('File not Found')
+                    continue
+                X[f'{version}_{rmax}_{nlayer}'] = x; Y[f'{version}_{rmax}_{nlayer}'] = y
+                ax2.plot(X[f'{version}_{rmax}_{nlayer}'], Y[f'{version}_{rmax}_{nlayer}'], label=f'nlayer={nlayer}',
+                        lw=curve_styles[f'{version}_{rmax}_{nlayer}'][0], 
+                        alpha=curve_styles[f'{version}_{rmax}_{nlayer}'][1],
+                        color=curve_styles[f'{version}_{rmax}_{nlayer}'][2],
+                        zorder=curve_styles[f'{version}_{rmax}_{nlayer}'][3],
+                        ls=curve_styles[f'{version}_{rmax}_{nlayer}'][4])
+
+    ax2.set_ylim([-0.05, 1.5])
+    ax2.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
+    ax2.legend(frameon=False)
+
+    # ax3 = fig.add_subplot(3, 1, 3)
+    # error_step = 1
+    # error = np.abs(Y['3_30']-Y['3_32'])
+    # ax3.scatter(X['2_32'][::error_step], error[::error_step], color='black', s=20)
+    # ax3.set_yscale('log')
+    # ax3.set_ylabel(r'$error$', rotation=0, fontsize=30)
+    # print(Y[f'3_20']-Y[f'3_30'])
+    # print(Y[f'2_20']-Y[f'2_30'])
+    # print(Y[f'2_16']-Y[f'3_16'])
+
+    # print(Y[f'2_16']-Y[f'2_35'])
+
+    print('----------------------')
+    # print(np.max(Y[f'2_16']))
+    # print(np.max(Y[f'2_35']))
+    # print(np.max(Y[f'2_50']))
+    # print(np.max(Y[f'3_16']))
+    # print(np.max(Y[f'3_35']))
+
+
+#     nunit = '_1unit_8'
+#     ax1 = fig.add_subplot(3, 2, 2)
+#    # #key:version_rmax
+#     # #value: (lw, alpha, color, zorder, styles)
+#     curve_styles = {
+#         '2_20': (9, 1, 'red', 1, 'solid'),
+#         '2_30': (12, 0.7, 'black', 1, 'solid'),
+#         '2_6': (18, 0.7, 'green', 1, 'solid'),
+#         '2_40': (6, 1, 'blue', 1, 'dotted'),
+#         # '2_45': (6, 1, 'black', 1, '-'),
+#     }
+#     for version in ['2']:
+#         main_dir = f'data/fig6{nunit}/mode=3_ref/version={version}/d={d}/'
+#         for rmax in ['20', '30', '40']:
+#             path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
+#             if os.path.exists(path): 
+#                 x, y = cl.read_1D_data_real(path)
+#             else:
+#                 print('File not Found')
+#                 continue
+#             X[f'{version}_{rmax}'] = x; Y[f'{version}_{rmax}'] = y
+#             ax1.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'RMAX={rmax}',
+#                     lw=curve_styles[f'{version}_{rmax}'][0], 
+#                     alpha=curve_styles[f'{version}_{rmax}'][1],
+#                     color=curve_styles[f'{version}_{rmax}'][2],
+#                     zorder=curve_styles[f'{version}_{rmax}'][3],
+#                     ls=curve_styles[f'{version}_{rmax}'][4])
+
+#     ax1.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
+#     ax1.legend(frameon=False)
+#     ax1.set_ylim([-0.05, 1.5])
+#     fig.text(0.5, 0.85, r'MULTEM2', color='black', ha='center', fontsize=30)
+#     ax1.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
+#     # ax2.yaxis.set_label_coords(-0.08, 0.5)        
+
+
+#     ax2 = fig.add_subplot(3, 2, 4)
+#     # X = {}; Y = {}
+#     # #key:version_rmax
+#     # #value: (lw, alpha, color, zorder)
+#     curve_styles = {
+#         '3_20': (9, 1, 'red', 1, 'solid'),
+#         '3_30': (12, 0.7, 'black', 1, 'solid'),
+#         # '3_26': (9, 0.7, 'green', 1, 'dashed'),
+#         '3_40': (6, 1, 'red', 1, 'dotted'),
+#         '3_22': (18, 0.4, 'green', 1, '-'),
+#         # '2_45': (6, 1, 'black', 1, '-'),
+#     }
+#     for version in ['3']:
+#         main_dir = f'data/fig6{nunit}/mode=3_ref/version={version}/d={d}/'
+#         for rmax in ['20', '30', '40']:
+#         # for rmax in ['47', '45']:
+#             path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
+#             if os.path.exists(path): 
+#                 x, y = cl.read_1D_data_real(path)
+#             else:
+#                 print('File not Found')
+#                 continue
+#             X[f'{version}_{rmax}'] = x; Y[f'{version}_{rmax}'] = y
+#             ax2.plot(X[f'{version}_{rmax}'], Y[f'{version}_{rmax}'], label=f'RMAX={rmax}',
+#                     lw=curve_styles[f'{version}_{rmax}'][0], 
+#                     alpha=curve_styles[f'{version}_{rmax}'][1],
+#                     color=curve_styles[f'{version}_{rmax}'][2],
+#                     zorder=curve_styles[f'{version}_{rmax}'][3],
+#                     ls=curve_styles[f'{version}_{rmax}'][4])
+
+#     ax2.set_ylim([-0.05, 1.5])
+#     ax2.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
+#     ax2.legend(frameon=False)
+
+#     ax3 = fig.add_subplot(3, 2, 6)
+#     error_step = 1
+#     error = np.abs(Y['2_40']-Y['3_40'])
+#     ax3.scatter(X['2_40'][::error_step], error[::error_step], color='black', s=20)
+#     ax3.set_yscale('log')
+#     ax3.set_ylabel(r'$error$', rotation=0, fontsize=30)
+#     print(Y[f'2_30']-Y[f'2_40'])
+#     # print(Y[f'2_20']-Y[f'2_30'])
+#     # print(Y[f'2_16']-Y[f'3_16'])
+
+#     # print(Y[f'2_16']-Y[f'2_35'])
+
+#     print('----------------------')
+
+
+
+
+#     # ax3.set_xticks([6.29, 6.291, 6.291])
+#     # ax3.set_xticklabels([6.29, 6.291, 6.291])
+#     # ax2.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=3)
+    
+#     # ax3.set_yticks([0.0, 0.5, 1.0, 1.5])
+#     # ax3.set_yticklabels([0.0, 0.5, 1.0, 1.5])
+#     # ax2.tick_params('both', length=7, width=2, which='both')
+#     # ax2.legend(frameon=False)
+#     fig.text(0.5, 0.5, r'MULTEM3', color='black', ha='center', fontsize=30)
+
+#     # ax2.set_ylim([-0.1, 0.8])
+#     ax2.set_xlabel(r'$ak_0$')
+#     ax2.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
+    # ax3.yaxis.set_label_coords(-0.08, 0.5)
+    # arr_img = plt.imread("unit_slice.png")
+    # im = OffsetImage(arr_img, zoom=0.55)
+    # ab = AnnotationBbox(im, (0.86, 0.74), xycoords='axes fraction', frameon=False)
+    # ax3.add_artist(ab)
+
+
+    # fig.text(0.03, 0.96, 'a', color='black', ha='center', fontsize=30)
+    # fig.text(0.03, 0.65, 'b', color='black', ha='center', fontsize=30)
+    # fig.text(0.03, 0.33, 'c', color='black', ha='center', fontsize=30)
+    # fig.text(0.7, 0.33, 'd', color='black', ha='center', fontsize=30)
+
+    plt.subplots_adjust(left=0.1,
+                        bottom=0.05,
+                        right=0.95,
+                        top=0.98,
+                        wspace=0.01,
+                        hspace=0.1)
+
+
+    # for ax in [ax1, ax2, ax3]:
+    #     ax.tick_params('both', length=10, width=2, which='major')
+
+    plt.savefig(f'fig6_test.pdf')
+    plt.clf(); plt.close()
+
+
+if 'fig6' in figures_to_plot:
+    import os
+    from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+    lmax = 7
+    fig = plt.figure(figsize=(20, 20))
+    X = {}; Y = {}
+    d = '0.41'
+    # nunit = '_1unit_9nlayer_2nplan'
+    from matplotlib.lines import Line2D
+    custom_lines = [Line2D([0], [0], color='red', lw=18, alpha=0.4, ls='solid'),
+            Line2D([0], [0], color='red', lw=6, alpha=1, ls='dotted')]
+
+    ax1 = fig.add_subplot(3, 1, 1)
+   # #key:version_rmax
+    # #value: (lw, alpha, color, zorder, styles)
+    curve_styles = {
+        '2_32_3': (9, 1, 'green', 1, 'solid'),
+        '2_32_4': (9, 1, 'red', 1, 'dashed'),
+        '2_32_6': (3, 1, 'black', 1, 'solid'),
+        '2_40': (6, 1, 'blue', 1, 'dotted'),
+        # '2_45': (6, 1, 'black', 1, '-'),
+    }
+    NLAYERS = ['3', '4', '5', '6', '7', '8', '9'][::-1]
+    for version in ['2']:
+        for rmax in ['20', '32']:
+            for nlayer in NLAYERS:
+                nunit = f'_1unit_{nlayer}'
+                main_dir = f'data/fig6_new{nunit}/mode=3_ref/version={version}/d={d}/'
+                path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
+                if os.path.exists(path): 
+                    x, y = cl.read_1D_data_real(path)
+                else:
+                    print('File not Found')
+                    continue
+                X[f'{version}_{rmax}_{nlayer}'] = x; Y[f'{version}_{rmax}_{nlayer}'] = y
+                if rmax == '32' and (nlayer == '3' or nlayer == '4' or nlayer == '6'):
+                    ax1.plot(X[f'{version}_{rmax}_{nlayer}'], Y[f'{version}_{rmax}_{nlayer}'], label=f'{2**(int(nlayer)-1)}',
+                            lw=curve_styles[f'{version}_{rmax}_{nlayer}'][0], 
+                            alpha=curve_styles[f'{version}_{rmax}_{nlayer}'][1],
+                            color=curve_styles[f'{version}_{rmax}_{nlayer}'][2],
+                            zorder=curve_styles[f'{version}_{rmax}_{nlayer}'][3],
+                            ls=curve_styles[f'{version}_{rmax}_{nlayer}'][4])
+
+    ax1.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=5, alpha=0.6)
+    fig.text(0.2, 0.95, 'planes', color='black', ha='center', fontsize=30)
+    ax1.legend(frameon=False, bbox_to_anchor=(0.06,0.5))
+    ax1.set_ylim([-0.05, 2.5])
+    fig.text(0.5, 0.95, r'MULTEM2', color='black', ha='center', fontsize=30)
+    ax1.set_xlabel(r'$ak_0$')
+    ax1.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
+    ax1.yaxis.set_label_coords(-0.08, 0.5)        
+
+    # ax1.set_xticks([0.8, 0.9, 1.0, 1.1, 1.2])
+    # ax1.set_xticklabels([0.8, 0.9, 1.0, 1.1, 1.2])
+
+
+    ax2 = fig.add_subplot(3, 1, 2)
+    # X = {}; Y = {}
+    # #key:version_rmax
+    # #value: (lw, alpha, color, zorder)
+    curve_styles = {
+        '3_32_3': (9, 1, 'green', 1, 'solid'),
+        '3_32_4': (9, 1, 'red', 1, 'dashed'),
+        '3_32_6': (3, 1, 'black', 1, 'solid'),
+        '3_40': (6, 1, 'red', 1, 'dotted'),
+        '3_22': (18, 0.4, 'green', 1, '-'),
+        # '2_45': (6, 1, 'black', 1, '-'),
+    }
+    for version in ['3']:
+        for rmax in ['20', '32']:
+             for nlayer in NLAYERS:
+                nunit = f'_1unit_{nlayer}'
+                main_dir = f'data/fig6_new{nunit}/mode=3_ref/version={version}/d={d}/'
+                path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
+                if os.path.exists(path): 
+                    x, y = cl.read_1D_data_real(path)
+                else:
+                    print('File not Found')
+                    continue
+                X[f'{version}_{rmax}_{nlayer}'] = x; Y[f'{version}_{rmax}_{nlayer}'] = y
+                if rmax == '32' and (nlayer == '3' or nlayer == '4' or nlayer == '6'):
+                    ax2.plot(X[f'{version}_{rmax}_{nlayer}'], Y[f'{version}_{rmax}_{nlayer}'], label=f'{2**(int(nlayer)-1)}',
+                            lw=curve_styles[f'{version}_{rmax}_{nlayer}'][0], 
+                            alpha=curve_styles[f'{version}_{rmax}_{nlayer}'][1],
+                            color=curve_styles[f'{version}_{rmax}_{nlayer}'][2],
+                            zorder=curve_styles[f'{version}_{rmax}_{nlayer}'][3],
+                            ls=curve_styles[f'{version}_{rmax}_{nlayer}'][4])
+
+    ax2.set_ylim([-0.05, 2.5])
+    ax2.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue',  lw=5, alpha=0.6)
+    fig.text(0.2, 0.62, 'planes', color='black', ha='center', fontsize=30)
+    ax2.legend(frameon=False, bbox_to_anchor=(0.06,0.5))
+    # ax2.set_xticks([0.8, 0.9, 1.0, 1.1, 1.2])
+    # ax2.set_xticklabels([0.8, 0.9, 1.0, 1.1, 1.2])
+
+    #TODO automatic error generation
+    ax3 = fig.add_subplot(3, 1, 3)
+    # error_step = 1 
+    # error_rmax20 = [np.max(np.abs(Y['2_20_3']-Y['3_20_3'])), np.max(np.abs(Y['2_20_4']-Y['3_20_4'])), np.max(np.abs(Y['2_20_5']-Y['3_20_5'])), 
+    #                 np.max(np.abs(Y['2_20_6']-Y['3_20_6'])), np.max(np.abs(Y['2_20_7']-Y['3_20_7'])), np.max(np.abs(Y['2_20_8']-Y['3_20_8'])), np.max(np.abs(Y['2_20_9']-Y['3_20_9']))]
+    # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax20, color='blue', marker='s', ms=20, ls='dashed', label="20", lw=5)
+    # # error_rmax30 = [np.max(np.abs(Y['2_30_3']-Y['3_30_3'])), np.max(np.abs(Y['2_30_4']-Y['3_30_4'])), np.max(np.abs(Y['2_30_5']-Y['3_30_5'])), 
+    # #                 np.max(np.abs(Y['2_30_6']-Y['3_30_6'])), np.max(np.abs(Y['2_30_7']-Y['3_30_7'])), np.max(np.abs(Y['2_30_8']-Y['3_30_8'])), np.max(np.abs(Y['2_30_9']-Y['3_30_9']))]
+    # # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax30, color='red', marker='s', ms=20, ls='dashed', label="30", lw=5)
+    # error_rmax32 = [np.max(np.abs(Y['2_32_3']-Y['3_32_3'])), np.max(np.abs(Y['2_32_4']-Y['3_32_4'])), np.max(np.abs(Y['2_32_5']-Y['3_32_5'])), 
+    #                 np.max(np.abs(Y['2_32_6']-Y['3_32_6'])), np.max(np.abs(Y['2_32_7']-Y['3_32_7'])), np.max(np.abs(Y['2_32_8']-Y['3_32_8'])), np.max(np.abs(Y['2_32_9']-Y['3_32_9']))]
+    # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax32, color='red', marker='s', ms=20, ls='dashed', label="32", lw=5)
+    # # error_rmax40 = [np.max(np.abs(Y['2_40_3']-Y['3_40_3'])), np.max(np.abs(Y['2_40_4']-Y['3_40_4'])), np.max(np.abs(Y['2_40_5']-Y['3_40_5'])), 
+    #                 np.max(np.abs(Y['2_40_6']-Y['3_40_6'])), np.max(np.abs(Y['2_40_7']-Y['3_40_7'])), np.max(np.abs(Y['2_40_8']-Y['3_40_8'])), np.max(np.abs(Y['2_40_9']-Y['3_40_9']))]
+    # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax40, color='green', marker='s', ms=20, ls='dashed', label="40", lw=5)
+
+    ax3.set_yscale('log')
+    ax3.set_ylabel('difference', fontsize=30)
+    ax3.set_xlabel(r'Number of planes', fontsize=30)
+    fig.text(0.81, 0.19, 'RMAX', color='black', ha='center', fontsize=30)
+    ax3.legend(frameon=False, bbox_to_anchor=(0.9,0.5))
+
+
+
+    ax3.set_xticks([4, 32, 64, 128, 256])
+    ax3.set_xticklabels([4, 32, 64, 128, 256])
+    
+ 
+
+    fig.text(0.5, 0.62, r'MULTEM3', color='black', ha='center', fontsize=30)
+
+    ax2.set_xlabel(r'$ak_0$')
+    ax2.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
+    ax2.yaxis.set_label_coords(-0.08, 0.5)        
+
+
+    fig.text(0.03, 0.97, 'a', color='black', ha='center', fontsize=30)
+    fig.text(0.03, 0.65, 'b', color='black', ha='center', fontsize=30)
+    fig.text(0.03, 0.33, 'c', color='black', ha='center', fontsize=30)
+
+    plt.subplots_adjust(left=0.1,
+                        bottom=0.05,
+                        right=0.95,
+                        top=0.98,
+                        wspace=0.01,
+                        hspace=0.2)
 
 
     for ax in [ax1, ax2, ax3]:
         ax.tick_params('both', length=10, width=2, which='major')
+        ax.tick_params('both', length=7, width=1.5, which='minor')
+
 
     plt.savefig(f'fig6.pdf')
     plt.clf(); plt.close()
 
    
 
-if 'fig9' in figures_to_plot:
+if 'fig10' in figures_to_plot:
     curve_styles = {
         '650_m_qsz': (6, 1, 'green', 1, 'dashed'),
         '650_m_qsz_mk': (6, 1, 'green', 1, 'solid'),
@@ -776,7 +1263,7 @@ if 'fig9' in figures_to_plot:
     }
     import os
     fig = plt.figure(figsize=(20, 20))
-    main_dir = f'data/fig9/'
+    main_dir = f'data/fig10/'
     fig.add_subplot(2, 2, 1)
     for dataset in ['650_m_qsz', '650_m_qsz_mk', '650_m_total']:
         path = main_dir+f'{dataset}.txt'
@@ -793,7 +1280,7 @@ if 'fig9' in figures_to_plot:
                     ls=curve_styles[dataset][4])
     plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
     plt.gca().yaxis.set_label_coords(-0.15, 0.5)
-    plt.gca().set_xlabel(r'sin$\theta$')
+    plt.gca().set_xlabel(r'sin $\theta$')
     plt.gca().tick_params('both', length=15, width=4, which='major')
     plt.gca().set_yticks([0.0, 0.1, 0.3, 0.5, 0.7])
     fig.text(0.32, 0.96, '650 nm', color='black', ha='center', fontsize=30)
@@ -818,7 +1305,7 @@ if 'fig9' in figures_to_plot:
                     ls=curve_styles[dataset][4])
     plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
     plt.gca().yaxis.set_label_coords(-0.15, 0.5)
-    plt.gca().set_xlabel(r'sin$\theta$')
+    plt.gca().set_xlabel(r'sin $\theta$')
     plt.gca().tick_params('both', length=15, width=4, which='major')
     plt.gca().set_yticks([0.0, 0.1, 0.3, 0.5, 0.7])
     fig.text(0.77, 0.96, '750 nm', color='black', ha='center', fontsize=30)
@@ -843,7 +1330,7 @@ if 'fig9' in figures_to_plot:
                     ls=curve_styles[dataset][4])
     plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
     plt.gca().yaxis.set_label_coords(-0.15, 0.5)
-    plt.gca().set_xlabel(r'sin$\theta$')
+    plt.gca().set_xlabel(r'sin $\theta$')
     plt.gca().tick_params('both', length=15, width=4, which='major')
     fig.text(0.32, 0.48, '750 nm', color='black', ha='center', fontsize=30)
     fig.text(0.08, 0.48, 'c', color='black', ha='center', fontsize=30)
@@ -867,7 +1354,7 @@ if 'fig9' in figures_to_plot:
                     ls=curve_styles[dataset][4])
     plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
     plt.gca().yaxis.set_label_coords(-0.15, 0.5)
-    plt.gca().set_xlabel(r'sin$\theta$')
+    plt.gca().set_xlabel(r'sin $\theta$')
     plt.gca().tick_params('both', length=15, width=4, which='major')
     fig.text(0.77, 0.48, '900 nm', color='black', ha='center', fontsize=30)
     fig.text(0.55, 0.48, 'd', color='black', ha='center', fontsize=30)
@@ -883,7 +1370,7 @@ if 'fig9' in figures_to_plot:
 
 
 
-    plt.savefig(f'fig9.pdf')
+    plt.savefig(f'fig10.pdf')
     plt.clf(); plt.close()
 
 

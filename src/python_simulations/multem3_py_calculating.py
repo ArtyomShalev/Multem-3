@@ -23,7 +23,7 @@ def multi_loadtxt(dir: str, filelist: list):
 
 
 def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_ratio, rmax, epssph_re, 
-                 epssph_im, epsmed_re, epsmed_im, m_type, m_order, m, mts, mos, mps, mode, multem_version, dist_btw_spheres_and_interface=1):
+                 epssph_im, epsmed_re, epsmed_im, m_type, m_order, m, mts, mos, mps, mode, multem_version, dist_btw_spheres_and_interface=1, nlayer=5):
     '''
     mode:   1 - 2D array of spheres in homogeneous media
             2 - interface
@@ -85,33 +85,7 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
         str_fort10 = ('           ********************************************\n'
                     '           ********INPUT FILE FOR TRANSMISSION*********\n'
                     '           ********************************************\n'
-                      '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP =1   NUNIT = 6\n'                    
-                    ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
-                                                                                                                                                                                                                '  NP ='+'%4i'%(npts)+'  ZINF ='+
-                    float_format%(zinf)+'  ZSUP ='+float_format%(zsup)+'\n'
-                                    '  THETA/AK(1) ='+float_format%(ak1)+'     FI/AK(2) ='+float_format%(ak2)+'   POLAR ='+polar+'     FEIN =   0.00\n'
-                '\n'
-
-                'Give information for the "NCOMP" components \n'
-                '\n'
-                '     IT  = 2\n'
-                '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
-                '   NPLAN = 3  NLAYER = 1\n'
-                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-                'xyzDL 0.0  0.0  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
-                'xyzDR 0.25  0.25  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
-                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-                'xyzDL 0.25  0.25  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
-                'xyzDR 0.25  0.25  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
-                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-                'xyzDL 0.25  0.25  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n'
-                'xyzDR 0.0  0.0  '+'%2.2f'%(dist_btw_spheres_and_interface/2)+'\n')
-        
-    if mode == '3_old':
-        str_fort10 = ('           ********************************************\n'
-                    '           ********INPUT FILE FOR TRANSMISSION*********\n'
-                    '           ********************************************\n'
-                      '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP =1   NUNIT = 6\n'                    
+                      '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP =3   NUNIT = 6\n'                    
                     ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
                                                                                                                                                                                                                 '  NP ='+'%4i'%(npts)+'  ZINF ='+
                     float_format%(zinf)+'  ZSUP ='+float_format%(zsup)+'\n'
@@ -124,8 +98,72 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                 '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
                 '   NPLAN = 1  NLAYER = 1\n'
                 '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-                'xyzDL 0.0  0.0  0.0\n'
-                'xyzDR 0.0  0.0  '+'%2.1f'%(dist_btw_spheres_and_interface)+'\n')
+                'xyzDL 0.0  0.0  '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                'xyzDR 0.33 0.33 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                 '     IT  = 2\n'
+                '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
+                '   NPLAN = 1  NLAYER = 1\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.33 0.33 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                'xyzDR 0.33 0.33 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                 '     IT  = 2\n'
+                '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
+                '   NPLAN = 1  NLAYER = 1\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.33 0.33 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                'xyzDR 0.0  0.0  '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n')
+        
+    if mode == '3_old':
+        str_fort10 = ('           ********************************************\n'
+                    '           ********INPUT FILE FOR TRANSMISSION*********\n'
+                    '           ********************************************\n'
+                      '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP =1   NUNIT = 5\n'                    
+                    ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
+                                                                                                                                                                                                                '  NP ='+'%4i'%(npts)+'  ZINF ='+
+                    float_format%(zinf)+'  ZSUP ='+float_format%(zsup)+'\n'
+                                    '  THETA/AK(1) ='+float_format%(ak1)+'     FI/AK(2) ='+float_format%(ak2)+'   POLAR ='+polar+'     FEIN =   0.00\n'
+                '\n'
+
+                'Give information for the "NCOMP" components \n'
+                '\n'
+                '     IT  = 2\n'
+                '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
+                '   NPLAN = 3  NLAYER = 1\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.25 0.14 0.41\n'
+                'xyzDR 0.25 0.14 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.25 0.14 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                'xyzDR 0.25 0.14 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.25 0.14 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                'xyzDR 0.25 0.14 0.41')
+        
+    if mode == '3_ref':
+        str_fort10 = ('           ********************************************\n'
+                    '           ********INPUT FILE FOR TRANSMISSION*********\n'
+                    '           ********************************************\n'
+                      '   KTYPE ='+'%2i'%(ktype)+'   KSCAN ='+'%2i'%(kscan)+'   KEMB  = 0    LMAX ='+'%2i'%(lmax)+'   NCOMP =1   NUNIT = 1\n'                    
+                    ' ALPHA =    1.000000  BETA =    1.000000   FAB =   '+'%9.6f'%(fab)+'  RMAX ='+'%11.6f'%(rmax)+'\n'
+                                                                                                                                                                                                                '  NP ='+'%4i'%(npts)+'  ZINF ='+
+                    float_format%(zinf)+'  ZSUP ='+float_format%(zsup)+'\n'
+                                    '  THETA/AK(1) ='+float_format%(ak1)+'     FI/AK(2) ='+float_format%(ak2)+'   POLAR ='+polar+'     FEIN =   0.00\n'
+                '\n'
+
+                'Give information for the "NCOMP" components \n'
+                '\n'
+                '     IT  = 2\n'
+                '     MUMED =   1.00000000   0.00000000     EPSMED=   1.00000000   0.00000000\n'
+                '   NPLAN = 1  NLAYER = '+'%1s'%(nlayer)+'\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.25 0.14 0.41\n'
+                'xyzDR 0.25 0.14 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.25 0.14 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                'xyzDR 0.25 0.14 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
+                'xyzDL 0.25 0.14 '+'%2.2f'%(dist_btw_spheres_and_interface)+'\n'
+                'xyzDR 0.25 0.14 0.41')
         
     if mode == 'orig_multem':
         str_fort10 = ('           ********************************************\n'
@@ -144,9 +182,9 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                 '   NPLAN = 2  NLAYER = 1\n'
                 '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
                 'xyzDL 0.0  0.0  0.4\n'
-                'xyzDR 0.25 0.25 0.3\n'
+                'xyzDR 0.0  0.0  0.3\n'
                 '       S =   '+'%10.8f'%(r_ratio)+'     MUSPH =   1.00000000   0.00000000     EPSSPH=  '+'%11.6f'%(epssph_re)+'   '+'%11.8f'%(epssph_im)+'\n'
-                'xyzDL 0.25 0.25 0.3\n'
+                'xyzDL 0.1  0.1  0.3\n'
                 'xyzDR 0.25 0.25 0.4\n'
                 '     IT  = 1\n'
                 ' DSLAB       =    0.000000\n'
@@ -168,8 +206,7 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
                 '     MU3   =   1.00000000   0.00000000     EPS1  =   2.00000000   0.00000000\n'
                 'xyzDL 0.0  0.0  0.0\n'
                 'xyzDR 0.0  0.0  0.0\n'
-                '     MUEMBL=   1.00000000   0.00000000    EPSEMBL=   1.00000000   0.00000000\n'
-                '     MUEMBR=   1.00000000   0.00000000    EPSEMBR=   1.00000000   0.00000000\n')
+                '     MUEMB =   1.00000000   0.00000000     EPSEMB=   1.00000000   0.00000000\n')
             
 
 
@@ -243,12 +280,19 @@ def eval(multem_version='3'):
                            stdout=subprocess.DEVNULL,
                            env=my_env)
     #FREQUENCY   TRANSMITTANCE  Reflectance   Absorbance
-    try:
-        F, T, R, A = np.loadtxt('fort.8').T
-    except:
-        F, T, R, A = None, None, None, None
+    # try:
+    F, T, R, A = np.loadtxt('fort.8', converters={1: lambda s: np.NaN if s[-3] not in [43, 45] else s}).T
+    # F, T, R, A = np.loadtxt('fort.8', converters={1: lambda s: print(s[-3])}).T
+
+    # F, T, R, A = np.loadtxt('fort.8').T
+
+    # except ValueError:
+        # F, T, R, A = None, None, None, None
     return F, T, R, A
 
+# def to_exp(s):
+#     if s[-3] != '-':
+        
 
 # def eval(): #TODO refactor
 #     # create_input(ktype, npts, ap1, ap2, from_y, to_y, polar, lmax, r_ratio, rmax, epssph_re, epssph_im,
@@ -340,20 +384,21 @@ def calc_ak1_omega_map(ktype, ak1, omega, ip, is_w0_needed):
     #ktype: 1 - ak1 - theta; 2 - ak1 - kx (2pi/alpha)
     ak1len = len(ak1)
     omegalen=len(omega)
-    zinf = omega[0]*2*np.pi
-    zsup = omega[-1]*2*np.pi
+    zinf = omega[0]
+    zsup = omega[-1]
     T = np.empty((ak1len, omegalen))
     R = np.empty((ak1len, omegalen))
     if is_w0_needed:
         W, THETA = np.empty((ak1len, omegalen), dtype=np.complex), np.empty((ak1len, omegalen))
     for i in range(ak1len):
         print(f'{i} from {ak1len}')
-        create_input(ktype=ktype, kscan=1, npts=omegalen, fab=ip['fab'], ak1=ak1[i], ak2=0,
-                     zinf=zinf, zsup=zsup,
-                     polar=ip['polar'], lmax=ip['lmax'], r_ratio=ip['r_ratio'],
-                     rmax=ip['rmax'], epssph_re=ip['epssph_re'],
-                     epssph_im=ip['epssph_im'], m_type=ip['type'], m_order=ip['order'],
-                     m=ip['m'], mts=ip['mts'], mos=ip['mos'], mps=ip['mps'], mode=['mode'])
+        create_input(ktype=ip['ktype'], kscan=1, npts=omegalen, fab=ip['fab'], ak1=ak1[i], ak2=0,
+                 zinf=zinf, zsup=zsup,
+                 polar=ip['polar'], lmax=ip['lmax'], r_ratio=ip['r_ratio'],
+                 rmax=ip['rmax'], epssph_re=ip['epssph_re'],
+                 epssph_im=ip['epssph_im'], epsmed_re=ip['epsmed_re'], epsmed_im=ip['epsmed_im'], 
+                 m_type=ip['type'], m_order=ip['order'],
+                 m=ip['m'], mts=ip['mts'], mos=ip['mos'], mps=ip['mps'], mode=ip['mode'], multem_version=ip['multem_version'], dist_btw_spheres_and_interface=ip['dist_btw_spheres_and_interface'])
         f, t, r, a = eval()
         T[i, :] = t #choose reflectance, transmittance or absorbance
         R[i, :] = r #choose reflectance, transmittance or absorbance
@@ -373,13 +418,13 @@ def calc_spectrum_omega(omega, ak1, ak2, ip):
         dist_btw_spheres_and_interface = 0
     else:
         dist_btw_spheres_and_interface = ip['dist_btw_spheres_and_interface']
-    create_input(ktype=ip['ktype'], kscan=1, npts=omegalen, fab=ip['fab'], ak1=ak1, ak2=ak2,
+    create_input(ktype=ip['ktype'], kscan=ip['kscan'], npts=omegalen, fab=ip['fab'], ak1=ak1, ak2=ak2,
                  zinf=zinf, zsup=zsup,
                  polar=ip['polar'], lmax=ip['lmax'], r_ratio=ip['r_ratio'],
                  rmax=ip['rmax'], epssph_re=ip['epssph_re'],
                  epssph_im=ip['epssph_im'], epsmed_re=ip['epsmed_re'], epsmed_im=ip['epsmed_im'], 
                  m_type=ip['type'], m_order=ip['order'],
-                 m=ip['m'], mts=ip['mts'], mos=ip['mos'], mps=ip['mps'], mode=ip['mode'], multem_version=ip['multem_version'], dist_btw_spheres_and_interface=dist_btw_spheres_and_interface)
+                 m=ip['m'], mts=ip['mts'], mos=ip['mos'], mps=ip['mps'], mode=ip['mode'], multem_version=ip['multem_version'], dist_btw_spheres_and_interface=dist_btw_spheres_and_interface, nlayer=ip['nlayer'])
     F, T, R, A = eval(ip['multem_version'])
     return F, T, R, A
 
@@ -410,9 +455,9 @@ def calc_spectrum_ak1(ktype, ak1, wl, ip):
 
 def show_2D_map(x, y, z, zmin, zmax, logscale=False):
     if logscale:
-        im = plt.imshow(z.T, extent = (np.min(x), np.max(x), np.min(y), np.max(y)), cmap=cm.rainbow, norm=LogNorm(vmin=zmin, vmax=1), aspect='auto', interpolation = 'none', origin='lower')
+        im = plt.imshow(z.T, extent = (np.min(x), np.max(x), np.min(y), np.max(y)), cmap=cm.hot, norm=LogNorm(vmin=zmin, vmax=1), aspect='auto', interpolation = 'none', origin='lower')
     else:
-        im = plt.imshow(z.T, extent = (np.min(x), np.max(x), np.min(y), np.max(y)), cmap=cm.rainbow, vmin=zmin, vmax=zmax, aspect='auto', interpolation = 'none', origin='lower')
+        im = plt.imshow(z.T, extent = (np.min(x), np.max(x), np.min(y), np.max(y)), cmap=cm.hot, vmin=zmin, vmax=zmax, aspect='auto', interpolation = 'none', origin='lower')
 
     cb = plt.colorbar(im)
     plt.show()
@@ -452,11 +497,13 @@ def save_result(path, filename, data):
 
 
 def save_1D_data(x, y, dir, filename, format='%e'):
-    if isinstance(x, type(None)) or isinstance(y, type(None)):
-        print('data is None type. Abort saving...')
-        return
+    # if isinstance(x, type(None)) or isinstance(y, type(None)):
+        # print('data is None type. Abort saving...')
+        # return
     if not os.path.exists(dir):
         os.makedirs(dir)
+    # print('x', x)
+    # print('y', y)
     data = np.stack((x, y), axis=-1)
     np.savetxt(dir+'/'+filename, data, delimiter='\t', fmt=format)
     print('data were saved')
