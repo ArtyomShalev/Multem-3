@@ -151,16 +151,81 @@ def find_nearest_idx(array, value):
 #--------- customizing font --------
 plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
+# fig1 - flowchart [draw.io]
+# fig2 - typical system design [POV-ray]
+figures_to_plot = ['fig4']
 
-figures_to_plot = ['fig3']
+if 'fig3' in figures_to_plot:
+    fig = plt.figure(figsize=(16*1.25, 9*1.25))
+    ax1 = fig.add_subplot(1, 1, 1)
+    data_dir = 'data/fig3/'
+    data = np.loadtxt(data_dir+'T.txt')
+    x, T = prep_xy_data(data)
+    x, T = x, T
+    error_wo_lapack = prep_xy_data(np.loadtxt(data_dir+'error_wo_lapack.txt'))[1]
+    # error_wo_lapack_new = prep_xy_data(np.loadtxt(data_dir+'error_wo_lapack_my.txt'))[1]
+
+    error_with_lapack = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1]
+    # error_with_lapack_and_fad = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1]
+    ax11 = ax1.twinx()
+    l1, = ax11.plot(x[::2], np.array(error_with_lapack[::2])*1e4, color='C2', lw=3)
+    l2, = ax11.plot(x, np.array(error_wo_lapack)*1e1, color='C0', lw=6)
+    ax1.set_ylabel('error')
+    l3, = ax1.plot(x, T, 'red', lw=18, alpha=0.3)
+    # create_arc_and_arrow(ax11, 3.733282, 1.002)
+    ax1.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
+    plt.legend([l1, l2], ['LAPACK', 'W/O LAPACK'], frameon=False)
+    # plt.annotate(r"x$10^4$",
+    #             xy=(3.731546, 0.6), xycoords='data',    # 0.6 1 option; 0.34 2 option
+    #             xytext=(-19, 30), textcoords='offset points',
+    #             arrowprops=dict(arrowstyle="->", color='black')
+                # )
+    # customizing
+    ax1.set_yticks([0.0, 1.0], minor=False)
+    ax1.set_ylim([-0.25, 1.1])
+    ax1.set_xlim([3.731, 3.735])
+    ax1.set_xlabel(r'$ak_0$')
+    ax1.set_xticks([3.731, 3.732, 3.733, 3.734, 3.735], minor=False)
+    ax11.set_yticks([0, 0.04], minor=False)  # -0.0235 1 option; -0.005 2 option
+    ax11.set_yticklabels(['0', '0.04'])
+    ax11.set_ylabel('error', labelpad=-30)
+    arrow_len = 0.00012
+    create_arc_and_arrow(ax1, 3.7321, 0.9, -arrow_len, 0.0, 'pink', 1.0)
+    create_arc_and_arrow(ax1, 3.73465, 0.17, arrow_len, 0.0, 'C2', 1.0)
+    create_arc_and_arrow(ax1, 3.73249, -0.18, arrow_len, 0.0, 'C0', 1.0)
+    # annotations on the whole figure
+    # fig.text(0.49, 0.02, r'$ak_0$', ha='center')
+    # fig.text(0.17, 0.28, r'$l_{max}=10$', ha='center')
+    # fig.text(0.17, 0.93, r'$l_{max}=4$', ha='center')
+    # fig.text(0.02, 0.97, 'a', ha='center')
+    # fig.text(0.02, 0.48, 'b', ha='center')
+    fig.text(0.81, 0.35, r'$x10^4$', ha='center', color='C2', fontsize=30)
+    fig.text(0.36, 0.13, r'$x10$', ha='center', color='C0', fontsize=30)
+
+    # ---------- zooming
+    # zoom_effect01(ax2, ax4, 3.7321, 3.7322)
+    # plt.subplot_tool()
+    plt.subplots_adjust(left=0.07,
+                        bottom=0.1,
+                        right=0.915,
+                        top=0.963,
+                        wspace=0.033,
+                        hspace=0.297)
+
+      # customizing ticks 
+    for ax in [ax1, ax11]:
+        ax.tick_params('both', length=10, width=2, which='major')
+    plt.savefig('fig3.pdf')
+    plt.clf(); plt.close()
+
 
 # ------------- Fig. 4 ---------------------------------------------------------------------------------------------
 if 'fig4' in figures_to_plot:
     fig = plt.figure(figsize=(20, 20))
     gs = GridSpec(2, 2, figure=fig)
-    # # fig 3 a
+    # # fig 4 a
     ax1 = fig.add_subplot(gs[0, :])
-    core_dir = 'data/fig3'
+    core_dir = 'data/fig4'
     # red
     data = np.loadtxt(core_dir+'/akxy=0.01_0.0.txt')
     x, y = prep_xy_data(data)
@@ -230,72 +295,9 @@ if 'fig4' in figures_to_plot:
 
 
 
-    plt.savefig('fig3.pdf')
+    plt.savefig('fig4.pdf')
     plt.clf(); plt.close()
 
-
-if 'fig3' in figures_to_plot:
-    fig = plt.figure(figsize=(16*1.25, 9*1.25))
-    ax1 = fig.add_subplot(1, 1, 1)
-    data_dir = 'data/fig3/'
-    data = np.loadtxt(data_dir+'T.txt')
-    x, T = prep_xy_data(data)
-    x, T = x, T
-    error_wo_lapack = prep_xy_data(np.loadtxt(data_dir+'error_wo_lapack.txt'))[1]
-    # error_wo_lapack_new = prep_xy_data(np.loadtxt(data_dir+'error_wo_lapack_my.txt'))[1]
-
-    error_with_lapack = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1]
-    # error_with_lapack_and_fad = prep_xy_data(np.loadtxt(data_dir+'error_with_lapack.txt'))[1]
-    ax11 = ax1.twinx()
-    l1, = ax11.plot(x[::2], np.array(error_with_lapack[::2])*1e4, color='C2', lw=3)
-    l2, = ax11.plot(x, np.array(error_wo_lapack)*1e1, color='C0', lw=6)
-    ax1.set_ylabel('error')
-    l3, = ax1.plot(x, T, 'red', lw=18, alpha=0.3)
-    # create_arc_and_arrow(ax11, 3.733282, 1.002)
-    ax1.set_ylabel(r'$\mathbf{T}$', rotation=0, fontsize=30)
-    plt.legend([l1, l2], ['LAPACK', 'W/O LAPACK'], frameon=False)
-    # plt.annotate(r"x$10^4$",
-    #             xy=(3.731546, 0.6), xycoords='data',    # 0.6 1 option; 0.34 2 option
-    #             xytext=(-19, 30), textcoords='offset points',
-    #             arrowprops=dict(arrowstyle="->", color='black')
-                # )
-    # customizing
-    ax1.set_yticks([0.0, 1.0], minor=False)
-    ax1.set_ylim([-0.25, 1.1])
-    ax1.set_xlim([3.731, 3.735])
-    ax1.set_xlabel(r'$ak_0$')
-    ax1.set_xticks([3.731, 3.732, 3.733, 3.734, 3.735], minor=False)
-    ax11.set_yticks([0, 0.04], minor=False)  # -0.0235 1 option; -0.005 2 option
-    ax11.set_yticklabels(['0', '0.04'])
-    ax11.set_ylabel('error', labelpad=-30)
-    arrow_len = 0.00012
-    create_arc_and_arrow(ax1, 3.7321, 0.9, -arrow_len, 0.0, 'pink', 1.0)
-    create_arc_and_arrow(ax1, 3.73465, 0.17, arrow_len, 0.0, 'C2', 1.0)
-    create_arc_and_arrow(ax1, 3.73249, -0.18, arrow_len, 0.0, 'C0', 1.0)
-    # annotations on the whole figure
-    # fig.text(0.49, 0.02, r'$ak_0$', ha='center')
-    # fig.text(0.17, 0.28, r'$l_{max}=10$', ha='center')
-    # fig.text(0.17, 0.93, r'$l_{max}=4$', ha='center')
-    # fig.text(0.02, 0.97, 'a', ha='center')
-    # fig.text(0.02, 0.48, 'b', ha='center')
-    fig.text(0.81, 0.35, r'$x10^4$', ha='center', color='C2', fontsize=30)
-    fig.text(0.36, 0.13, r'$x10$', ha='center', color='C0', fontsize=30)
-
-    # ---------- zooming
-    # zoom_effect01(ax2, ax4, 3.7321, 3.7322)
-    # plt.subplot_tool()
-    plt.subplots_adjust(left=0.07,
-                        bottom=0.1,
-                        right=0.915,
-                        top=0.963,
-                        wspace=0.033,
-                        hspace=0.297)
-
-      # customizing ticks 
-    for ax in [ax1, ax11]:
-        ax.tick_params('both', length=10, width=2, which='major')
-    plt.savefig('fig3.pdf')
-    plt.clf(); plt.close()
 
 
 if 'fig6_7' in figures_to_plot:
