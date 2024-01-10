@@ -20,7 +20,7 @@ def get_half_width_half_maxima_and_x0(x, y):
         
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_calculate = ['fig4']
+figures_to_calculate = ['fig5']
  
     # ----- calculating data for fig. 3 -------------------
 if 'fig3' in figures_to_calculate:
@@ -121,6 +121,58 @@ if 'fig4' in figures_to_calculate:
     print(f'CPU time:{time.time()-start}')
 
 
+if 'fig5' in figures_to_calculate:
+    start = time.time()
+    input_parameters = {
+        'ktype': 1,
+        'lmax': 3,
+        'lattice_constant': 475,
+        'radius': 100,
+        'epssph_re': -20.1480000,
+        'epssph_im': 1.24700000,
+        'epsmed_re': 2.1025,
+        'epsmed_im': 0,
+        'polar': 'S',
+        'fab': 60,
+        'mts': '0',
+        'mos': '0',
+        'mps': '0',
+        'type': '1',
+        'order': '1',
+        'm': '1',
+        'multem_version': '3'
+    }
+
+    input_parameters['r_ratio'] = input_parameters['radius']/input_parameters['lattice_constant']
+    fi = 0
+    from_sin_theta = 0.0
+    to_sin_theta = 0.999
+    n_theta = 1000
+    sin_theta = np.linspace(from_sin_theta, to_sin_theta, n_theta)
+    theta = np.arcsin(sin_theta)*180/np.pi
+
+    for input_parameters['rmax'] in [7, 12, 14]:
+        dir = f'data/fig5/'
+        factor = 0
+        for wl in [650, 750, 900]:
+            if wl == 650:
+                input_parameters['epssph_re'] = -12.953
+                input_parameters['epssph_im'] = 1.1209
+            elif wl == 750:
+                input_parameters['epssph_re'] = -20.148
+                input_parameters['epssph_im'] = 1.2470
+            elif wl == 900:
+                input_parameters['epssph_re'] = -32.719
+                input_parameters['epssph_im'] = 1.9955
+            else:
+                print('epspsh is not set correctly!')
+            R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
+            calc.save_result(dir, f'{wl}_{input_parameters["rmax"]}', R)
+            factor += 1
+        calc.save_result(dir, 'sintheta', sin_theta)
+        print(f"CPU time {time.time()-start}")
+
+
 #takes approx 43000 seconds to calculate these data
 if 'fig6' in figures_to_calculate:
     start = time.time()
@@ -213,57 +265,6 @@ if 'fig6' in figures_to_calculate:
     print(f'CPU time:{time.time()-start}')
    
 # 0.470512
-if 'fig5' in figures_to_calculate:
-    start = time.time()
-    input_parameters = {
-        'ktype': 1,
-        'lmax': 3,
-        'lattice_constant': 475,
-        'radius': 100,
-        'epssph_re': -20.1480000,
-        'epssph_im': 1.24700000,
-        'epsmed_re': 2.1025,
-        'epsmed_im': 0,
-        'polar': 'S',
-        'fab': 60,
-        'mts': '0',
-        'mos': '0',
-        'mps': '0',
-        'type': '1',
-        'order': '1',
-        'm': '1',
-        'multem_version': '3'
-    }
-
-    input_parameters['r_ratio'] = input_parameters['radius']/input_parameters['lattice_constant']
-    fi = 0
-    from_sin_theta = 0.0
-    to_sin_theta = 0.999
-    n_theta = 1000
-    sin_theta = np.linspace(from_sin_theta, to_sin_theta, n_theta)
-    theta = np.arcsin(sin_theta)*180/np.pi
-
-    for input_parameters['rmax'] in [7, 12, 14]:
-        dir = f'data/fig5/'
-        factor = 0
-        for wl in [650, 750, 900]:
-            if wl == 650:
-                input_parameters['epssph_re'] = -12.953
-                input_parameters['epssph_im'] = 1.1209
-            elif wl == 750:
-                input_parameters['epssph_re'] = -20.148
-                input_parameters['epssph_im'] = 1.2470
-            elif wl == 900:
-                input_parameters['epssph_re'] = -32.719
-                input_parameters['epssph_im'] = 1.9955
-            else:
-                print('epspsh is not set correctly!')
-            R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
-            calc.save_result(dir, f'{wl}_{input_parameters["rmax"]}', R)
-            factor += 1
-        calc.save_result(dir, 'sintheta', sin_theta)
-        print(f"CPU time {time.time()-start}")
-
 #========================================================================
 #fig 7
 #calculation is implemented in dir Zaghoul_MIT_faddeeva_comparison

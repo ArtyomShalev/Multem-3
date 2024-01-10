@@ -444,8 +444,8 @@ def calc_spectrum_ak1(ktype, ak1, wl, ip):
                      epssph_im=ip['epssph_im'], epsmed_re=ip['epsmed_re'], epsmed_im=ip['epsmed_im'],
                      m_type=ip['type'], m_order=ip['order'],
                      m=ip['m'], mts=ip['mts'], mos=ip['mos'], mps=ip['mps'], mode='1', multem_version=ip['multem_version'])
-        f, t, r, a = eval()
         try:
+            f, t, r, a = eval()
             R[i] = r[0]
         except:
             print('smth went wrong')

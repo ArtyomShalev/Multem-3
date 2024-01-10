@@ -153,7 +153,7 @@ plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_plot = ['fig3']
+figures_to_plot = ['fig5']
 
 if 'fig3' in figures_to_plot:
     fig = plt.figure(figsize=(16*1.25, 9*1.25))
@@ -280,6 +280,44 @@ if 'fig4' in figures_to_plot:
     plt.savefig('fig4.pdf')
     plt.clf(); plt.close()
 
+
+
+
+# import calculating_lib as cl
+
+if 'fig5' in figures_to_plot:
+
+    dir = f'data/fig5'
+    fig = plt.figure(figsize=(20, 20))
+    i = 1
+    curve_styles = {
+        '7': (8, 1, 'red', 1, 'dotted'),
+        '12': (18, 0.4, 'green', 1, '-'),
+        '14': (6, 1, 'black', 1, '-'),
+    }
+    RMAX = ['12', '14', '7'] 
+    lines = {}
+
+    for rmax in RMAX:
+        R1, R2, R3, x = multi_loadtxt(dir, (f'650_{rmax}.txt', f'750_{rmax}.txt', f'900_{rmax}.txt', 'sintheta.txt'))
+        plt.plot(x, R1, color=curve_styles[rmax][2], lw=curve_styles[rmax][0], alpha=curve_styles[rmax][1], ls=curve_styles[rmax][4])
+        plt.plot([0.63, 0.63], [0, 0.15], 'red', lw=5)
+        plt.plot(x, R2+1, color=curve_styles[rmax][2], lw=curve_styles[rmax][0], alpha=curve_styles[rmax][1], ls=curve_styles[rmax][4])
+        plt.plot([0.726, 0.726], [1.04, 1.19], 'red', lw=5)
+        lines[rmax], = plt.plot(x, R3+2, color=curve_styles[rmax][2], lw=curve_styles[rmax][0], alpha=curve_styles[rmax][1], ls=curve_styles[rmax][4])
+        plt.plot([0.872, 0.872], [2.1, 2.25], 'red', lw=5)
+        plt.xlabel(r'sin $\theta$')
+        plt.ylabel(r'$\mathbf{R_{spec}}$', rotation=0)
+        plt.gca().yaxis.set_label_coords(-0.1, 0.5)
+    plt.legend(handles=[lines['7'], lines['12'], lines['14']], labels=['RMAX=7', 'RMAX=12', 'RMAX=14'], frameon=False)
+    plt.tick_params('both', length=10, width=2, which='major')
+
+    fig.text(0.5, 0.23, r'$\lambda=650$ nm', ha='center')
+    fig.text(0.5, 0.48, r'$\lambda=750$ nm', ha='center')
+    fig.text(0.5, 0.8, r'$\lambda=900$ nm', ha='center')
+    
+    plt.savefig('fig5.pdf')
+    plt.clf(); plt.close()
 
 
 if 'fig6_7' in figures_to_plot:
@@ -463,44 +501,6 @@ if 'fig6_7' in figures_to_plot:
 
     plt.savefig('fig6.pdf')
     plt.clf(); plt.close()
-
-
-import calculating_lib as cl
-
-if 'fig5' in figures_to_plot:
-
-    dir = f'data/fig5'
-    fig = plt.figure(figsize=(20, 20))
-    i = 1
-    curve_styles = {
-        '7': (8, 1, 'red', 1, 'dotted'),
-        '12': (18, 0.4, 'green', 1, '-'),
-        '14': (6, 1, 'black', 1, '-'),
-    }
-    RMAX = ['12', '14', '7'] 
-    lines = {}
-
-    for rmax in RMAX:
-        R1, R2, R3, x = multi_loadtxt(dir, (f'650_{rmax}.txt', f'750_{rmax}.txt', f'900_{rmax}.txt', 'sintheta.txt'))
-        plt.plot(x, R1, color=curve_styles[rmax][2], lw=curve_styles[rmax][0], alpha=curve_styles[rmax][1], ls=curve_styles[rmax][4])
-        plt.plot([0.63, 0.63], [0, 0.15], 'red', lw=5)
-        plt.plot(x, R2+1, color=curve_styles[rmax][2], lw=curve_styles[rmax][0], alpha=curve_styles[rmax][1], ls=curve_styles[rmax][4])
-        plt.plot([0.726, 0.726], [1.04, 1.19], 'red', lw=5)
-        lines[rmax], = plt.plot(x, R3+2, color=curve_styles[rmax][2], lw=curve_styles[rmax][0], alpha=curve_styles[rmax][1], ls=curve_styles[rmax][4])
-        plt.plot([0.872, 0.872], [2.1, 2.25], 'red', lw=5)
-        plt.xlabel(r'sin $\theta$')
-        plt.ylabel(r'$\mathbf{R_{spec}}$', rotation=0)
-        plt.gca().yaxis.set_label_coords(-0.1, 0.5)
-    plt.legend(handles=[lines['7'], lines['12'], lines['14']], labels=['RMAX=7', 'RMAX=12', 'RMAX=14'], frameon=False)
-    plt.tick_params('both', length=10, width=2, which='major')
-
-    fig.text(0.5, 0.23, r'$\lambda=650$ nm', ha='center')
-    fig.text(0.5, 0.48, r'$\lambda=750$ nm', ha='center')
-    fig.text(0.5, 0.8, r'$\lambda=900$ nm', ha='center')
-    
-    plt.savefig('fig5.pdf')
-    plt.clf(); plt.close()
-
 
 
 
