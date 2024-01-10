@@ -18,12 +18,11 @@ def get_half_width_half_maxima_and_x0(x, y):
 
         return hwhm, x0
         
+# fig1 - flowchart [draw.io]
+# fig2 - typical system design [POV-ray]
+figures_to_calculate = ['fig3']
 
-# 'fig3a', 'fig3b', 'fig3c', 'fig5'
-figures_to_calculate = ['fig6']
-
-# ----- calculating data for fig. 3 a) -------------------
-if 'fig3' in figures_to_calculate:
+if 'fig4' in figures_to_calculate:
     start = time.time()
     input_params = {
         'mts': '0', #multipole_type_selected
@@ -48,21 +47,18 @@ if 'fig3' in figures_to_calculate:
         'npts': 1000,
         'r_ratio': 0.470512,
         'mode': '1', # 2D array of spheres
-        'multem_version': '3'
+        'multem_version': '3',
+
     }
     omega = np.linspace(input_params['zinf'], input_params['zsup'], input_params['npts'])
     ak1 = np.array((1e-2, 0, 5e-2, 1e-1))/2/np.pi
     ak2 = np.array((0, 5e-2, 0, 0))/2/np.pi
     kpts = len(ak1)
     lmax = 4
-    print('calculating data for fig. 3 a)...')
     for i in range(kpts):
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1[i], ak2[i], input_params)        
         calc.save_1D_data(omega, T, dir='data/fig3', filename=f'akxy={round(ak1[i]*2*np.pi, 4)}_{round(ak2[i]*2*np.pi, 4)}.txt', format='%19.16e')
-    print('done')
     
-    # ----- calculating data for fig. 3 b) -------------------
-    print('calculating data for fig. 3 b)...')
     input_params = {
         'mts': '0', #multipole_type_selected
         'mos': '0', #multipole_order_selected
@@ -100,8 +96,9 @@ if 'fig3' in figures_to_calculate:
 
 
   
-    # ----- calculating data for fig. 4 -------------------
-if 'fig4' in figures_to_calculate:
+    # ----- calculating data for fig. 3 -------------------
+if 'fig3' in figures_to_calculate:
+    #TODO source files to compile all binaries
     start = time.time()
     input_params = {
         'mts': '0', #multipole_type_selected
@@ -111,7 +108,7 @@ if 'fig4' in figures_to_calculate:
         'order': '1 1',
         'm': '1 -1',
         'rmax': 16,
-        'lmax': 10,
+        'lmax': 7,
         'lattice_constant': 300,
         'fab': 60,
         'polar': 'S',
@@ -125,27 +122,24 @@ if 'fig4' in figures_to_calculate:
         'zsup': 3.735,
         'npts': 2000,
         'r_ratio': 0.4705,
-        'mode': '1' # 2D array of spheres
+        'mode': '1', # 2D array of spheres
+        'nlayer': '1'
     }
     
     omega = np.linspace(input_params['zinf'], input_params['zsup'], input_params['npts'])
     ak1 = np.array((0.01))/2/np.pi
     ak2 = np.array((0.0))/2/np.pi
     input_params['multem_version'] = '3'
-    # T_lmax=10
     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
-    calc.save_1D_data(omega, T, dir='data/fig4', filename='T.txt', format='%19.16e') 
-    # with lapack and faddeeva
-    F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
-    calc.save_1D_data(omega, (T+R-1), dir='data/fig4', filename='error_with_lapack_and_faddeeva.txt', format='%19.16e') 
+    calc.save_1D_data(omega, T, dir='data/fig3', filename='T.txt', format='%19.16e') 
     # wo lapack
     input_params['multem_version'] = 'wo_lapack'
     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
-    calc.save_1D_data(omega, (T+R-1), dir='data/fig4', filename='error_wo_lapack.txt', format='%19.16e')       
+    calc.save_1D_data(omega, 1-(T+R), dir='data/fig3', filename='error_wo_lapack.txt', format='%19.16e')       
     # with lapack
     input_params['multem_version'] = 'with_lapack'    
     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
-    calc.save_1D_data(omega, (T+R-1), dir='data/fig4', filename='error_with_lapack.txt', format='%19.16e') 
+    calc.save_1D_data(omega, 1-(T+R), dir='data/fig3', filename='error_with_lapack.txt', format='%19.16e') 
     print('done')
     print(f'CPU time:{time.time()-start}')
 
@@ -156,7 +150,7 @@ if 'fig6' in figures_to_calculate:
     input_params = {
     'mts': '0', #multipole_type_selected
     'mos': '0', #multipole_order_selected
-    'mps': '0', #m_projection_selected
+    'mps': '0', #m_projection_selectedfig4
     'type': '1',
     'order': '1',
     'm': '1',
@@ -204,9 +198,9 @@ if 'fig6' in figures_to_calculate:
     # print(f'vector length:', np.sum(p.power(dl + dr, 2)))
 
     # print(f'minimal vector length:', input_params['r_ratio'])
-    # NLAYERS = ['3', '4', '5', '6', '7', '8', '9']
+    NLAYERS = ['3', '4', '5', '6', '7', '8', '9']
     # NLAYERS = ['7', '8', '9']
-    NLAYERS = ['3', '4', '6']
+    # NLAYERS = ['3', '4', '6']
 
     for nlayer in NLAYERS:
         nunit = f'_1unit_{nlayer}'
@@ -218,7 +212,8 @@ if 'fig6' in figures_to_calculate:
         for input_params['multem_version'] in ['3']:
             for input_params['lmax'] in [7]:
                 time0 = time.time()
-                for input_params['rmax'] in [32]:
+                # for input_params['rmax'] in [32]:
+                for input_params['rmax'] in [20, 34]:
                     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
                     calc.save_1D_data(omega, R, dir=f'data/fig6_new{nunit}/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
                 print(f'{input_params["multem_version"]} : {time.time()-time0}s')
@@ -227,7 +222,7 @@ if 'fig6' in figures_to_calculate:
             for input_params['lmax'] in [7]:
                 time0 = time.time()
                 # for input_params['rmax'] in [35, 50]:
-                for input_params['rmax'] in [32]:
+                for input_params['rmax'] in [20, 34]:
                     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
                     calc.save_1D_data(omega, R, dir=f'data/fig6_new{nunit}/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
                 print(f'{input_params["multem_version"]} : {time.time()-time0}s')
