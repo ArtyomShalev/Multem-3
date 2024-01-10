@@ -72,34 +72,6 @@ if 'fig3' in figures_to_calculate:
 
 if 'fig4' in figures_to_calculate:
     start = time.time()
-    # input_params = {
-    #     'mts': '0', #multipole_type_selected
-    #     'mos': '0', #multipole_order_selected
-    #     'mps': '0', #m_projection_selected
-    #     'type': '1 1',
-    #     'order': '1 1',
-    #     'm': '1 -1',
-    #     'rmax': 16,
-    #     'lmax': 4,
-    #     'lattice_constant': 300,
-    #     'fab': 60,
-    #     'polar': 'S',
-    #     'epssph_re': 15,
-    #     'epssph_im': 0,
-    #     'epsmed_re': 1,
-    #     'epsmed_im': 0,
-    #     'ktype': 2,
-    #     'kscan': 1,
-    #     'zinf': 3.73,
-    #     'zsup': 3.74,
-    #     'npts': 1000,
-    #     'r_ratio': 0.470512,
-    #     'mode': '1', # 2D array of spheres
-    #     'multem_version': '3',
-    #     'nlayer': '1'
-
-    # }
-
     input_params = {
         'mts': '0', #multipole_type_selected
         'mos': '0', #multipole_order_selected
@@ -135,8 +107,6 @@ if 'fig4' in figures_to_calculate:
     for i in range(kpts):
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1[i], ak2[i], input_params)        
         calc.save_1D_data(omega, T, dir=dir_to_save, filename=f'akxy={round(ak1[i]*2*np.pi, 4)}_{round(ak2[i]*2*np.pi, 4)}.txt', format='%19.16e')
-    
-   
     #fig 4 b
     input_params['zinf'] = 3.7315
     input_params['zsup'] = 3.7356

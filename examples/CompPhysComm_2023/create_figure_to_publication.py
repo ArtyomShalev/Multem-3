@@ -233,7 +233,7 @@ if 'fig4' in figures_to_plot:
     ax1.set_xlim(3.7285, 3.74)
     ax1.set_ylim(-0.1, 1.1)
     ax1.legend(frameon=False, loc=2, bbox_to_anchor=(0.0,0.86) ,title='\t'+r'$ak_x$'+'\t'+r'$ak_y$')
-    # fig.3 b
+    # fig.4 b
     ax2 = fig.add_subplot(gs[1, 0])
     ax3 = fig.add_subplot(gs[1, 1], sharey=ax2)  
     for lmax in [4, 7, 10, 13]:
@@ -276,8 +276,6 @@ if 'fig4' in figures_to_plot:
     fig.text(0.05, 0.9, 'a', ha='center')
     fig.text(0.05, 0.47, 'b', ha='center')
     fig.text(0.51, 0.06, r'$ak_0$', ha='center')
-
-
 
     plt.savefig('fig4.pdf')
     plt.clf(); plt.close()
