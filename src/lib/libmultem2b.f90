@@ -2122,7 +2122,7 @@ integer :: s, multipole_type_selector, m_projection_selector, multipole_order_se
 !        write (1,*) z
         cerf = faddeeva_w(z, relerr)
         
-        write(3, 102) z, cerf
+        write(1, 102) z
         102 format(5f19.15)
         return
     end function
