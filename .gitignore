@@ -43,7 +43,7 @@ CMakeCache.txt
 # IDE
 .idea
 .vscode
-.__pycache__
+__pycache__
 
 #binary files
 bin
