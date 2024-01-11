@@ -20,7 +20,7 @@ def get_half_width_half_maxima_and_x0(x, y):
         
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_calculate = ['fig5']
+figures_to_calculate = ['fig8']
  
     # ----- calculating data for fig. 3 -------------------
 if 'fig3' in figures_to_calculate:
@@ -244,7 +244,7 @@ if 'fig6' in figures_to_calculate:
                 # for input_params['rmax'] in [32]:
                 for input_params['rmax'] in [20, 34]:
                     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                    calc.save_1D_data(omega, R, dir=f'data/fig6_new{nunit}/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
+                    calc.save_1D_data(omega, R, dir=f'data/fig6/{nunit}/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
                 print(f'{input_params["multem_version"]} : {time.time()-time0}s')
         #10738.055797576904s
         for input_params['multem_version'] in ['2']:
@@ -253,7 +253,7 @@ if 'fig6' in figures_to_calculate:
                 # for input_params['rmax'] in [35, 50]:
                 for input_params['rmax'] in [20, 34]:
                     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-                    calc.save_1D_data(omega, R, dir=f'data/fig6_new{nunit}/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
+                    calc.save_1D_data(omega, R, dir=f'data/fig6/{nunit}/mode={input_params["mode"]}/version={input_params["multem_version"]}/d={input_params["dist_btw_spheres_and_interface"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}.txt', format='%19.16e') 
                 print(f'{input_params["multem_version"]} : {time.time()-time0}s')
     # for input_params['multem_version'] in ['2', '3']:
     #     for input_params['lmax'] in [7]:
@@ -264,13 +264,14 @@ if 'fig6' in figures_to_calculate:
     #         print(f'{input_params["multem_version"]} : {time.time()-time0}s')
     print(f'CPU time:{time.time()-start}')
    
-# 0.470512
+
 #========================================================================
 #fig 7
 #calculation is implemented in dir Zaghoul_MIT_faddeeva_comparison
 # fig 7 contains data calculated in fig3a, so one needs to calculate data for fig 3a first
 # then run bash script cerf_faddeeva_comparison/run_CompPhysComm_data_prep.sh
 #========================================================================
+
 
 if 'fig8' in figures_to_calculate:
     input_params = {
@@ -296,12 +297,12 @@ if 'fig8' in figures_to_calculate:
     'npts': 1000,
     'r_ratio': 0.470512,
     'mode': '1', #multi-layered
-    'dist_btw_spheres_and_interface': 0.6
+    'dist_btw_spheres_and_interface': 0.6,
+    'nlayer': '1'
 }
     start = time.time()
-    #fig8 b-e ?
-    # omega = np.linspace(3.7314, 3.732, input_params['npts'])
-    omega = np.linspace(3.7354, 3.7357, input_params['npts']) #Lmax 4 0.4705
+    dir_to_save = 'data/fig8/'
+    omega = np.linspace(3.7354, 3.7357, input_params['npts'])
     input_params['zinf'] = omega[0]
     input_params['zsup'] = omega[-1]
     ak1 = 1e-3/2/np.pi
@@ -309,10 +310,10 @@ if 'fig8' in figures_to_calculate:
     for input_params['multem_version'] in ['3_cerf', '3']:
         time0 = time.time()
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-        calc.save_1D_data(omega, R, dir=f'data/fig8/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+        calc.save_1D_data(omega, R, dir=f'{dir_to_save}{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
         print(f'{input_params["multem_version"]} : {time.time()-time0}s')
 
-    omega = np.linspace(3.7354, 3.7357, input_params['npts']) #Lmax 4 0.4705
+    omega = np.linspace(3.7354, 3.7357, input_params['npts'])
     input_params['zinf'] = omega[0]
     input_params['zsup'] = omega[-1]
     ak1 = 8e-5/2/np.pi
@@ -320,11 +321,10 @@ if 'fig8' in figures_to_calculate:
     for input_params['multem_version'] in ['3_cerf', '3']:
         time0 = time.time()
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-        calc.save_1D_data(omega, R, dir=f'data/fig8/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+        calc.save_1D_data(omega, R, dir=f'{dir_to_save}{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
         print(f'{input_params["multem_version"]} : {time.time()-time0}s')
     
     omega = np.linspace(3.73553338, 3.735533395, input_params['npts']) #lmax4
-    # omega = np.linspace(3.73163055, 3.731630575, input_params['npts']) #lmax4
     input_params['zinf'] = omega[0]
     input_params['zsup'] = omega[-1]
     ak1 = 8e-6/2/np.pi
@@ -332,13 +332,14 @@ if 'fig8' in figures_to_calculate:
     for input_params['multem_version'] in ['3_cerf', '3']:
         time0 = time.time()
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
-        calc.save_1D_data(omega, R, dir=f'data/fig8/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
+        calc.save_1D_data(omega, R, dir=f'{dir_to_save}{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
         print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-        hwhm, x0 = get_half_width_half_maxima_and_x0(omega, R)
-        print(f'fwhm={hwhm*2}, x0={x0}')
-        plt.plot(omega, R)
-        plt.scatter(x0, 1)
-        plt.show()
+        # ----- fano resonance fitting -----------
+        # hwhm, x0 = get_half_width_half_maxima_and_x0(omega, R)
+        # print(f'fwhm={hwhm*2}, x0={x0}')
+        # plt.plot(omega, R)
+        # plt.scatter(x0, 1)
+        # plt.show()
     print(f'CPU time: {time.time()-start}')
 
 

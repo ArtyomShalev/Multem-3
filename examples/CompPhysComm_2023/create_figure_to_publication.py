@@ -13,6 +13,8 @@ from matplotlib.transforms import Bbox, TransformedBbox, \
 from mpl_toolkits.axes_grid1.inset_locator import BboxPatch, BboxConnector,\
     BboxConnectorPatch
 from matplotlib.colors import LogNorm
+import calculating_lib as cl
+
 
 
 def multi_loadtxt(dir, filelist):
@@ -153,7 +155,7 @@ plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_plot = ['fig5']
+figures_to_plot = ['fig8']
 
 if 'fig3' in figures_to_plot:
     fig = plt.figure(figsize=(16*1.25, 9*1.25))
@@ -281,10 +283,6 @@ if 'fig4' in figures_to_plot:
     plt.clf(); plt.close()
 
 
-
-
-# import calculating_lib as cl
-
 if 'fig5' in figures_to_plot:
 
     dir = f'data/fig5'
@@ -318,6 +316,157 @@ if 'fig5' in figures_to_plot:
     
     plt.savefig('fig5.pdf')
     plt.clf(); plt.close()
+
+
+if 'fig6' in figures_to_plot:
+    import os
+    from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+    lmax = 7
+    fig = plt.figure(figsize=(20, 20))
+    X = {}; Y = {}
+    d = '0.41'
+    from matplotlib.lines import Line2D
+    custom_lines = [Line2D([0], [0], color='red', lw=18, alpha=0.4, ls='solid'),
+            Line2D([0], [0], color='red', lw=6, alpha=1, ls='dotted')]
+
+    ax1 = fig.add_subplot(3, 1, 1)
+    #key:version_rmax
+    # #value: (lw, alpha, color, zorder, styles)
+    curve_styles = {
+        '2_34_3': (9, 1, 'green', 1, 'solid'),
+        '2_34_4': (9, 1, 'red', 1, 'dashed'),
+        '2_34_5': (3, 1, 'black', 1, 'solid'),
+        '2_40': (6, 1, 'blue', 1, 'dotted'),
+        # '2_45': (6, 1, 'black', 1, '-'),
+    }
+    NLAYERS = ['3', '4', '5', '6', '7', '8', '9'][::-1]
+    # NLAYERS = ['3', '4', '5']
+    for version in ['2']:
+        for rmax in ['20', '34']:
+            for nlayer in NLAYERS:
+                nunit = f'1unit_{nlayer}'
+                main_dir = f'data/fig6/{nunit}/mode=3_ref/version={version}/d={d}/'
+                path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
+                if os.path.exists(path): 
+                    x, y = cl.read_1D_data_real(path)
+                else:
+                    print('File not Found')
+                    continue
+                X[f'{version}_{rmax}_{nlayer}'] = x; Y[f'{version}_{rmax}_{nlayer}'] = y
+                if rmax == '34' and (nlayer == '3' or nlayer == '4' or nlayer == '5'):
+                    ax1.plot(X[f'{version}_{rmax}_{nlayer}'], Y[f'{version}_{rmax}_{nlayer}'], label=f'{2**(int(nlayer)-1)}',
+                            lw=curve_styles[f'{version}_{rmax}_{nlayer}'][0], 
+                            alpha=curve_styles[f'{version}_{rmax}_{nlayer}'][1],
+                            color=curve_styles[f'{version}_{rmax}_{nlayer}'][2],
+                            zorder=curve_styles[f'{version}_{rmax}_{nlayer}'][3],
+                            ls=curve_styles[f'{version}_{rmax}_{nlayer}'][4])
+
+    ax1.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=5, alpha=0.6)
+    fig.text(0.245, 0.955, 'planes', color='black', ha='center', fontsize=30)
+    ax1.legend(frameon=False, bbox_to_anchor=(0.11,0.71))
+    ax1.set_ylim([-0.05, 1.5])
+    fig.text(0.5, 0.96, r'MULTEM2', color='black', ha='center', fontsize=30)
+    ax1.set_xlabel(r'$ak_0$')
+    ax1.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
+    ax1.yaxis.set_label_coords(-0.08, 0.5)        
+
+    # ax1.set_xticks([0.8, 0.9, 1.0, 1.1, 1.2])
+    # ax1.set_xticklabels([0.8, 0.9, 1.0, 1.1, 1.2])
+
+
+    ax2 = fig.add_subplot(3, 1, 2)
+    # X = {}; Y = {}
+    # #key:version_rmax
+    # #value: (lw, alpha, color, zorder)
+    curve_styles = {
+        '3_34_3': (9, 1, 'green', 1, 'solid'),
+        '3_34_4': (9, 1, 'red', 1, 'dashed'),
+        '3_34_5': (3, 1, 'black', 1, 'solid'),
+        '3_40': (6, 1, 'red', 1, 'dotted'),
+        '3_22': (18, 0.4, 'green', 1, '-'),
+        # '2_45': (6, 1, 'black', 1, '-'),
+    }
+    for version in ['3']:
+        for rmax in ['20', '34']:
+             for nlayer in NLAYERS:
+                nunit = f'1unit_{nlayer}'
+                main_dir = f'data/fig6/{nunit}/mode=3_ref/version={version}/d={d}/'
+                path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
+                if os.path.exists(path): 
+                    x, y = cl.read_1D_data_real(path)
+                else:
+                    print('File not Found')
+                    continue
+                X[f'{version}_{rmax}_{nlayer}'] = x; Y[f'{version}_{rmax}_{nlayer}'] = y
+                if rmax == '34' and (nlayer == '3' or nlayer == '4' or nlayer == '5'):
+                    ax2.plot(X[f'{version}_{rmax}_{nlayer}'], Y[f'{version}_{rmax}_{nlayer}'], label=f'{2**(int(nlayer)-1)}',
+                            lw=curve_styles[f'{version}_{rmax}_{nlayer}'][0], 
+                            alpha=curve_styles[f'{version}_{rmax}_{nlayer}'][1],
+                            color=curve_styles[f'{version}_{rmax}_{nlayer}'][2],
+                            zorder=curve_styles[f'{version}_{rmax}_{nlayer}'][3],
+                            ls=curve_styles[f'{version}_{rmax}_{nlayer}'][4])
+
+    ax2.set_ylim([-0.05, 1.5])
+    ax2.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue',  lw=5, alpha=0.6)
+    fig.text(0.245, 0.452, 'planes', color='black', ha='center', fontsize=30)
+    ax2.legend(frameon=False, bbox_to_anchor=(0.11,0.71))
+    # ax2.set_xticks([0.8, 0.9, 1.0, 1.1, 1.2])
+    # ax2.set_xticklabels([0.8, 0.9, 1.0, 1.1, 1.2])
+
+    #TODO automatic error generation
+    ax3 = fig.add_subplot(3, 1, 3)
+    error_step = 1 
+    error_rmax20 = [np.max(np.abs(Y['2_20_3']-Y['3_20_3'])), np.max(np.abs(Y['2_20_4']-Y['3_20_4'])), np.max(np.abs(Y['2_20_5']-Y['3_20_5'])), 
+                    np.max(np.abs(Y['2_20_6']-Y['3_20_6'])), np.max(np.abs(Y['2_20_7']-Y['3_20_7'])), np.max(np.abs(Y['2_20_8']-Y['3_20_8'])), np.max(np.abs(Y['2_20_9']-Y['3_20_9']))]
+    ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax20, color='blue', marker='s', ms=20, ls='dashed', label="20", lw=5)
+    error_rmax34 = [np.max(np.abs(Y['2_34_3']-Y['3_34_3'])), np.max(np.abs(Y['2_34_4']-Y['3_34_4'])), np.max(np.abs(Y['2_34_5']-Y['3_34_5'])), 
+                    np.max(np.abs(Y['2_34_6']-Y['3_34_6'])), np.max(np.abs(Y['2_34_7']-Y['3_34_7'])), np.max(np.abs(Y['2_34_8']-Y['3_34_8'])), np.max(np.abs(Y['2_34_9']-Y['3_34_9']))]
+    ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax34, color='red', marker='s', ms=20, ls='dashed', label="30", lw=5)
+    # error_rmax32 = [np.max(np.abs(Y['2_32_3']-Y['3_32_3'])), np.max(np.abs(Y['2_32_4']-Y['3_32_4'])), np.max(np.abs(Y['2_32_5']-Y['3_32_5'])), 
+    #                 np.max(np.abs(Y['2_32_6']-Y['3_32_6'])), np.max(np.abs(Y['2_32_7']-Y['3_32_7'])), np.max(np.abs(Y['2_32_8']-Y['3_32_8'])), np.max(np.abs(Y['2_32_9']-Y['3_32_9']))]
+    # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax32, color='red', marker='s', ms=20, ls='dashed', label="32", lw=5)
+    # # error_rmax40 = [np.max(np.abs(Y['2_40_3']-Y['3_40_3'])), np.max(np.abs(Y['2_40_4']-Y['3_40_4'])), np.max(np.abs(Y['2_40_5']-Y['3_40_5'])), 
+    #                 np.max(np.abs(Y['2_40_6']-Y['3_40_6'])), np.max(np.abs(Y['2_40_7']-Y['3_40_7'])), np.max(np.abs(Y['2_40_8']-Y['3_40_8'])), np.max(np.abs(Y['2_40_9']-Y['3_40_9']))]
+    # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax40, color='green', marker='s', ms=20, ls='dashed', label="40", lw=5)
+
+    ax3.set_yscale('log')
+    ax3.set_ylabel('difference', fontsize=30)
+    ax3.set_xlabel(r'Number of planes', fontsize=30)
+    fig.text(0.81, 0.19, 'RMAX', color='black', ha='center', fontsize=30)
+    ax3.legend(frameon=False, bbox_to_anchor=(0.9,0.5))
+
+
+
+    ax3.set_xticks([4, 32, 64, 128, 256])
+    ax3.set_xticklabels([4, 32, 64, 128, 256])
+    
+ 
+
+    fig.text(0.5, 0.45, r'MULTEM3', color='black', ha='center', fontsize=30)
+
+    ax2.set_xlabel(r'$ak_0$')
+    ax2.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
+    ax2.yaxis.set_label_coords(-0.08, 0.5)        
+
+
+    fig.text(0.03, 0.97, 'a', color='black', ha='center', fontsize=30)
+    fig.text(0.03, 0.47, 'b', color='black', ha='center', fontsize=30)
+
+    plt.subplots_adjust(left=0.1,
+                        bottom=0.05,
+                        right=0.95,
+                        top=0.98,
+                        wspace=0.01,
+                        hspace=0.2)
+
+
+    for ax in [ax1, ax2, ax3]:
+        ax.tick_params('both', length=10, width=2, which='major')
+        ax.tick_params('both', length=7, width=1.5, which='minor')
+
+    plt.savefig(f'fig6.pdf')
+    plt.clf(); plt.close()
+
 
 
 if 'fig6_7' in figures_to_plot:
@@ -648,33 +797,12 @@ if 'fig8' in figures_to_plot:
         plt.gca().minorticks_off()
         plt.gca().yaxis.set_label_coords(-0.18, 0.5)
 
-
-
     fig.text(0.04, 0.96, r'a', ha='center', fontsize=30)
     fig.text(0.54, 0.96, r'b', ha='center', fontsize=30)
     fig.text(0.04, 0.64, r'c', ha='center', fontsize=30)
     fig.text(0.54, 0.64, r'd', ha='center', fontsize=30)
     fig.text(0.04, 0.33, r'e', ha='center', fontsize=30)
     fig.text(0.54, 0.33, r'f', ha='center', fontsize=30)
-
-
-
-    # #setting ticks and labels
-    # axs[0].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-    # axs[0].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
-    # axs[0].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
-    # axs[0].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
-    # axs[1].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
-    # axs[1].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
-    # axs[2].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
-    # axs[2].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
-    # axs[3].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
-    # axs[3].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
-    # axs[4].set_xticks([3.73163055, 3.731630575])
-    # axs[4].set_xticklabels([3.73163055, 3.731630575])
-    # axs[5].set_xticks([3.73163055, 3.731630575])
-    # axs[5].set_xticklabels([3.73163055, 3.731630575])
-
 
     axs[0].set_xticks([3.7354, 3.7355, 3.7356, 3.7357])
     axs[0].set_xticklabels([3.7354, 3.7355, 3.7356, 3.7357])
@@ -695,8 +823,6 @@ if 'fig8' in figures_to_plot:
     axs[5].set_xticks([3.73553338, 3.735533395])
     axs[5].set_xticklabels([3.73553338, 3.735533395])
 
-    
-  
     plt.subplots_adjust(left=0.12,
                         bottom=0.099,
                         right=0.98,
@@ -1079,156 +1205,6 @@ if 'fig6_test' in figures_to_plot:
     plt.clf(); plt.close()
 
 
-if 'fig6' in figures_to_plot:
-    import os
-    from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-    lmax = 7
-    fig = plt.figure(figsize=(20, 20))
-    X = {}; Y = {}
-    d = '0.41'
-    # nunit = '_1unit_9nlayer_2nplan'
-    from matplotlib.lines import Line2D
-    custom_lines = [Line2D([0], [0], color='red', lw=18, alpha=0.4, ls='solid'),
-            Line2D([0], [0], color='red', lw=6, alpha=1, ls='dotted')]
-
-    ax1 = fig.add_subplot(3, 1, 1)
-   # #key:version_rmax
-    # #value: (lw, alpha, color, zorder, styles)
-    curve_styles = {
-        '2_32_3': (9, 1, 'green', 1, 'solid'),
-        '2_32_4': (9, 1, 'red', 1, 'dashed'),
-        '2_32_6': (3, 1, 'black', 1, 'solid'),
-        '2_40': (6, 1, 'blue', 1, 'dotted'),
-        # '2_45': (6, 1, 'black', 1, '-'),
-    }
-    NLAYERS = ['3', '4', '5', '6', '7', '8', '9'][::-1]
-    for version in ['2']:
-        for rmax in ['20', '32']:
-            for nlayer in NLAYERS:
-                nunit = f'_1unit_{nlayer}'
-                main_dir = f'data/fig6_new{nunit}/mode=3_ref/version={version}/d={d}/'
-                path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
-                if os.path.exists(path): 
-                    x, y = cl.read_1D_data_real(path)
-                else:
-                    print('File not Found')
-                    continue
-                X[f'{version}_{rmax}_{nlayer}'] = x; Y[f'{version}_{rmax}_{nlayer}'] = y
-                if rmax == '32' and (nlayer == '3' or nlayer == '4' or nlayer == '6'):
-                    ax1.plot(X[f'{version}_{rmax}_{nlayer}'], Y[f'{version}_{rmax}_{nlayer}'], label=f'{2**(int(nlayer)-1)}',
-                            lw=curve_styles[f'{version}_{rmax}_{nlayer}'][0], 
-                            alpha=curve_styles[f'{version}_{rmax}_{nlayer}'][1],
-                            color=curve_styles[f'{version}_{rmax}_{nlayer}'][2],
-                            zorder=curve_styles[f'{version}_{rmax}_{nlayer}'][3],
-                            ls=curve_styles[f'{version}_{rmax}_{nlayer}'][4])
-
-    ax1.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue', lw=5, alpha=0.6)
-    fig.text(0.2, 0.95, 'planes', color='black', ha='center', fontsize=30)
-    ax1.legend(frameon=False, bbox_to_anchor=(0.06,0.5))
-    ax1.set_ylim([-0.05, 2.5])
-    fig.text(0.5, 0.95, r'MULTEM2', color='black', ha='center', fontsize=30)
-    ax1.set_xlabel(r'$ak_0$')
-    ax1.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
-    ax1.yaxis.set_label_coords(-0.08, 0.5)        
-
-    # ax1.set_xticks([0.8, 0.9, 1.0, 1.1, 1.2])
-    # ax1.set_xticklabels([0.8, 0.9, 1.0, 1.1, 1.2])
-
-
-    ax2 = fig.add_subplot(3, 1, 2)
-    # X = {}; Y = {}
-    # #key:version_rmax
-    # #value: (lw, alpha, color, zorder)
-    curve_styles = {
-        '3_32_3': (9, 1, 'green', 1, 'solid'),
-        '3_32_4': (9, 1, 'red', 1, 'dashed'),
-        '3_32_6': (3, 1, 'black', 1, 'solid'),
-        '3_40': (6, 1, 'red', 1, 'dotted'),
-        '3_22': (18, 0.4, 'green', 1, '-'),
-        # '2_45': (6, 1, 'black', 1, '-'),
-    }
-    for version in ['3']:
-        for rmax in ['20', '32']:
-             for nlayer in NLAYERS:
-                nunit = f'_1unit_{nlayer}'
-                main_dir = f'data/fig6_new{nunit}/mode=3_ref/version={version}/d={d}/'
-                path = main_dir+f'lmax={lmax}_rmax={rmax}.txt'
-                if os.path.exists(path): 
-                    x, y = cl.read_1D_data_real(path)
-                else:
-                    print('File not Found')
-                    continue
-                X[f'{version}_{rmax}_{nlayer}'] = x; Y[f'{version}_{rmax}_{nlayer}'] = y
-                if rmax == '32' and (nlayer == '3' or nlayer == '4' or nlayer == '6'):
-                    ax2.plot(X[f'{version}_{rmax}_{nlayer}'], Y[f'{version}_{rmax}_{nlayer}'], label=f'{2**(int(nlayer)-1)}',
-                            lw=curve_styles[f'{version}_{rmax}_{nlayer}'][0], 
-                            alpha=curve_styles[f'{version}_{rmax}_{nlayer}'][1],
-                            color=curve_styles[f'{version}_{rmax}_{nlayer}'][2],
-                            zorder=curve_styles[f'{version}_{rmax}_{nlayer}'][3],
-                            ls=curve_styles[f'{version}_{rmax}_{nlayer}'][4])
-
-    ax2.set_ylim([-0.05, 2.5])
-    ax2.plot((x[0], x[-1]),(1.0, 1.0), '-', color='blue',  lw=5, alpha=0.6)
-    fig.text(0.2, 0.62, 'planes', color='black', ha='center', fontsize=30)
-    ax2.legend(frameon=False, bbox_to_anchor=(0.06,0.5))
-    # ax2.set_xticks([0.8, 0.9, 1.0, 1.1, 1.2])
-    # ax2.set_xticklabels([0.8, 0.9, 1.0, 1.1, 1.2])
-
-    #TODO automatic error generation
-    ax3 = fig.add_subplot(3, 1, 3)
-    # error_step = 1 
-    # error_rmax20 = [np.max(np.abs(Y['2_20_3']-Y['3_20_3'])), np.max(np.abs(Y['2_20_4']-Y['3_20_4'])), np.max(np.abs(Y['2_20_5']-Y['3_20_5'])), 
-    #                 np.max(np.abs(Y['2_20_6']-Y['3_20_6'])), np.max(np.abs(Y['2_20_7']-Y['3_20_7'])), np.max(np.abs(Y['2_20_8']-Y['3_20_8'])), np.max(np.abs(Y['2_20_9']-Y['3_20_9']))]
-    # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax20, color='blue', marker='s', ms=20, ls='dashed', label="20", lw=5)
-    # # error_rmax30 = [np.max(np.abs(Y['2_30_3']-Y['3_30_3'])), np.max(np.abs(Y['2_30_4']-Y['3_30_4'])), np.max(np.abs(Y['2_30_5']-Y['3_30_5'])), 
-    # #                 np.max(np.abs(Y['2_30_6']-Y['3_30_6'])), np.max(np.abs(Y['2_30_7']-Y['3_30_7'])), np.max(np.abs(Y['2_30_8']-Y['3_30_8'])), np.max(np.abs(Y['2_30_9']-Y['3_30_9']))]
-    # # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax30, color='red', marker='s', ms=20, ls='dashed', label="30", lw=5)
-    # error_rmax32 = [np.max(np.abs(Y['2_32_3']-Y['3_32_3'])), np.max(np.abs(Y['2_32_4']-Y['3_32_4'])), np.max(np.abs(Y['2_32_5']-Y['3_32_5'])), 
-    #                 np.max(np.abs(Y['2_32_6']-Y['3_32_6'])), np.max(np.abs(Y['2_32_7']-Y['3_32_7'])), np.max(np.abs(Y['2_32_8']-Y['3_32_8'])), np.max(np.abs(Y['2_32_9']-Y['3_32_9']))]
-    # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax32, color='red', marker='s', ms=20, ls='dashed', label="32", lw=5)
-    # # error_rmax40 = [np.max(np.abs(Y['2_40_3']-Y['3_40_3'])), np.max(np.abs(Y['2_40_4']-Y['3_40_4'])), np.max(np.abs(Y['2_40_5']-Y['3_40_5'])), 
-    #                 np.max(np.abs(Y['2_40_6']-Y['3_40_6'])), np.max(np.abs(Y['2_40_7']-Y['3_40_7'])), np.max(np.abs(Y['2_40_8']-Y['3_40_8'])), np.max(np.abs(Y['2_40_9']-Y['3_40_9']))]
-    # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax40, color='green', marker='s', ms=20, ls='dashed', label="40", lw=5)
-
-    ax3.set_yscale('log')
-    ax3.set_ylabel('difference', fontsize=30)
-    ax3.set_xlabel(r'Number of planes', fontsize=30)
-    fig.text(0.81, 0.19, 'RMAX', color='black', ha='center', fontsize=30)
-    ax3.legend(frameon=False, bbox_to_anchor=(0.9,0.5))
-
-
-
-    ax3.set_xticks([4, 32, 64, 128, 256])
-    ax3.set_xticklabels([4, 32, 64, 128, 256])
-    
- 
-
-    fig.text(0.5, 0.62, r'MULTEM3', color='black', ha='center', fontsize=30)
-
-    ax2.set_xlabel(r'$ak_0$')
-    ax2.set_ylabel(r'$\mathbf{R}$', rotation=0, fontsize=30)
-    ax2.yaxis.set_label_coords(-0.08, 0.5)        
-
-
-    fig.text(0.03, 0.97, 'a', color='black', ha='center', fontsize=30)
-    fig.text(0.03, 0.65, 'b', color='black', ha='center', fontsize=30)
-    fig.text(0.03, 0.33, 'c', color='black', ha='center', fontsize=30)
-
-    plt.subplots_adjust(left=0.1,
-                        bottom=0.05,
-                        right=0.95,
-                        top=0.98,
-                        wspace=0.01,
-                        hspace=0.2)
-
-
-    for ax in [ax1, ax2, ax3]:
-        ax.tick_params('both', length=10, width=2, which='major')
-        ax.tick_params('both', length=7, width=1.5, which='minor')
-
-
-    plt.savefig(f'fig6.pdf')
-    plt.clf(); plt.close()
 
    
 
