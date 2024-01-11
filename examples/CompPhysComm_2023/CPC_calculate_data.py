@@ -20,7 +20,7 @@ def get_half_width_half_maxima_and_x0(x, y):
         
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_calculate = ['fig8']
+figures_to_calculate = ['fig9']
  
     # ----- calculating data for fig. 3 -------------------
 if 'fig3' in figures_to_calculate:
@@ -368,7 +368,8 @@ if 'fig9' in figures_to_calculate:
     # 'r_ratio': 0.470512,
     'r_ratio': 0.470665,
     'mode': '1', #multi-layered
-    'dist_btw_spheres_and_interface': 0.6
+    'dist_btw_spheres_and_interface': 0.6,
+    'nlayer': '1'
 }
     start = time.time()
     omega = np.linspace(3.7314, 3.732, input_params['npts'])
@@ -381,7 +382,6 @@ if 'fig9' in figures_to_calculate:
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
         calc.save_1D_data(omega, R, dir=f'data/fig9/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
         print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-
 
     omega = np.linspace(3.7316, 3.7317, input_params['npts'])
     input_params['zinf'] = omega[0]
@@ -404,12 +404,12 @@ if 'fig9' in figures_to_calculate:
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
         calc.save_1D_data(omega, R, dir=f'data/fig9/{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
         print(f'{input_params["multem_version"]} : {time.time()-time0}s')
-        hwhm, x0 = get_half_width_half_maxima_and_x0(omega, R)
-        print(f'fwhm={hwhm*2}, x0={x0}')
         #--------- BIC spectral position check -------------
-        plt.plot(omega, R)
-        plt.scatter(x0, 1)
-        plt.show()
+        # hwhm, x0 = get_half_width_half_maxima_and_x0(omega, R)
+        # print(f'fwhm={hwhm*2}, x0={x0}')
+        # plt.plot(omega, R)
+        # plt.scatter(x0, 1)
+        # plt.show()
     print(f'CPU time: {time.time()-start}')
 
 

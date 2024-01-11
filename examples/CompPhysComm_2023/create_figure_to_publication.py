@@ -155,7 +155,7 @@ plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_plot = ['fig8']
+figures_to_plot = ['fig9']
 
 if 'fig3' in figures_to_plot:
     fig = plt.figure(figsize=(16*1.25, 9*1.25))
@@ -652,105 +652,6 @@ if 'fig6_7' in figures_to_plot:
     plt.clf(); plt.close()
 
 
-
-if 'fig9' in figures_to_plot:
-    from decimal import Decimal
-    LMAX = [10]
-    RMAX = [16]
-    AK1 = [1e-3, 8e-5, 8e-6]
-    X = {}; Y = {}
-    step = 1
-    #reading data to plot
-    for version in ['3_cerf', '3']:
-        main_dir = dir=f'data/fig9/{version}/'
-        for lmax in LMAX:
-            for rmax in RMAX:
-                for ak1 in AK1:
-                    ak1 = round(ak1/2/np.pi, 8)
-                    path = main_dir+f'lmax={lmax}_rmax={rmax}_ak1={ak1}.txt'
-                    x, y = cl.read_1D_data_real(path)
-                    X[f'{version}_{rmax}_{ak1}'] = x; Y[f'{version}_{rmax}_{ak1}'] = y
-    
-    fig = plt.figure(figsize=(22, 22))
-    error_step = 5
-    axs = []
-    for i, ak1 in enumerate(AK1):
-        ak1 = round(ak1/2/np.pi, 8) 
-        ax = fig.add_subplot(3, 2, 2*(i+1)-1)
-        axs.append(ax)
-        key = f'{RMAX[0]}_{ak1}'
-        plt.gca().plot(X['3_cerf_'+key], Y['3_cerf_'+key], 'green', lw=18, alpha=0.4, label='CERF') 
-        plt.gca().plot(X['3_'+key], Y['3_'+key], 'black', lw=6, label='SciPy')
-        plt.gca().set_title(r'$k_x$='+f'{Decimal(AK1[i]):.0e}')
-        plt.gca().set_xlabel(r'$ak_0$')
-        plt.gca().legend(frameon=False)
-        plt.gca().tick_params('both', length=15, width=4, which='major')
-        plt.gca().minorticks_off()
-        plt.gca().set_ylabel(r'$\mathbf{R}$', rotation=0)
-        plt.gca().yaxis.set_label_coords(-0.18, 0.5)
-        ax = fig.add_subplot(3, 2, 2*(i+1))
-        axs.append(ax)
-        error = np.abs(Y['3_'+key]-Y['3_cerf_'+key])
-        plt.gca().scatter(X['3_'+key][::error_step], error[::error_step], color='black', s=20)
-        plt.gca().set_ylabel('error')
-        plt.gca().set_xlabel(r'$ak_0$')
-        plt.gca().set_yscale('log')
-        plt.gca().tick_params('both', length=15, width=4, which='major')
-        plt.gca().minorticks_off()
-        plt.gca().yaxis.set_label_coords(-0.18, 0.5)
-
-
-
-    fig.text(0.04, 0.96, r'a', ha='center', fontsize=30)
-    fig.text(0.54, 0.96, r'b', ha='center', fontsize=30)
-    fig.text(0.04, 0.64, r'c', ha='center', fontsize=30)
-    fig.text(0.54, 0.64, r'd', ha='center', fontsize=30)
-    fig.text(0.04, 0.33, r'e', ha='center', fontsize=30)
-    fig.text(0.54, 0.33, r'f', ha='center', fontsize=30)
-
-
-
-    # #setting ticks and labels
-    axs[0].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-    axs[0].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
-    axs[0].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
-    axs[0].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
-    axs[1].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
-    axs[1].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
-    axs[2].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
-    axs[2].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
-    axs[3].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
-    axs[3].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
-    axs[4].set_xticks([3.73163055, 3.731630575])
-    axs[4].set_xticklabels([3.73163055, 3.731630575])
-    axs[5].set_xticks([3.73163055, 3.731630575])
-    axs[5].set_xticklabels([3.73163055, 3.731630575])
-
-
-    # axs[2].set_xticks([3.7354, 3.7356, 3.7358])
-    # axs[2].set_xticklabels([3.7354, 3.7356, 3.7358])
-    # axs[2].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-    # axs[2].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
-    # axs[3].set_xticks([3.7354, 3.7356, 3.7358])
-    # axs[3].set_xticklabels([3.7354, 3.7356, 3.7358])
-    # axs[4].set_xticks([3.73558, 3.735583, 3.735586])
-    # axs[4].set_xticklabels([3.73558, 3.735583, 3.735586])
-    # axs[4].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-    # axs[4].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
-    # axs[5].set_xticks([3.73558, 3.735583, 3.735586])
-    # axs[5].set_xticklabels([3.73558, 3.735583, 3.735586])
-    
-  
-    plt.subplots_adjust(left=0.12,
-                        bottom=0.099,
-                        right=0.98,
-                        top=0.95,
-                        wspace=0.3,
-                        hspace=0.4)
-    plt.savefig(f'fig9.pdf')
-    plt.clf(); plt.close()
-
-
 if 'fig8' in figures_to_plot:
     from decimal import Decimal
     LMAX = [4]
@@ -832,6 +733,84 @@ if 'fig8' in figures_to_plot:
     plt.savefig(f'fig8.pdf')
     plt.clf(); plt.close()
 
+
+if 'fig9' in figures_to_plot:
+    from decimal import Decimal
+    LMAX = [10]
+    RMAX = [16]
+    AK1 = [1e-3, 8e-5, 8e-6]
+    X = {}; Y = {}
+    step = 1
+    #reading data to plot
+    for version in ['3_cerf', '3']:
+        main_dir = dir=f'data/fig9/{version}/'
+        for lmax in LMAX:
+            for rmax in RMAX:
+                for ak1 in AK1:
+                    ak1 = round(ak1/2/np.pi, 8)
+                    path = main_dir+f'lmax={lmax}_rmax={rmax}_ak1={ak1}.txt'
+                    x, y = cl.read_1D_data_real(path)
+                    X[f'{version}_{rmax}_{ak1}'] = x; Y[f'{version}_{rmax}_{ak1}'] = y
+    
+    fig = plt.figure(figsize=(22, 22))
+    error_step = 5
+    axs = []
+    for i, ak1 in enumerate(AK1):
+        ak1 = round(ak1/2/np.pi, 8) 
+        ax = fig.add_subplot(3, 2, 2*(i+1)-1)
+        axs.append(ax)
+        key = f'{RMAX[0]}_{ak1}'
+        plt.gca().plot(X['3_cerf_'+key], Y['3_cerf_'+key], 'green', lw=18, alpha=0.4, label='CERF') 
+        plt.gca().plot(X['3_'+key], Y['3_'+key], 'black', lw=6, label='SciPy')
+        plt.gca().set_title(r'$k_x$='+f'{Decimal(AK1[i]):.0e}')
+        plt.gca().set_xlabel(r'$ak_0$')
+        plt.gca().legend(frameon=False)
+        plt.gca().tick_params('both', length=15, width=4, which='major')
+        plt.gca().minorticks_off()
+        plt.gca().set_ylabel(r'$\mathbf{R}$', rotation=0)
+        plt.gca().yaxis.set_label_coords(-0.18, 0.5)
+        ax = fig.add_subplot(3, 2, 2*(i+1))
+        axs.append(ax)
+        error = np.abs(Y['3_'+key]-Y['3_cerf_'+key])
+        plt.gca().scatter(X['3_'+key][::error_step], error[::error_step], color='black', s=20)
+        plt.gca().set_ylabel('error')
+        plt.gca().set_xlabel(r'$ak_0$')
+        plt.gca().set_yscale('log')
+        plt.gca().tick_params('both', length=15, width=4, which='major')
+        plt.gca().minorticks_off()
+        plt.gca().yaxis.set_label_coords(-0.18, 0.5)
+
+    fig.text(0.04, 0.96, r'a', ha='center', fontsize=30)
+    fig.text(0.54, 0.96, r'b', ha='center', fontsize=30)
+    fig.text(0.04, 0.64, r'c', ha='center', fontsize=30)
+    fig.text(0.54, 0.64, r'd', ha='center', fontsize=30)
+    fig.text(0.04, 0.33, r'e', ha='center', fontsize=30)
+    fig.text(0.54, 0.33, r'f', ha='center', fontsize=30)
+
+    #setting ticks and labels
+    axs[0].set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[0].set_yticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
+    axs[0].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
+    axs[0].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
+    axs[1].set_xticks([3.7314, 3.7316, 3.7318, 3.7320])
+    axs[1].set_xticklabels([3.7314, 3.7316, 3.7318, 3.7320])
+    axs[2].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
+    axs[2].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
+    axs[3].set_xticks([3.7316, 3.73163, 3.73166, 3.73169])
+    axs[3].set_xticklabels([3.7316, 3.73163, 3.73166, 3.73169])
+    axs[4].set_xticks([3.73163055, 3.731630575])
+    axs[4].set_xticklabels([3.73163055, 3.731630575])
+    axs[5].set_xticks([3.73163055, 3.731630575])
+    axs[5].set_xticklabels([3.73163055, 3.731630575])
+    
+    plt.subplots_adjust(left=0.12,
+                        bottom=0.099,
+                        right=0.98,
+                        top=0.95,
+                        wspace=0.3,
+                        hspace=0.4)
+    plt.savefig(f'fig9.pdf')
+    plt.clf(); plt.close()
 
 
 if 'fig6_old' in figures_to_plot:
