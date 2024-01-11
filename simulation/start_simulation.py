@@ -42,7 +42,8 @@ input_params = {
         'npts': 300,
         'r_ratio': 0.4705,
         'mode': '1',
-        'multem_version': '3'
+        'multem_version': '3',
+        'nlayer': '1'
     }
 
 omega = np.linspace(3.7275, 3.74, 300)/2/np.pi
