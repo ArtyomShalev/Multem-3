@@ -155,7 +155,7 @@ plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_plot = ['fig9']
+figures_to_plot = ['fig10']
 
 if 'fig3' in figures_to_plot:
     fig = plt.figure(figsize=(16*1.25, 9*1.25))
@@ -802,7 +802,7 @@ if 'fig9' in figures_to_plot:
     axs[4].set_xticklabels([3.73163055, 3.731630575])
     axs[5].set_xticks([3.73163055, 3.731630575])
     axs[5].set_xticklabels([3.73163055, 3.731630575])
-    
+
     plt.subplots_adjust(left=0.12,
                         bottom=0.099,
                         right=0.98,
@@ -812,6 +812,133 @@ if 'fig9' in figures_to_plot:
     plt.savefig(f'fig9.pdf')
     plt.clf(); plt.close()
 
+
+if 'fig10' in figures_to_plot:
+    curve_styles = {
+        '650_m_qsz': (6, 1, 'green', 1, 'dashed'),
+        '650_m_qsz_mk': (6, 1, 'green', 1, 'solid'),
+        '650_m_total': (20, 0.2, 'green', 1, 'solid'),
+        '750_m_qsz': (6, 1, 'green', 1, 'dashed'),
+        '750_m_qsz_mk': (6, 1, 'green', 1, 'solid'),
+        '750_m_total': (20, 0.2, 'green', 1, 'solid'),
+        '750_p_ps': (6, 1, 'red', 1, 'dashed'),
+        '750_p_qks_mz_ps': (6, 1, 'red', 1, 'solid'),
+        '750_p_total': (20, 0.2, 'red', 1, 'solid'),
+        '900_p_ps': (6, 1, 'red', 1, 'dashed'),
+        '900_p_qks_mz_ps': (6, 1, 'red', 1, 'solid'),
+        '900_p_total': (20, 0.2, 'red', 1, 'solid')
+    }
+    import os
+    fig = plt.figure(figsize=(20, 20))
+    main_dir = f'data/fig10/'
+    fig.add_subplot(2, 2, 1)
+    for dataset in ['650_m_qsz', '650_m_qsz_mk', '650_m_total']:
+        path = main_dir+f'{dataset}.txt'
+        if os.path.exists(path): 
+            x, y = cl.read_1D_data_real(path)
+        else:
+            print('File not Found')
+            continue
+        plt.gca().plot(x, y, 
+                    lw=curve_styles[dataset][0], 
+                    alpha=curve_styles[dataset][1],
+                    color=curve_styles[dataset][2],
+                    zorder=curve_styles[dataset][3],
+                    ls=curve_styles[dataset][4])
+    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
+    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
+    plt.gca().set_xlabel(r'sin $\theta$')
+    plt.gca().tick_params('both', length=15, width=4, which='major')
+    plt.gca().set_yticks([0.0, 0.1, 0.3, 0.5, 0.7])
+    fig.text(0.32, 0.96, '650 nm', color='black', ha='center', fontsize=30)
+    fig.text(0.08, 0.96, 'a', color='black', ha='center', fontsize=30)
+    fig.text(0.28, 0.83, r'$q_{sz}$', color='green', ha='center', fontsize=30)
+    fig.text(0.33, 0.9, r'$m_{k}+q_{sz}$', color='green', ha='center', fontsize=30)
+
+
+    fig.add_subplot(2, 2, 2)
+    for dataset in ['750_m_qsz', '750_m_qsz_mk', '750_m_total']:
+        path = main_dir+f'{dataset}.txt'
+        if os.path.exists(path): 
+            x, y = cl.read_1D_data_real(path)
+        else:
+            print('File not Found')
+            continue
+        plt.gca().plot(x, y, 
+                    lw=curve_styles[dataset][0], 
+                    alpha=curve_styles[dataset][1],
+                    color=curve_styles[dataset][2],
+                    zorder=curve_styles[dataset][3],
+                    ls=curve_styles[dataset][4])
+    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
+    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
+    plt.gca().set_xlabel(r'sin $\theta$')
+    plt.gca().tick_params('both', length=15, width=4, which='major')
+    plt.gca().set_yticks([0.0, 0.1, 0.3, 0.5, 0.7])
+    fig.text(0.77, 0.96, '750 nm', color='black', ha='center', fontsize=30)
+    fig.text(0.55, 0.96, 'b', color='black', ha='center', fontsize=30)
+    fig.text(0.73, 0.86, r'$q_{sz}$', color='green', ha='center', fontsize=30)
+    fig.text(0.78, 0.93, r'$m_{k}+q_{sz}$', color='green', ha='center', fontsize=30)
+
+
+    fig.add_subplot(2, 2, 3)
+    for dataset in ['750_p_ps', '750_p_qks_mz_ps', '750_p_total']:
+        path = main_dir+f'{dataset}.txt'
+        if os.path.exists(path): 
+            x, y = cl.read_1D_data_real(path)
+        else:
+            print('File not Found')
+            continue
+        plt.gca().plot(x, y, 
+                    lw=curve_styles[dataset][0], 
+                    alpha=curve_styles[dataset][1],
+                    color=curve_styles[dataset][2],
+                    zorder=curve_styles[dataset][3],
+                    ls=curve_styles[dataset][4])
+    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
+    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
+    plt.gca().set_xlabel(r'sin $\theta$')
+    plt.gca().tick_params('both', length=15, width=4, which='major')
+    fig.text(0.32, 0.48, '750 nm', color='black', ha='center', fontsize=30)
+    fig.text(0.08, 0.48, 'c', color='black', ha='center', fontsize=30)
+    fig.text(0.33, 0.3, r'$p_{s}$', color='red', ha='center', fontsize=30)
+    fig.text(0.42, 0.42, r'$p_{s}+m_{z}+q_{ks}$', color='red', ha='center', fontsize=30)
+
+    
+    fig.add_subplot(2, 2, 4)
+    for dataset in ['900_p_ps', '900_p_qks_mz_ps', '900_p_total']:
+        path = main_dir+f'{dataset}.txt'
+        if os.path.exists(path): 
+            x, y = cl.read_1D_data_real(path)
+        else:
+            print('File not Found')
+            continue
+        plt.gca().plot(x, y, 
+                    lw=curve_styles[dataset][0], 
+                    alpha=curve_styles[dataset][1],
+                    color=curve_styles[dataset][2],
+                    zorder=curve_styles[dataset][3],
+                    ls=curve_styles[dataset][4])
+    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
+    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
+    plt.gca().set_xlabel(r'sin $\theta$')
+    plt.gca().tick_params('both', length=15, width=4, which='major')
+    fig.text(0.77, 0.48, '900 nm', color='black', ha='center', fontsize=30)
+    fig.text(0.55, 0.48, 'd', color='black', ha='center', fontsize=30)
+    fig.text(0.72, 0.41, r'$p_{s}$', color='red', ha='center', fontsize=30)
+    fig.text(0.7, 0.2, r'$p_{s}+m_{z}+q_{ks}$', color='red', ha='center', fontsize=30)
+
+    plt.subplots_adjust(left=0.15,
+                        bottom=0.1,
+                        right=0.95,
+                        top=0.95,
+                        wspace=0.3,
+                        hspace=0.3)
+
+
+
+    plt.savefig(f'fig10.pdf')
+    plt.clf(); plt.close()
 
 if 'fig6_old' in figures_to_plot:
     import os
@@ -1182,138 +1309,6 @@ if 'fig6_test' in figures_to_plot:
 
     plt.savefig(f'fig6_test.pdf')
     plt.clf(); plt.close()
-
-
-
-   
-
-if 'fig10' in figures_to_plot:
-    curve_styles = {
-        '650_m_qsz': (6, 1, 'green', 1, 'dashed'),
-        '650_m_qsz_mk': (6, 1, 'green', 1, 'solid'),
-        '650_m_total': (20, 0.2, 'green', 1, 'solid'),
-        '750_m_qsz': (6, 1, 'green', 1, 'dashed'),
-        '750_m_qsz_mk': (6, 1, 'green', 1, 'solid'),
-        '750_m_total': (20, 0.2, 'green', 1, 'solid'),
-        '750_p_ps': (6, 1, 'red', 1, 'dashed'),
-        '750_p_qks_mz_ps': (6, 1, 'red', 1, 'solid'),
-        '750_p_total': (20, 0.2, 'red', 1, 'solid'),
-        '900_p_ps': (6, 1, 'red', 1, 'dashed'),
-        '900_p_qks_mz_ps': (6, 1, 'red', 1, 'solid'),
-        '900_p_total': (20, 0.2, 'red', 1, 'solid')
-    }
-    import os
-    fig = plt.figure(figsize=(20, 20))
-    main_dir = f'data/fig10/'
-    fig.add_subplot(2, 2, 1)
-    for dataset in ['650_m_qsz', '650_m_qsz_mk', '650_m_total']:
-        path = main_dir+f'{dataset}.txt'
-        if os.path.exists(path): 
-            x, y = cl.read_1D_data_real(path)
-        else:
-            print('File not Found')
-            continue
-        plt.gca().plot(x, y, 
-                    lw=curve_styles[dataset][0], 
-                    alpha=curve_styles[dataset][1],
-                    color=curve_styles[dataset][2],
-                    zorder=curve_styles[dataset][3],
-                    ls=curve_styles[dataset][4])
-    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
-    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
-    plt.gca().set_xlabel(r'sin $\theta$')
-    plt.gca().tick_params('both', length=15, width=4, which='major')
-    plt.gca().set_yticks([0.0, 0.1, 0.3, 0.5, 0.7])
-    fig.text(0.32, 0.96, '650 nm', color='black', ha='center', fontsize=30)
-    fig.text(0.08, 0.96, 'a', color='black', ha='center', fontsize=30)
-    fig.text(0.28, 0.83, r'$q_{sz}$', color='green', ha='center', fontsize=30)
-    fig.text(0.33, 0.9, r'$m_{k}+q_{sz}$', color='green', ha='center', fontsize=30)
-
-
-    fig.add_subplot(2, 2, 2)
-    for dataset in ['750_m_qsz', '750_m_qsz_mk', '750_m_total']:
-        path = main_dir+f'{dataset}.txt'
-        if os.path.exists(path): 
-            x, y = cl.read_1D_data_real(path)
-        else:
-            print('File not Found')
-            continue
-        plt.gca().plot(x, y, 
-                    lw=curve_styles[dataset][0], 
-                    alpha=curve_styles[dataset][1],
-                    color=curve_styles[dataset][2],
-                    zorder=curve_styles[dataset][3],
-                    ls=curve_styles[dataset][4])
-    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
-    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
-    plt.gca().set_xlabel(r'sin $\theta$')
-    plt.gca().tick_params('both', length=15, width=4, which='major')
-    plt.gca().set_yticks([0.0, 0.1, 0.3, 0.5, 0.7])
-    fig.text(0.77, 0.96, '750 nm', color='black', ha='center', fontsize=30)
-    fig.text(0.55, 0.96, 'b', color='black', ha='center', fontsize=30)
-    fig.text(0.73, 0.86, r'$q_{sz}$', color='green', ha='center', fontsize=30)
-    fig.text(0.78, 0.93, r'$m_{k}+q_{sz}$', color='green', ha='center', fontsize=30)
-
-
-    fig.add_subplot(2, 2, 3)
-    for dataset in ['750_p_ps', '750_p_qks_mz_ps', '750_p_total']:
-        path = main_dir+f'{dataset}.txt'
-        if os.path.exists(path): 
-            x, y = cl.read_1D_data_real(path)
-        else:
-            print('File not Found')
-            continue
-        plt.gca().plot(x, y, 
-                    lw=curve_styles[dataset][0], 
-                    alpha=curve_styles[dataset][1],
-                    color=curve_styles[dataset][2],
-                    zorder=curve_styles[dataset][3],
-                    ls=curve_styles[dataset][4])
-    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
-    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
-    plt.gca().set_xlabel(r'sin $\theta$')
-    plt.gca().tick_params('both', length=15, width=4, which='major')
-    fig.text(0.32, 0.48, '750 nm', color='black', ha='center', fontsize=30)
-    fig.text(0.08, 0.48, 'c', color='black', ha='center', fontsize=30)
-    fig.text(0.33, 0.3, r'$p_{s}$', color='red', ha='center', fontsize=30)
-    fig.text(0.42, 0.42, r'$p_{s}+m_{z}+q_{ks}$', color='red', ha='center', fontsize=30)
-
-    
-    fig.add_subplot(2, 2, 4)
-    for dataset in ['900_p_ps', '900_p_qks_mz_ps', '900_p_total']:
-        path = main_dir+f'{dataset}.txt'
-        if os.path.exists(path): 
-            x, y = cl.read_1D_data_real(path)
-        else:
-            print('File not Found')
-            continue
-        plt.gca().plot(x, y, 
-                    lw=curve_styles[dataset][0], 
-                    alpha=curve_styles[dataset][1],
-                    color=curve_styles[dataset][2],
-                    zorder=curve_styles[dataset][3],
-                    ls=curve_styles[dataset][4])
-    plt.gca().set_ylabel(r'$\mathbf{R_{spec}}$', rotation=0, fontsize=30)
-    plt.gca().yaxis.set_label_coords(-0.15, 0.5)
-    plt.gca().set_xlabel(r'sin $\theta$')
-    plt.gca().tick_params('both', length=15, width=4, which='major')
-    fig.text(0.77, 0.48, '900 nm', color='black', ha='center', fontsize=30)
-    fig.text(0.55, 0.48, 'd', color='black', ha='center', fontsize=30)
-    fig.text(0.72, 0.41, r'$p_{s}$', color='red', ha='center', fontsize=30)
-    fig.text(0.7, 0.2, r'$p_{s}+m_{z}+q_{ks}$', color='red', ha='center', fontsize=30)
-
-    plt.subplots_adjust(left=0.15,
-                        bottom=0.1,
-                        right=0.95,
-                        top=0.95,
-                        wspace=0.3,
-                        hspace=0.3)
-
-
-
-    plt.savefig(f'fig10.pdf')
-    plt.clf(); plt.close()
-
 
 
 if 'extra_data' in figures_to_plot:

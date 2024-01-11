@@ -20,7 +20,7 @@ def get_half_width_half_maxima_and_x0(x, y):
         
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_calculate = ['fig9']
+figures_to_calculate = ['fig10']
  
     # ----- calculating data for fig. 3 -------------------
 if 'fig3' in figures_to_calculate:
@@ -432,7 +432,7 @@ if 'fig10' in figures_to_calculate:
         'm': '1',
         'multem_version': '3'
     }
-    dir = f'data/fig9/'
+    dir = f'data/fig10/'
     fi = 0
     from_sin_theta = 0.08
     to_sin_theta = 0.12
@@ -446,13 +446,13 @@ if 'fig10' in figures_to_calculate:
     input_parameters['zsup'] = (wl+0.01)/input_parameters['lattice_constant']
     input_parameters['epssph_re'] = -12.953
     input_parameters['epssph_im'] = 1.1209
-# total
+    # total
     input_parameters['mts'] = '0'
     input_parameters['mos'] = '0'
     input_parameters['mps'] = '0'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_total.txt')
-# q_{sz} multipole
+    # q_{sz} multipole
     input_parameters['mts'] = '1'
     input_parameters['mos'] = '1'
     input_parameters['mps'] = '1'
@@ -461,13 +461,12 @@ if 'fig10' in figures_to_calculate:
     input_parameters['m'] = '-1 1'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)  
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_qsz.txt')
-# m{k} + q{sz}
+    # m{k} + q{sz}
     input_parameters['type'] =  '0 0 1 1'
     input_parameters['order'] = '2 2 1 1'
     input_parameters['m'] =     '-1 1 1 -1'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_qsz_mk.txt')
-
     wl = 750
     from_sin_theta = 0.307
     to_sin_theta = 0.313
@@ -483,7 +482,7 @@ if 'fig10' in figures_to_calculate:
     input_parameters['mps'] = '0'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_total.txt')
-# q_{sz} multipole
+    # q_{sz} multipole
     input_parameters['mts'] = '1'
     input_parameters['mos'] = '1'
     input_parameters['mps'] = '1'
@@ -492,7 +491,7 @@ if 'fig10' in figures_to_calculate:
     input_parameters['m'] = '-1 1'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)  
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_m_qsz.txt')
-# m{k} + q{sz}
+    # m{k} + q{sz}
     input_parameters['type'] =  '0 0 1 1'
     input_parameters['order'] = '2 2 1 1'
     input_parameters['m'] =     '-1 1 1 -1'
@@ -509,7 +508,7 @@ if 'fig10' in figures_to_calculate:
     input_parameters['mps'] = '0'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_total.txt')
-# p_{s} multipole
+    # p_{s} multipole
     input_parameters['mts'] = '1'
     input_parameters['mos'] = '1'
     input_parameters['mps'] = '1'
@@ -518,7 +517,7 @@ if 'fig10' in figures_to_calculate:
     input_parameters['m'] = '-1 1'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)  
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_ps.txt')
-# p{s} + m{z} + q{ks}
+    # p{s} + m{z} + q{ks}
     input_parameters['type'] =  '0 0 1 0 0'
     input_parameters['order'] = '1 1 1 2 2'
     input_parameters['m'] =     '-1 1 0 -2 2'
@@ -534,13 +533,13 @@ if 'fig10' in figures_to_calculate:
     input_parameters['zsup'] = (wl+0.01)/input_parameters['lattice_constant']
     input_parameters['epssph_re'] = -32.719
     input_parameters['epssph_im'] = 1.9955
-# total
+    # total
     input_parameters['mts'] = '0'
     input_parameters['mos'] = '0'
     input_parameters['mps'] = '0'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_total.txt')
-# p_{s} multipole
+    # p_{s} multipole
     input_parameters['mts'] = '1'
     input_parameters['mos'] = '1'
     input_parameters['mps'] = '1'
@@ -549,7 +548,7 @@ if 'fig10' in figures_to_calculate:
     input_parameters['m'] = '-1 1'
     R = calc.calc_spectrum_ak1(ktype=1, ak1=theta, wl=wl, ip=input_parameters)  
     calc.save_1D_data(sin_theta, R, dir, f'{wl}_p_ps.txt')
-# p{s} + m{z} + q{ks}
+    # p{s} + m{z} + q{ks}
     input_parameters['type'] =  '0 0 1 0 0'
     input_parameters['order'] = '1 1 1 2 2'
     input_parameters['m'] =     '-1 1 0 -2 2'
