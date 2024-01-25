@@ -1,36 +1,18 @@
 # Multem-3
 
-Multem 3 is a renewed program for transmission and band-structure calculations of photonic crystals.
+Multem 3 is a renewed program for transmission and band-structure calculations of photonic crystals using multple scattering technique.
 
 ## Project Description
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
 
-```bash
-pip install foobar
-```
 
 ## How to Install and Run Multem 3
-
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
+'''
+git clone --recurse-submodule https://github.com/ArtyomShalev/Multem-3.git
+'''
 ## How to use Multem 3
 
-```python
-import foobar
 
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-```
 
 ## License
 
@@ -61,7 +43,7 @@ Pages 49-77,
 ISSN 0010-4655](https://doi.org/10.1016/S0010-4655(98)00060-5)
 
 [J. Pendry, Low Energy Electron Diffraction: The Theory and its Application to
-Determination of Surface Structure, Techniques of Physics, Academic Press, 1974.] (https://scripts.iucr.org/cgi-bin/paper?S0021889875010886)
+Determination of Surface Structure, Techniques of Physics, Academic Press, 1974](https://scripts.iucr.org/cgi-bin/paper?S0021889875010886)
 
 
 ## TODOs 
@@ -74,4 +56,4 @@ Determination of Surface Structure, Techniques of Physics, Academic Press, 1974.
     frequently used setups
     describe input params
 
-    git clone --recurse-submodule https://github.com/ArtyomShalev/Multem-3.git
+    
