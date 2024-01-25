@@ -13,7 +13,7 @@ from matplotlib.transforms import Bbox, TransformedBbox, \
 from mpl_toolkits.axes_grid1.inset_locator import BboxPatch, BboxConnector,\
     BboxConnectorPatch
 from matplotlib.colors import LogNorm
-import calculating_lib as cl
+# import calculating_lib as cl
 
 
 
@@ -155,7 +155,7 @@ plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_plot = ['fig10']
+figures_to_plot = ['fig6']
 
 if 'fig3' in figures_to_plot:
     fig = plt.figure(figsize=(16*1.25, 9*1.25))
@@ -421,7 +421,7 @@ if 'fig6' in figures_to_plot:
     ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax20, color='blue', marker='s', ms=20, ls='dashed', label="20", lw=5)
     error_rmax34 = [np.max(np.abs(Y['2_34_3']-Y['3_34_3'])), np.max(np.abs(Y['2_34_4']-Y['3_34_4'])), np.max(np.abs(Y['2_34_5']-Y['3_34_5'])), 
                     np.max(np.abs(Y['2_34_6']-Y['3_34_6'])), np.max(np.abs(Y['2_34_7']-Y['3_34_7'])), np.max(np.abs(Y['2_34_8']-Y['3_34_8'])), np.max(np.abs(Y['2_34_9']-Y['3_34_9']))]
-    ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax34, color='red', marker='s', ms=20, ls='dashed', label="30", lw=5)
+    ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax34, color='red', marker='s', ms=20, ls='dashed', label="34", lw=5)
     # error_rmax32 = [np.max(np.abs(Y['2_32_3']-Y['3_32_3'])), np.max(np.abs(Y['2_32_4']-Y['3_32_4'])), np.max(np.abs(Y['2_32_5']-Y['3_32_5'])), 
     #                 np.max(np.abs(Y['2_32_6']-Y['3_32_6'])), np.max(np.abs(Y['2_32_7']-Y['3_32_7'])), np.max(np.abs(Y['2_32_8']-Y['3_32_8'])), np.max(np.abs(Y['2_32_9']-Y['3_32_9']))]
     # ax3.plot([2**(3-1), 2**(4-1), 2**(5-1),  2**(6-1),  2**(7-1),  2**(8-1),  2**(9-1)], error_rmax32, color='red', marker='s', ms=20, ls='dashed', label="32", lw=5)
