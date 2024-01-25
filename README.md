@@ -1,4 +1,4 @@
-# Multem-3
+# Multem 3
 
 Multem 3 is a renewed program for transmission and band-structure calculations of photonic crystals using multple scattering technique.
 
@@ -6,10 +6,21 @@ Multem 3 is a renewed program for transmission and band-structure calculations o
 
 
 
-## How to Install and Run Multem 3
+## How to Install and Run the Project
+Install the project
 ```
 git clone --recurse-submodule https://github.com/ArtyomShalev/Multem-3.git
 ```
+
+### Prerequisites
+
+Build the project 
+```
+cd Multem-3
+cmake .
+make 
+```
+
 ## How to use Multem 3
 
 
