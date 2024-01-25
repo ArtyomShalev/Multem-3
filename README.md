@@ -7,9 +7,9 @@ Multem 3 is a renewed program for transmission and band-structure calculations o
 
 
 ## How to Install and Run Multem 3
-'''
+```
 git clone --recurse-submodule https://github.com/ArtyomShalev/Multem-3.git
-'''
+```
 ## How to use Multem 3
 
 
