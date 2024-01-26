@@ -1,20 +1,33 @@
-# Multem 3
+# Multem 3 
 
-Multem 3 is a renewed program for transmission and band-structure calculations of photonic crystals using multple scattering technique.
+Multem 3 is a renewed program for transmission and band-structure calculations of photonic crystals using multiple-scattering theory for 2D periodic systems and a layer-by-layer coupling scheme.
 
-## Project Description
+## Project description
+Multem is an open source program for calculation of the transmission, reflection and absorption coefficients, and complex band structure of a photonic crystal slab. We present the renewed version of Multem called Multem 3. 
+**Main changes**:
+* Its  syntax has been upgraded to Fortran 2018, with the source code being divided into modules. 
+* Multem 3 is equipped with LAPACK, the state-of-the art Faddeeva complex error function routine, and the Bessel function package AMOS. 
+* It is allowed to freely increase the cut-off value LMAX on the number of spherical vector wave functions and the cut-off value RMAX controlling the maximal length of reciprocal vectors taken into consideration.
+
+### Project structure
+
+![Screenshot](readme_project_structure.png)
+
+folder fig
 
 
-
-## How to Install and Run the Project
+## How to install and run the project
 Install the project
 ```
 git clone --recurse-submodule https://github.com/ArtyomShalev/Multem-3.git
 ```
 
 ### Prerequisites
+* gcc and gfortran
+* CMake
+* LAPACK
 
-Build the project 
+### Building the project 
 ```
 cd Multem-3
 cmake .
@@ -22,6 +35,10 @@ make
 ```
 
 ## How to use Multem 3
+
+2D systems
+
+Photonic crystal slabs
 
 
 
@@ -33,7 +50,7 @@ make
 
 When using this code please cite 
 
-[Multem 3]
+[Multem 3: An updated and revised version of the program for transmission and band calculations of photonic crystals]
 
 Other relevant publications are:
 
@@ -56,10 +73,12 @@ ISSN 0010-4655](https://doi.org/10.1016/S0010-4655(98)00060-5)
 [J. Pendry, Low Energy Electron Diffraction: The Theory and its Application to
 Determination of Surface Structure, Techniques of Physics, Academic Press, 1974](https://scripts.iucr.org/cgi-bin/paper?S0021889875010886)
 
+## Contibutors
 
 ## TODOs 
 
     TODO: describe structure of the project
+    change the gitmodules
     where all binaries are
     what is fort.1 fort.8 fort.10 fort.16 and .ini is
     how to run Multem-3
