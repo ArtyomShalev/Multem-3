@@ -12,7 +12,7 @@ Multem is an open source program for calculation of the transmission, reflection
 
 ### Project structure
 
-![Multem modules](multem_modules.pdf)
+![Multem modules](multem_modules.png)
 
 folder fig
 
