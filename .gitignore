@@ -50,7 +50,6 @@ bin
 *.pyc
 
 #figures and data
-*.png
 *.pdf
 *.txt
 
