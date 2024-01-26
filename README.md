@@ -4,6 +4,7 @@ Multem 3 is a renewed program for transmission and band-structure calculations o
 
 ## Project description
 Multem is an open source program for calculation of the transmission, reflection and absorption coefficients, and complex band structure of a photonic crystal slab. We present the renewed version of Multem called Multem 3. 
+
 **Main changes**:
 * Its  syntax has been upgraded to Fortran 2018, with the source code being divided into modules. 
 * Multem 3 is equipped with LAPACK, the state-of-the art Faddeeva complex error function routine, and the Bessel function package AMOS. 
@@ -11,7 +12,7 @@ Multem is an open source program for calculation of the transmission, reflection
 
 ### Project structure
 
-![Screenshot](readme_project_structure.png)
+![Multem modules](multem_modules.pdf)
 
 folder fig
 
