@@ -77,14 +77,11 @@ Determination of Surface Structure, Techniques of Physics, Academic Press, 1974]
 ## Contibutors
 
 ## TODOs 
-
-    TODO: describe structure of the project
     change the gitmodules
     where all binaries are
     what is fort.1 fort.8 fort.10 fort.16 and .ini is
     how to run Multem-3
     how to make a config
     frequently used setups
-    describe input params
 
     

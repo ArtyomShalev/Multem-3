@@ -51,6 +51,7 @@ bin
 
 #figures and data
 *.txt
+*.pdf
 
 #data folders
 data
