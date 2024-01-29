@@ -6,7 +6,6 @@ module libmultem2b
     use multipole_regime_parameters
 
     implicit none
-    ! integer, parameter, public :: dp = kind(0.0D0)
     complex(dp), parameter, public :: ci = (0.0_dp, 1.0_dp)
     complex(dp), parameter, public :: czero = (0.0_dp, 0.0_dp)
     complex(dp), parameter, public :: cone = (1.0_dp, 0.0_dp)
@@ -24,24 +23,15 @@ contains
         l2max = lmax + lmax
         ll2 = l2max + 1
         k = 1
-        !        kk = 1
-        !        ap1 = -2.0_dp / tv
-        !        ap2 = -1.0_dp
-        !        cf = ci / kappa
         do l = 1, ll2
-            !            ap1 = ap1 / 2.0_dp
-            !            ap2 = ap2 + 2.0_dp
-            !            cp = cf
             mm = 1
             if(mod  (l, 2) == 0) then
                 mm = 2
-                !                cp = ci * cp
             end if
             nn = (l - mm) / 2 + 2
             do m = mm, l, 2
                 j1 = l + m - 1
                 j2 = l - m + 1
-                !               cp = -cp
                 nn = nn - 1
                 do i = 1, nn
                     i1 = i
@@ -190,10 +180,6 @@ contains
         end do
 
         zstep = (zsup - zinf) / dble(np - 1)
-!!cxt remove after the test
-!        ZINF=3.7d0  !0.3 d0  !3.7d0
-!        ZSTEP=.1d0/dble(2.0_dp)  !0.7d0/dble(nstep)
-!!cxt remove after the test
         zval = zinf - zstep
 
         if(ktype<3) then
@@ -219,10 +205,6 @@ contains
             kapin = kappa0 * d1
             kapout = kappa0 * d2
             if(ktype==1) then
-!!cxt remove after the test
-!                THETA=asin(1.0000003575641670d-2/3.7d0)  ! THETA*PI/180.D0
-!!                kapin=3.7d0
-!!cxt remove after the test
                 ak(1) = dble(kapin) * sin(theta) * cos(fi)
                 ak(2) = dble(kapin) * sin(theta) * sin(fi)
 
@@ -459,12 +441,6 @@ contains
             end do
         end do
 
-        !     call zgetrf_wrap(qiv, int)
-        !     do igk2=1,igkmax
-        !     call zgetrs_wrap(qiv, qh1(:,igk2), int)
-        !     call zgetrs_wrap(qiv, qh2(:,igk2), int)
-        !     end do
-
         call zge(qiv, int, igkmax, igkd, emach)
         do igk2 = 1, igkmax
             call zsu(qiv, int, qh1(1, igk2), igkmax, igkd, emach)
@@ -491,7 +467,6 @@ contains
                 a(igkmax + igk1, igkmax + igk2) = qh2(igk1, igk2)
             end do
         end do
-        !     if (.true.) then
         if (.false.) then
             call zgeevx_wrap (a, r2, comvec)
             do ii = 1, igk2m
@@ -632,7 +607,7 @@ contains
                 xxmat2((lmax + 1)**2 - 1, (lmax + 1)**2 - 1)
         complex(dp) dlme(2, (lmax + 1)**2), dlmh(2, (lmax + 1)**2)
         !
-        ! .. local variables for multipole expansion ..
+        ! .. local variables for multipole decomposition ..
         integer ::  s, multipole_type_selector, m_projection_selector, multipole_order_selector, &
                 type_to_zero, order_to_zero, m_to_zero
         !
@@ -682,7 +657,7 @@ contains
                     end do
                 end do
 
-                ! .. multipole expansion block ..
+                ! .. multipole decomposition block ..
                 iev = lmxod
                 iod = 0
                 do l = 1, lmax
@@ -928,10 +903,7 @@ contains
         !
         tv = abs(ar1(1) * ar2(2) - ar1(2) * ar2(1))
         alpha = tv / (4.0_dp * pi) * kapsq
-        al = abs(alpha)     !Ewald parameter used by Kambe and Pendry
-!!cxt remove after the test
-!        al=1.3005500000000001_dp
-!!cxt remove after the test
+        al = abs(alpha)   
         if(exp(al) * emach - 5.0d-5 > 0) al = log(5.0d-5 / emach)
         alpha = cmplx_dp(al, 0.0_dp)
         rta = sqrt(alpha)
@@ -1037,12 +1009,9 @@ contains
                 ! setting of the variable II=1 at the loop end
 
                 do i2 = 1, 4
-                    !     write(16,307) i1,i2
-                    ! 307 format(33x,'i1=',i2,' , i2=',i2/33x,12('='))
                     an = an1
                     an1 = -an2
                     an2 = an
-
                     !Set dual lattice vector \vg:
                     ab1 = an1 * b1(1) + an2 * b2(1)
                     ab2 = an1 * b1(2) + an2 * b2(2)
@@ -1185,7 +1154,7 @@ contains
                 end do
                 ii = 0      !from now on, the "do i1"-loop is performed fully
             end do
-
+! ----------- DLM1 test block ----------------------------------------------
 !  After each step of the summation a test on the
 !  convergence of the  elements of dlm is made.
 !  The measure of convergence is taken to be the usual vector norm
@@ -1193,32 +1162,31 @@ contains
 !  The measure of convergence is controlled by parameters QP and QT
 !  The summation is enforced to run over at least IENF shells
 
-            test2 = 0.0_dp
+        !     test2 = 0.0_dp
 
-            do i = 1, nndlm
-                dnorm = abs(dlm(i))
-                test2 = test2 + dnorm * dnorm    !=\sum_I |DLM(I))|**2
-            end do
+        !     do i = 1, nndlm
+        !         dnorm = abs(dlm(i))
+        !         test2 = test2 + dnorm * dnorm    !=\sum_I |DLM(I))|**2
+        !     end do
 
-            test = abs((test2 - test1) / test1)
-            test1 = test2
-            if ((n1>ienf).and.(test - qp <= 0)) exit ! TODO: convergence constant
-            if(n1 - 10 >= 0) exit
+        !     test = abs((test2 - test1) / test1)
+        !     test1 = test2
+        !     if ((n1>ienf).and.(test - qp <= 0)) exit ! TODO: convergence constant
+        !     if(n1 - 10 >= 0) exit
         end do
 
-        if(test - qp > 0) then ! TODO: convergence constant
-        !unsuccessful exit-even if not converged
-        !continues further to the DLM2-summation:
-            write(16, 26) n1
-            stop 1
-            26  format(//13x, 'dlm1,s not converged by n1=', i2)
-        else
-        !successful exit:
-            write(16, 28) n1
-            28    format(//13x, 'dlm1,s converged by n1=', i2)
-        end if
-!     write(16,250) dlm
-!250  format(5h0dlm1,//,45(2e13.5,/))
+        ! if(test - qp > 0) then ! TODO: convergence constant
+        ! !unsuccessful exit-even if not converged
+        ! !continues further to the DLM2-summation:
+        !     write(16, 26) n1
+        !     stop 1
+        !     26  format(//13x, 'dlm1,s not converged by n1=', i2)
+        ! else
+        ! !successful exit:
+        !     write(16, 28) n1
+        !     28    format(//13x, 'dlm1,s converged by n1=', i2)
+        ! end if
+! ------------------------------------------------------------------------
 !--------/---------/---------/---------/---------/---------/---------/--
 !                         DLM2 term
 !--------/---------/---------/---------/---------/---------/---------/--
@@ -1337,7 +1305,7 @@ contains
                     end do
                 end do
             end do
-
+! ----------- DLM2 test block ----------------------------------------------
 ! After each step of the summation a test on the
 ! convergence of the elements of dlm is made.
 !  The measure of convergence is taken to be the usual vector norm
@@ -1345,29 +1313,29 @@ contains
 !  The measure of convergence is controlled by parameters QP and QT
 !  The summation is enforced to run over at least IENF shells
 
-            test2 = 0.0_dp
-            do i = 1, nndlm
-                dnorm = abs(dlm(i))
-                test2 = test2 + dnorm * dnorm    !=\sum_I |DLM(I))|**2
-            end do
+        !     test2 = 0.0_dp
+        !     do i = 1, nndlm
+        !         dnorm = abs(dlm(i))
+        !         test2 = test2 + dnorm * dnorm    !=\sum_I |DLM(I))|**2
+        !     end do
 
-            test = abs((test2 - test1) / test1)
-            test1 = test2
-            if ((n1>ienf).and.(test - qp <= 0)) exit ! TODO: convergence constant
-            if(n1 - 10>=0) exit
+        !     test = abs((test2 - test1) / test1)
+        !     test1 = test2
+        !     if ((n1>ienf).and.(test - qp <= 0)) exit ! TODO: convergence constant
+        !     if(n1 - 10>=0) exit
         end do
 
-        if(test - qp > 0) then ! TODO: convergence constant
-        !unsuccessful exit-even if not converged
-        !continues further to the DLM3-summation:
-            write(16, 44) n1
-            stop 1
-            44    format(//3x, 'dlm2,s not converged by n1=', i2)
-        else
-        !successful exit:
-            write(16, 46) n1
-            46    format(//3x, 'dlm2,s converged by n1=', i2)
-        end if
+        ! if(test - qp > 0) then ! TODO: convergence constant
+        ! !unsuccessful exit-even if not converged
+        ! !continues further to the DLM3-summation:
+        !     write(16, 44) n1
+        !     stop 1
+        !     44    format(//3x, 'dlm2,s not converged by n1=', i2)
+        ! else
+        ! !successful exit:
+        !     write(16, 46) n1
+        !     46    format(//3x, 'dlm2,s converged by n1=', i2)
+        ! end if    
 !--------/---------/---------/---------/---------/---------/---------/--
 !                         DLM3 term
 !--------/---------/---------/---------/---------/---------/---------/--
@@ -1393,8 +1361,6 @@ contains
                 n = n + 1
             end do
         end do
-        !     write(16,251) dlm
-        ! 251 format(15h0dlm1+dlm2+dlm3,//45(2e13.5,/))
 !--------/---------/---------/---------/---------/---------/---------/--
 ! summation over the clebsch-gordon type coefficients
 ! elm proceeds, first for  xodd, and then  for xeven.
@@ -1471,7 +1437,7 @@ integer :: s, multipole_type_selector, m_projection_selector, multipole_order_se
         type_to_zero, order_to_zero, m_to_zero
 !     ------------------------------------------------------------------
 
-        ampl_factor = 0
+        ampl_factor = 0 ! undesired multipole responses are set to zero  
         lmax1 = lmax + 1
         lmtot = lmax1 * lmax1 - 1
         lmxod = (lmax * lmax1) / 2
@@ -1566,7 +1532,7 @@ integer :: s, multipole_type_selector, m_projection_selector, multipole_order_se
             end do
         end do
 
-        ! .. multipole expansion block
+        ! .. multipole decomposition block
         iaod = 0
         iaev = lmxod
         do la = 1, lmax
@@ -2119,11 +2085,10 @@ integer :: s, multipole_type_selector, m_projection_selector, multipole_order_se
         complex(dp), intent(in) :: z
         real(dp) :: relerr = 1e-16_dp
 !        cerf = exp(-z**2) * (1.0 - erf_pop(-ci * z
-!        write (1,*) z
         cerf = faddeeva_w(z, relerr)
         
-        write(1, 102) z
-        102 format(5f19.15)
+        ! write(1, 102) z
+        ! 102 format(5f19.15)
         return
     end function
     !=======================================================================
@@ -2718,61 +2683,6 @@ integer :: s, multipole_type_selector, m_projection_selector, multipole_order_se
             allocate(multipole_combination(3,0))
             return
         end if
-!        non_zero_elements = 0
-!        do i = 1, size(selectors)
-!            if(selectors(i) /= 0) non_zero_elements = non_zero_elements + 1
-!        end do
-!        if(non_zero_elements /= 0)) then
-!            select case(non_zero_elements)
-!            case(1)
-!                du smth
-!            case(2)
-!                du another
-!            case(3)
-!
-!            end select
-!        non_zero_selector = findloc(selectors, value = 1)
-!
-!        select case (non_zero_selector(1))
-!            case(1)
-!                user_multipole_combination_size = size(multipole_type)
-!            case(2)
-!                user_multipole_combination_size = size(multipole_order)
-!            case(3)
-!                user_multipole_combination_size = size(m_projection)
-!            case default
-!                user_multipole_combination_size = all_multipole_combination_size
-!        end select
-
-!        allocate(user_multipole_combination(3, all_multipole_combination_size))
-!
-!        do i = 1, user_multipole_combination_size
-!            if (is_multipole_type_selected == 0) then
-!                if (mod(i, 2) /= 0) then
-!                    user_multipole_combination(1, i) = 0
-!                else
-!                    user_multipole_combination(1, i) = 1
-!                end if
-!            else
-!                user_multipole_combination(1, i) = multipole_type(i)
-!            end if
-!            user_multipole_combination(2, i) = multipole_order(i)
-!            user_multipole_combination(3, i) = m_projection(i)
-!        end do
-
-!        if (is_multipole_type_selected == 0) then
-!            user_multipole_combination(1, 1:user_multipole_combination_size/2) = 0
-!            user_multipole_combination(1, user_multipole_combination_size/2:user_multipole_combination_size) = 1
-!        else
-!            do i = 1, user_multipole_combination_size
-!                user_multipole_combination(1, i) = multipole_type(i)
-!            end do
-!        end if
-!
-!        do i = 1, user_multipole_combination_size
-!            user_multipole_combination(2, i) = multipole_order(i)
-!            user_multipole_combination(3, i) = m_projection(i)
-!        end do
 
         user_multipole_combination_size = size(multipole_type)
         allocate(user_multipole_combination(3, user_multipole_combination_size))
