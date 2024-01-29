@@ -45,15 +45,18 @@ This script generates all necessary config files using the self-written python m
 
 **Configuration files description**
 
-* **fort.10** is a Multem1 and Mutlem2 compitable input file. It sets up the incident field, the design of the structure by planes, the material parameters of the spheres in each plane etc. More detailed information about this config file can be found in original Multem paper (1998) (see *Publications* section) 
+* **fort.10** is a Multem1 and Mutlem2 compitable input file. It sets up the incident field, the design of the structure, the material parameters of the spheres in each plane etc. More detailed information about this config file can be found in original Multem paper (1998) (see *Publications* section) 
 
-* **multipole_regime_parameters.ini** is a multipole decomposition configuration file. It is devided into two sections -- selectors and regime. *Selectors* are used for turning the multipole decomposition on and off. *Regime* is used for setting the [specific multipole (s - type, n - order and m - projection) indices](https://en.wikipedia.org/wiki/Vector_spherical_harmonics#Alternative_definition). If the corresponsing selector is off (equals to 0) then regime will not be read by the program, and can be arbitrary. 
+* **multipole_regime_parameters.ini** is a multipole decomposition configuration file. It is devided into two sections -- selectors and regime. *Selectors* are used for turning the multipole decomposition on and off. *Regime* is used for setting the [specific multipole (s - electric (0) or magnetic (1), n - order and m - projection) indices](https://en.wikipedia.org/wiki/Vector_spherical_harmonics#Alternative_definition). If the corresponsing selector is off (equals to 0) then regime will not be read by the program, and this parameter can be arbitrary. 
 
 ## How to use Multem 3 (to be added soon)
 
 2D systems
 
 Photonic crystal slabs
+
+
+## Frequently used setups (to be added soon)
 
 
 ## License
@@ -93,8 +96,5 @@ Determination of Surface Structure, Techniques of Physics, Academic Press, 1974]
     change the gitmodules
     where all binaries are
     what is fort.1 fort.8 fort.10 fort.16 and .ini is
-    how to run Multem-3
-    how to make a config
-    frequently used setups
 
     
