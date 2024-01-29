@@ -17,6 +17,7 @@ import numpy as np
 import sys
 sys.path.insert(0, '..')
 import src.python_simulations.multem3_py_calculating as calc
+import shutil
 
 
 #triangular lattice of dieletric spheres 

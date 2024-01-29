@@ -1162,30 +1162,30 @@ contains
 !  The measure of convergence is controlled by parameters QP and QT
 !  The summation is enforced to run over at least IENF shells
 
-        !     test2 = 0.0_dp
+            test2 = 0.0_dp
 
-        !     do i = 1, nndlm
-        !         dnorm = abs(dlm(i))
-        !         test2 = test2 + dnorm * dnorm    !=\sum_I |DLM(I))|**2
-        !     end do
+            do i = 1, nndlm
+                dnorm = abs(dlm(i))
+                test2 = test2 + dnorm * dnorm    !=\sum_I |DLM(I))|**2
+            end do
 
-        !     test = abs((test2 - test1) / test1)
-        !     test1 = test2
-        !     if ((n1>ienf).and.(test - qp <= 0)) exit ! TODO: convergence constant
-        !     if(n1 - 10 >= 0) exit
+            test = abs((test2 - test1) / test1)
+            test1 = test2
+            if ((n1>ienf).and.(test - qp <= 0)) exit ! TODO: convergence constant
+            if(n1 - 10 >= 0) exit
         end do
 
-        ! if(test - qp > 0) then ! TODO: convergence constant
-        ! !unsuccessful exit-even if not converged
-        ! !continues further to the DLM2-summation:
-        !     write(16, 26) n1
-        !     stop 1
-        !     26  format(//13x, 'dlm1,s not converged by n1=', i2)
-        ! else
-        ! !successful exit:
-        !     write(16, 28) n1
-        !     28    format(//13x, 'dlm1,s converged by n1=', i2)
-        ! end if
+        if(test - qp > 0) then ! TODO: convergence constant
+        !unsuccessful exit-even if not converged
+        !continues further to the DLM2-summation:
+            ! write(16, 26) n1
+            stop 1
+            26  format(//13x, 'dlm1,s not converged by n1=', i2)
+        else
+        !successful exit:
+            ! write(16, 28) n1
+            28    format(//13x, 'dlm1,s converged by n1=', i2)
+        end if
 ! ------------------------------------------------------------------------
 !--------/---------/---------/---------/---------/---------/---------/--
 !                         DLM2 term
@@ -1313,29 +1313,29 @@ contains
 !  The measure of convergence is controlled by parameters QP and QT
 !  The summation is enforced to run over at least IENF shells
 
-        !     test2 = 0.0_dp
-        !     do i = 1, nndlm
-        !         dnorm = abs(dlm(i))
-        !         test2 = test2 + dnorm * dnorm    !=\sum_I |DLM(I))|**2
-        !     end do
+            test2 = 0.0_dp
+            do i = 1, nndlm
+                dnorm = abs(dlm(i))
+                test2 = test2 + dnorm * dnorm    !=\sum_I |DLM(I))|**2
+            end do
 
-        !     test = abs((test2 - test1) / test1)
-        !     test1 = test2
-        !     if ((n1>ienf).and.(test - qp <= 0)) exit ! TODO: convergence constant
-        !     if(n1 - 10>=0) exit
+            test = abs((test2 - test1) / test1)
+            test1 = test2
+            if ((n1>ienf).and.(test - qp <= 0)) exit ! TODO: convergence constant
+            if(n1 - 10>=0) exit
         end do
 
-        ! if(test - qp > 0) then ! TODO: convergence constant
-        ! !unsuccessful exit-even if not converged
-        ! !continues further to the DLM3-summation:
-        !     write(16, 44) n1
-        !     stop 1
-        !     44    format(//3x, 'dlm2,s not converged by n1=', i2)
-        ! else
-        ! !successful exit:
-        !     write(16, 46) n1
-        !     46    format(//3x, 'dlm2,s converged by n1=', i2)
-        ! end if    
+        if(test - qp > 0) then ! TODO: convergence constant
+        !unsuccessful exit-even if not converged
+        !continues further to the DLM3-summation:
+            ! write(16, 44) n1
+            stop 1
+            ! 44    format(//3x, 'dlm2,s not converged by n1=', i2)
+        else
+        !successful exit:
+            ! write(16, 46) n1
+            ! 46    format(//3x, 'dlm2,s converged by n1=', i2)
+        end if    
 !--------/---------/---------/---------/---------/---------/---------/--
 !                         DLM3 term
 !--------/---------/---------/---------/---------/---------/---------/--

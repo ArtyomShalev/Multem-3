@@ -36,12 +36,19 @@ make
 ```
 
 ### Runnig the project
+One has just to
+!compile the FORTRAN  source code  and  execute  the  so  produced
+!executable file, having  in the same  directory the desired input
+!data in the file in unit 10
+
 Multem3 can be run by the python script in simulation directory.
 ```
 cd simulation
 python3 start_simulation.py
 ```
-This script generates all necessary config files using the self-written python module which is located at src/python_simulations directory.
+This script generates all necessary config files using the self-written python module which is located at src/python_simulations directory. **Important**: this script binary in the same directory (cmake or copy paste)
+
+
 
 **Configuration files description**
 

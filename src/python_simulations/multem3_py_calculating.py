@@ -11,6 +11,7 @@ import matplotlib.colors as mcolors
 from matplotlib.colors import hsv_to_rgb
 from colorsys import hls_to_rgb
 # from typing import str
+import shutil
 
 
 def multi_loadtxt(dir: str, filelist: list):
@@ -236,8 +237,8 @@ def eval(multem_version='3'):
             my_env["OMP_NUM_THREADS"] = "1"
             # print("Running multem...")
             subprocess.run(['./multem3'],
-                           stdout=subprocess.DEVNULL,
-                           env=my_env)
+                            stdout=subprocess.DEVNULL,
+                            env=my_env)
     if multem_version == '3_cerf':
         if os.path.isfile('multem3_cerf'):
             my_env = os.environ.copy()
