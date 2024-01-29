@@ -35,12 +35,25 @@ cmake .
 make 
 ```
 
-## How to use Multem 3
+### Runnig the project
+Multem3 can be run by the python script in simulation directory.
+```
+cd simulation
+python3 start_simulation.py
+```
+This script generates all necessary config files using the self-written python module which is located at src/python_simulations directory.
+
+**Configuration files description**
+
+* **fort.10** is a Multem1 and Mutlem2 compitable input file. It sets up the incident field, the design of the structure by planes, the material parameters of the spheres in each plane etc. More detailed information about this config file can be found in original Multem paper (1998) (see *Publications* section) 
+
+* **multipole_regime_parameters.ini** is a multipole decomposition configuration file. It is devided into two sections -- selectors and regime. *Selectors* are used for turning the multipole decomposition on and off. *Regime* is used for setting the [specific multipole (s - type, n - order and m - projection) indices](https://en.wikipedia.org/wiki/Vector_spherical_harmonics#Alternative_definition). If the corresponsing selector is off (equals to 0) then regime will not be read by the program, and can be arbitrary. 
+
+## How to use Multem 3 (to be added soon)
 
 2D systems
 
 Photonic crystal slabs
-
 
 
 ## License
