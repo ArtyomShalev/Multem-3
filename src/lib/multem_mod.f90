@@ -1,26 +1,11 @@
-!DMQMULTEM, VERSION 2.  MULTEM 2: A NEW VERSION OF THE PROGRAM FOR
-!   TRANSMISSION AND BAND-STRUCTURE CALCULATIONS OF PHOTONIC
-!   CRYSTALS.  N. STEFANOU, V. YANNOPAPAS, A. MODINOS.
-!EF. IN COMP. PHYS. COMMUN. 132 (2000) 189
-!EADME
-!!The program is in one file which contains:
-!1.   The FORTRAN source code (MULTEM)
-!2.   Two input data files  (one  for the transmission test run and
-!     one for the band-structure test run)
-!3.   The corresponding two files with  the  test run outputs which
-!     will be produced by running the  program using the above sets
-!     of input data.
-!The comment lines starting with  "CCCCCCCCC----------->"  identify
-!the different constituent parts. These lines must  be removed when
-!you will extract the input data files.
-!!Input data are read from unit 10.
-!No special  job control  statements are  needed.  One has just to
-!compile the FORTRAN  source code  and  execute  the  so  produced
-!executable file, having  in the same  directory the desired input
-!data in the file in unit 10 (named "ftn10" in HP-UX for instance)
-!CCCCCCCC-----------> END OF README
-!CCCCCCCC-----------> THIS IS THE FIRST LINE OF THE FILE
-!CCCCCCCC-----------> HERE STARTS THE FORTRAN SOURCE CODE
+!Multem, version 3 is a renewed program for transmission and 
+!band-structure calculations of photonic crystals. This source file
+!and libmultem2b.f90 are basically modified code of  MULTEM 2: 
+!A NEW VERSION OF THE PROGRAM FOR TRANSMISSION AND BAND-STRUCTURE 
+!CALCULATIONS OF PHOTONIC CRYSTALS.  
+!N. STEFANOU, V. YANNOPAPAS, A. MODINOS. 
+!IN COMP. PHYS. COMMUN. 132 (2000) 189
+!HERE STARTS THE FORTRAN SOURCE CODE
 !=======================================================================
 
 program multem
@@ -116,20 +101,7 @@ program multem
 
     integer, allocatable ::  multipole_type(:), multipole_order(:), m_projection(:), multipole_combination(:, :)
     integer :: is_multipole_type_selected, is_multipole_order_selected, is_m_projection_selected
-    !     ------------------------------------------------------------------
-    !
-    ! read from .ini file
-    call cli_parse
-    call ini_parse
-
-    is_multipole_type_selected = mrp%is_multipole_type_selected
-    is_multipole_order_selected = mrp%is_multipole_order_selected
-    is_m_projection_selected = mrp%is_m_projection_selected
-    multipole_type = mrp%multipole_type
-    multipole_order = mrp%multipole_order
-    m_projection = mrp%m_projection
-    !     ------------------------------------------------------------------
-    !
+  
     read(10, 200) ktype, kscan, kemb, lmax, ncomp, nunit
     if(ktype<=0.or.ktype>=4) stop 'illegal input value of ktype'
     if(kscan<=0.or.kscan>=3) stop 'illegal input value of kscan'
@@ -223,10 +195,20 @@ program multem
     else
         read(10, *) dummy, (al(i), i = 1, 3)
     endif
+      !    multipole decomposition section -----------------------------------
+    call cli_parse
+    call ini_parse
+    is_multipole_type_selected = mrp%is_multipole_type_selected
+    is_multipole_order_selected = mrp%is_multipole_order_selected
+    is_m_projection_selected = mrp%is_m_projection_selected
+    multipole_type = mrp%multipole_type
+    multipole_order = mrp%multipole_order
+    m_projection = mrp%m_projection
 
     multipole_combination = get_multipole_combination(lmax, multipole_type, multipole_order, m_projection,&
                             is_multipole_type_selected, is_multipole_order_selected, is_m_projection_selected)
-
+    !     ------------------------------------------------------------------
+    
     call main_evaluate(ncompd, npland, lmax, i, ktype, kscan, ncomp, np,&
             nunit, icomp, kemb,  ipl, alpha, rmax, zinf, zsup, fab, alphap, theta,&
             fi, fein, d2, d1, polar, &
