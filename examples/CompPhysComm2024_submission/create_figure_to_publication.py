@@ -13,9 +13,9 @@ from matplotlib.transforms import Bbox, TransformedBbox, \
 from mpl_toolkits.axes_grid1.inset_locator import BboxPatch, BboxConnector,\
     BboxConnectorPatch
 from matplotlib.colors import LogNorm
-# import calculating_lib as cl
-
-
+import sys
+sys.path.insert(0, '../..')
+import src.python_simulations.multem3_py_calculating as cl
 
 def multi_loadtxt(dir, filelist):
     output = ()
@@ -155,7 +155,7 @@ plt.rcParams.update({'font.size': 28, 'font.serif':"Times New Roman"})
 
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_plot = ['fig6']
+figures_to_plot = ['fig3', 'fig4', 'fig5', 'fig8', 'fig9', 'fig10']
 
 if 'fig3' in figures_to_plot:
     fig = plt.figure(figsize=(16*1.25, 9*1.25))

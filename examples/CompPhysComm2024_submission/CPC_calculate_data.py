@@ -20,11 +20,12 @@ def get_half_width_half_maxima_and_x0(x, y):
         
 # fig1 - flowchart [draw.io]
 # fig2 - typical system design [POV-ray]
-figures_to_calculate = ['fig10']
+# figures_to_calculate = ['fig4', 'fig5', 'fig8', 'fig9', 'fig10', 'fig6']
+figures_to_calculate = ['fig8', 'fig9']
  
     # ----- calculating data for fig. 3 -------------------
 if 'fig3' in figures_to_calculate:
-    #TODO source files to compile all binaries
+    print('fig3 data calculation...')
     start = time.time()
     input_params = {
         'mts': '0', #multipole_type_selected
@@ -59,7 +60,7 @@ if 'fig3' in figures_to_calculate:
     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
     calc.save_1D_data(omega, T, dir='data/fig3', filename='T.txt', format='%19.16e') 
     # wo lapack
-    input_params['multem_version'] = 'wo_lapack'
+    input_params['multem_version'] = '2'
     F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)        
     calc.save_1D_data(omega, 1-(T+R), dir='data/fig3', filename='error_wo_lapack.txt', format='%19.16e')       
     # with lapack
@@ -71,6 +72,7 @@ if 'fig3' in figures_to_calculate:
 
 
 if 'fig4' in figures_to_calculate:
+    print('fig4 data calculation...')
     start = time.time()
     input_params = {
         'mts': '0', #multipole_type_selected
@@ -122,6 +124,7 @@ if 'fig4' in figures_to_calculate:
 
 
 if 'fig5' in figures_to_calculate:
+    print('fig5 data calculation...')
     start = time.time()
     input_parameters = {
         'ktype': 1,
@@ -173,8 +176,8 @@ if 'fig5' in figures_to_calculate:
         print(f"CPU time {time.time()-start}")
 
 
-#takes approx 43000 seconds to calculate these data
 if 'fig6' in figures_to_calculate:
+    print('fig6 data calculation...')
     start = time.time()
     input_params = {
     'mts': '0', #multipole_type_selected
@@ -219,7 +222,7 @@ if 'fig6' in figures_to_calculate:
     # dl = [0.22, 0.0, input_params['dist_btw_spheres_and_interface']]
     # dr = [0.22, 0.0, input_params['dist_btw_spheres_and_interface']]
 
-    # print(f'vector length:', np.sum(np.power(dl + dr, 2)))
+    # print(f'vector length:',examples/CompPhysComm2024_submission/multem_different_versions/multem3_cerf/bin/multem3_cerfnp.sum(np.power(dl + dr, 2)))
 
     # dl = [0.33, 0.33, input_params['dist_btw_spheres_and_interface']]
     # dr = [0.33, 0.33, input_params['dist_btw_spheres_and_interface']]
@@ -274,6 +277,7 @@ if 'fig6' in figures_to_calculate:
 
 
 if 'fig8' in figures_to_calculate:
+    print('fig8 data calculation...')
     input_params = {
     'mts': '0', #multipole_type_selected
     'mos': '0', #multipole_order_selected
@@ -307,7 +311,7 @@ if 'fig8' in figures_to_calculate:
     input_params['zsup'] = omega[-1]
     ak1 = 1e-3/2/np.pi
     ak2 = 0
-    for input_params['multem_version'] in ['3_cerf', '3']:
+    for input_params['multem_version'] in ['3', '3_cerf']:
         time0 = time.time()
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
         calc.save_1D_data(omega, R, dir=f'{dir_to_save}{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
@@ -318,7 +322,7 @@ if 'fig8' in figures_to_calculate:
     input_params['zsup'] = omega[-1]
     ak1 = 8e-5/2/np.pi
     ak2 = 0
-    for input_params['multem_version'] in ['3_cerf', '3']:
+    for input_params['multem_version'] in ['3', '3_cerf']:
         time0 = time.time()
         F, T, R, A = calc.calc_spectrum_omega(omega, ak1, ak2, input_params)
         calc.save_1D_data(omega, R, dir=f'{dir_to_save}{input_params["multem_version"]}', filename=f'lmax={input_params["lmax"]}_rmax={input_params["rmax"]}_ak1={round(ak1, 8)}.txt', format='%19.16e') 
@@ -344,6 +348,7 @@ if 'fig8' in figures_to_calculate:
 
 
 if 'fig9' in figures_to_calculate:
+    print('fig9 data calculation...')
     input_params = {
     'mts': '0', #multipole_type_selected
     'mos': '0', #multipole_order_selected
@@ -414,6 +419,7 @@ if 'fig9' in figures_to_calculate:
 
 
 if 'fig10' in figures_to_calculate:
+    print('fig10 data calculation...')
     start = time.time()
     input_parameters = {
         'ktype': 1,

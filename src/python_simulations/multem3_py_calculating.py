@@ -30,7 +30,7 @@ def create_input(ktype, kscan, npts, fab, ak1, ak2, zinf, zsup, polar, lmax, r_r
             2 - interface
             3 - multilayered-design
     '''
-    if multem_version == '3':
+    if multem_version == '3' or '3_cerf':
         float_format = '%19.15f'
     else:
         float_format = '%13.8f'
